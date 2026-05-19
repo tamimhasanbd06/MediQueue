@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, EffectFade, Pagination } from "swiper/modules";
+import { Autoplay, EffectFade } from "swiper/modules";
 
 import "swiper/css";
 import "swiper/css/effect-fade";
@@ -21,7 +21,7 @@ const slides = [
     id: 2,
     image:
       "https://images.unsplash.com/photo-1513258496099-48168024aec0?q=80&w=1600&auto=format&fit=crop",
-    heading: "Book Smarter. Learn Better.",
+    heading: "Book Smarter Learn Better",
     subheading:
       "Flexible tutor schedules, instant booking, secure digital tokens, and seamless education management.",
     badge: "Smart Session Booking",
@@ -42,7 +42,7 @@ export default function Banner() {
     <section className="relative w-full h-[85vh] sm:h-[90vh] lg:h-screen overflow-hidden bg-black">
 
       <Swiper
-        modules={[Autoplay, EffectFade, Pagination]}
+        modules={[Autoplay, EffectFade]}
         effect="fade"
         loop={true}
         speed={1800}
@@ -50,87 +50,93 @@ export default function Banner() {
           delay: 5000,
           disableOnInteraction: false,
         }}
-        pagination={false}
         className="w-full h-full"
       >
 
-        {slides.map((slide) => (
-          <SwiperSlide key={slide.id}>
+        {slides?.map((slide) => (
+          <SwiperSlide key={slide?.id}>
             <div className="relative w-full h-full">
 
               {/* IMAGE */}
               <img
-                src={slide.image}
-                alt={slide.heading}
-                className="absolute inset-0 w-full h-full object-cover scale-105 animate-[slowZoom_8s_linear_infinite]"
+                src={slide?.image}
+                alt={slide?.heading}
+                className="absolute inset-0 w-full h-full object-cover scale-105 animate-slowZoom"
               />
 
-              {/* MULTI LAYER OVERLAY */}
+              {/* OVERLAY */}
               <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/30" />
+
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30" />
 
-              {/* GLOW EFFECT */}
-              <div className="absolute top-0 left-0 w-full h-full bg-blue-900/10" />
+              {/* BLUE GLOW */}
+              <div className="absolute inset-0 bg-blue-900/10" />
 
               {/* CONTENT */}
               <div className="relative z-20 flex items-center h-full">
+
                 <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-16 w-full">
 
                   <div className="max-w-4xl text-white">
 
                     {/* BADGE */}
-                    <div className="inline-flex items-center px-5 py-2 rounded-full border border-blue-400/40 bg-blue-500/10 backdrop-blur-md mb-6">
+                    <div className="inline-flex items-center px-5 py-2 rounded-full border border-blue-400/40 bg-blue-500/10 backdrop-blur-md mb-6 animate-fadeUp">
+
                       <span className="text-blue-300 text-sm md:text-base font-medium tracking-wide uppercase">
-                        {slide.badge}
+                        {slide?.badge}
                       </span>
+
                     </div>
 
                     {/* HEADING */}
-                    <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-extrabold leading-[1.1] mb-6 animate-fadeInUp">
-                      <span className="block">
-                        {slide.heading.split(" ").slice(0, -1).join(" ")}
-                      </span>
+                    <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-extrabold leading-[1.1] mb-6 animate-fadeUp delay-100">
 
-                      <span className="text-blue-500 drop-shadow-lg">
-                        {slide.heading.split(" ").slice(-1)}
-                      </span>
+                      {slide?.heading}
+
                     </h1>
 
                     {/* SUBHEADING */}
-                    <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-200 leading-relaxed max-w-3xl mb-10 animate-fadeInUp delay-200">
-                      {slide.subheading}
+                    <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-200 leading-relaxed max-w-3xl mb-10 animate-fadeUp delay-200">
+
+                      {slide?.subheading}
+
                     </p>
 
                     {/* BUTTONS */}
-                    <div className="flex flex-wrap gap-5 animate-fadeInUp delay-300">
+                    <div className="flex flex-wrap gap-5 animate-fadeUp delay-300">
 
                       <Link
                         href="/tutors"
                         className="group relative px-8 py-4 md:px-10 md:py-5 bg-blue-600 hover:bg-blue-700 rounded-xl font-semibold text-white text-base md:text-lg shadow-2xl transition duration-500 overflow-hidden"
                       >
+
                         <span className="relative z-10">
                           Browse Tutors
                         </span>
 
-                        <span className="absolute inset-0 bg-linear-to-r from-blue-500 to-cyan-400 opacity-0 group-hover:opacity-100 transition duration-500" />
+                        <span className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-400 opacity-0 group-hover:opacity-100 transition duration-500" />
+
                       </Link>
 
                       <Link
                         href="/register"
                         className="px-8 py-4 md:px-10 md:py-5 border-2 border-white/70 hover:border-blue-400 hover:bg-white hover:text-black rounded-xl font-semibold text-white text-base md:text-lg backdrop-blur-md transition duration-500"
                       >
+
                         Join Now
+
                       </Link>
 
                     </div>
 
                     {/* STATS */}
-                    <div className="flex flex-wrap gap-8 mt-14 text-white">
+                    <div className="flex flex-wrap gap-8 mt-14 text-white animate-fadeUp delay-500">
 
                       <div>
                         <h3 className="text-3xl md:text-4xl font-bold text-blue-400">
                           500+
                         </h3>
+
                         <p className="text-sm md:text-base text-gray-300">
                           Active Tutors
                         </p>
@@ -140,6 +146,7 @@ export default function Banner() {
                         <h3 className="text-3xl md:text-4xl font-bold text-blue-400">
                           10K+
                         </h3>
+
                         <p className="text-sm md:text-base text-gray-300">
                           Sessions Booked
                         </p>
@@ -149,6 +156,7 @@ export default function Banner() {
                         <h3 className="text-3xl md:text-4xl font-bold text-blue-400">
                           98%
                         </h3>
+
                         <p className="text-sm md:text-base text-gray-300">
                           Satisfaction Rate
                         </p>
@@ -157,48 +165,16 @@ export default function Banner() {
                     </div>
 
                   </div>
+
                 </div>
+
               </div>
 
             </div>
           </SwiperSlide>
         ))}
+
       </Swiper>
-
-      {/* CUSTOM STYLES */}
-      <style jsx global>{`
-        @keyframes slowZoom {
-          0% {
-            transform: scale(1.05);
-          }
-          100% {
-            transform: scale(1.15);
-          }
-        }
-
-        .animate-fadeInUp {
-          animation: fadeInUp 1.2s ease forwards;
-        }
-
-        .delay-200 {
-          animation-delay: 0.2s;
-        }
-
-        .delay-300 {
-          animation-delay: 0.3s;
-        }
-
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(40px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
     </section>
   );
 }
