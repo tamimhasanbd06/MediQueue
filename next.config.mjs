@@ -15,6 +15,16 @@ const nextConfig = {
         protocol: "https",
         hostname: "i.pravatar.cc",
       },
+
+      // NEW
+      {
+        protocol: "https",
+        hostname: "s1.imgbb.ws",
+      },
+      {
+        protocol: "https",
+        hostname: "s2.imgbb.ws",
+      },
     ],
   },
 };
