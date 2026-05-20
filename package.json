@@ -9,6 +9,8 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@better-auth/mongo-adapter": "^1.6.11",
+    "better-auth": "^1.6.11",
     "cors": "^2.8.6",
     "framer-motion": "^12.38.0",
     "lucide-react": "^1.16.0",
