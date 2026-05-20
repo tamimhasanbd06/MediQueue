@@ -12,102 +12,155 @@ export default function Navbar() {
   const [user, setUser] = useState(null);
   const [open, setOpen] = useState(false);
   const [dark, setDark] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
+  // LOAD USER + THEME
   useEffect(() => {
+    setMounted(true);
+
     const storedUser = localStorage.getItem("user");
     const theme = localStorage.getItem("theme");
 
-    if (storedUser) setUser(JSON.parse(storedUser));
-    if (theme === "dark") setDark(true);
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+
+    if (theme === "dark") {
+      setDark(true);
+    }
   }, []);
 
+  // THEME TOGGLE
   useEffect(() => {
-    document.documentElement.classList.toggle("dark", dark);
-    localStorage.setItem("theme", dark ? "dark" : "light");
-  }, [dark]);
+    if (!mounted) return;
 
+    document.documentElement.classList.toggle("dark", dark);
+
+    localStorage.setItem("theme", dark ? "dark" : "light");
+  }, [dark, mounted]);
+
+  // LOGOUT
   const logout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
+
     setUser(null);
     setOpen(false);
+
     router.push("/login");
   };
 
+  // ACTIVE LINK STYLE
   const isActive = (path) =>
     pathname === path
-      ? "text-blue-500 font-semibold"
-      : "text-gray-600 hover:text-blue-500";
+      ? "text-blue-600 dark:text-blue-400 font-semibold"
+      : "text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition";
+
+  if (!mounted) return null;
 
   return (
     <>
       {/* NAVBAR */}
-      <nav className="w-full bg-white dark:bg-gray-900 border-b dark:border-gray-700">
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
+      <nav className="sticky top-0 z-50 w-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-lg border-b border-gray-200 dark:border-gray-700 shadow-sm">
 
-          {/* Logo */}
-          <Link href="/" className="text-xl font-bold text-blue-600">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-4 md:px-6 py-4">
+
+          {/* LOGO */}
+          <Link
+            href="/"
+            className="text-2xl font-black tracking-tight text-blue-600 dark:text-blue-400"
+          >
             MediQueue
           </Link>
 
-          {/* Desktop */}
-          <div className="hidden md:flex items-center gap-6 text-sm">
+          {/* DESKTOP MENU */}
+          <div className="hidden md:flex items-center gap-6 text-sm font-medium">
 
-            <Link href="/" className={isActive("/")}>Home</Link>
-            <Link href="/tutors" className={isActive("/tutors")}>Tutors</Link>
+            <Link href="/" className={isActive("/")}>
+              Home
+            </Link>
+
+            <Link href="/tutors" className={isActive("/tutors")}>
+              Tutors
+            </Link>
 
             {user && (
               <>
-                <Link href="/add-tutor" className={isActive("/add-tutor")}>
+                <Link
+                  href="/add-tutor"
+                  className={isActive("/add-tutor")}
+                >
                   Add Tutor
                 </Link>
-                <Link href="/my-tutors" className={isActive("/my-tutors")}>
+
+                <Link
+                  href="/my-tutors"
+                  className={isActive("/my-tutors")}
+                >
                   My Tutors
                 </Link>
-                <Link href="/booked-sessions" className={isActive("/booked-sessions")}>
+
+                <Link
+                  href="/booked-sessions"
+                  className={isActive("/booked-sessions")}
+                >
                   Sessions
                 </Link>
               </>
             )}
 
-            {/* Dark Toggle */}
+            {/* THEME TOGGLE */}
             <button
               onClick={() => setDark(!dark)}
-              className="px-3 py-1 border rounded text-sm dark:text-white"
+              className="px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800 text-sm dark:text-white hover:scale-105 active:scale-95 transition"
             >
               {dark ? "☀️ Light" : "🌙 Dark"}
             </button>
 
+            {/* AUTH BUTTONS */}
             {!user ? (
-              <>
-                <Link href="/login" className="px-4 py-1 border rounded">
+              <div className="flex items-center gap-3">
+
+                <Link
+                  href="/login"
+                  className="px-5 py-2 rounded-xl border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:border-blue-500 hover:text-blue-600 transition"
+                >
                   Login
                 </Link>
 
-                <Link href="/register" className="px-4 py-1 bg-blue-600 text-white rounded">
-                  Register
+                <Link
+                  href="/signup"
+                  className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/20 transition hover:scale-105 active:scale-95"
+                >
+                  Sign Up
                 </Link>
-              </>
+
+              </div>
             ) : (
               <button
                 onClick={() => setOpen(true)}
-                className="w-9 h-9 rounded-full border overflow-hidden"
+                className="w-11 h-11 rounded-full overflow-hidden border-2 border-blue-500 hover:scale-105 transition"
               >
                 <img
-                  src={user?.photo || "https://i.ibb.co/4pDNDk1/avatar.png"}
+                  src={
+                    user?.photo ||
+                    "https://i.ibb.co/4pDNDk1/avatar.png"
+                  }
+                  alt="User"
                   className="w-full h-full object-cover"
                 />
               </button>
             )}
           </div>
 
-          {/* Hamburger */}
+          {/* MOBILE MENU BUTTON */}
           <button
             onClick={() => setOpen(true)}
-            className="md:hidden text-2xl text-gray-700 dark:text-white"
+            className="md:hidden text-3xl text-gray-700 dark:text-white"
           >
             ☰
           </button>
+
         </div>
       </nav>
 
@@ -119,12 +172,12 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setOpen(false)}
-            className="fixed inset-0 bg-black/40 z-40"
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
           />
         )}
       </AnimatePresence>
 
-      {/* SIDE DRAWER */}
+      {/* MOBILE DRAWER */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -132,67 +185,132 @@ export default function Navbar() {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ duration: 0.3 }}
-            className="fixed top-0 right-0 h-full w-72 bg-white dark:bg-gray-900 z-50 shadow-xl border-l dark:border-gray-700"
+            className="fixed top-0 right-0 h-full w-[85%] max-w-sm bg-white dark:bg-gray-900 z-50 shadow-2xl border-l border-gray-200 dark:border-gray-700"
           >
 
-            {/* Header */}
-            <div className="flex justify-between items-center p-4 border-b dark:border-gray-700">
-              <h2 className="text-blue-600 font-bold">MediQueue</h2>
-              <button onClick={() => setOpen(false)} className="text-xl">
+            {/* DRAWER HEADER */}
+            <div className="flex items-center justify-between p-5 border-b border-gray-200 dark:border-gray-700">
+
+              <h2 className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                MediQueue
+              </h2>
+
+              <button
+                onClick={() => setOpen(false)}
+                className="text-2xl text-gray-700 dark:text-white"
+              >
                 ✕
               </button>
+
             </div>
 
-            {/* Profile */}
+            {/* USER INFO */}
             {user && (
-              <div className="p-4 flex items-center gap-3 border-b dark:border-gray-700">
+              <div className="p-5 flex items-center gap-4 border-b border-gray-200 dark:border-gray-700">
+
                 <img
-                  src={user?.photo}
-                  className="w-10 h-10 rounded-full"
+                  src={
+                    user?.photo ||
+                    "https://i.ibb.co/4pDNDk1/avatar.png"
+                  }
+                  alt="User"
+                  className="w-14 h-14 rounded-full object-cover border-2 border-blue-500"
                 />
+
                 <div>
-                  <p className="font-semibold">{user?.name}</p>
+                  <p className="font-semibold text-gray-800 dark:text-white">
+                    {user?.name}
+                  </p>
+
                   <button
                     onClick={logout}
-                    className="text-sm text-red-500"
+                    className="text-sm text-red-500 hover:text-red-600 transition"
                   >
                     Logout
                   </button>
                 </div>
+
               </div>
             )}
 
-            {/* Links */}
-            <div className="flex flex-col p-4 gap-4 text-sm">
+            {/* MOBILE LINKS */}
+            <div className="flex flex-col p-5 gap-4 text-base font-medium">
 
-              <Link onClick={() => setOpen(false)} href="/">Home</Link>
-              <Link onClick={() => setOpen(false)} href="/tutors">Tutors</Link>
+              <Link
+                onClick={() => setOpen(false)}
+                href="/"
+                className={isActive("/")}
+              >
+                Home
+              </Link>
+
+              <Link
+                onClick={() => setOpen(false)}
+                href="/tutors"
+                className={isActive("/tutors")}
+              >
+                Tutors
+              </Link>
 
               {user && (
                 <>
-                  <Link onClick={() => setOpen(false)} href="/add-tutor">
+                  <Link
+                    onClick={() => setOpen(false)}
+                    href="/add-tutor"
+                    className={isActive("/add-tutor")}
+                  >
                     Add Tutor
                   </Link>
-                  <Link onClick={() => setOpen(false)} href="/my-tutors">
+
+                  <Link
+                    onClick={() => setOpen(false)}
+                    href="/my-tutors"
+                    className={isActive("/my-tutors")}
+                  >
                     My Tutors
                   </Link>
-                  <Link onClick={() => setOpen(false)} href="/booked-sessions">
+
+                  <Link
+                    onClick={() => setOpen(false)}
+                    href="/booked-sessions"
+                    className={isActive("/booked-sessions")}
+                  >
                     Sessions
                   </Link>
                 </>
               )}
 
+              {/* MOBILE THEME BUTTON */}
+              <button
+                onClick={() => setDark(!dark)}
+                className="mt-3 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800 dark:text-white transition"
+              >
+                {dark ? "☀️ Light Mode" : "🌙 Dark Mode"}
+              </button>
+
+              {/* AUTH */}
               {!user && (
-                <div className="flex flex-col gap-2 mt-4">
-                  <Link href="/login" className="border text-center py-2 rounded">
+                <div className="flex flex-col gap-3 mt-5">
+
+                  <Link
+                    onClick={() => setOpen(false)}
+                    href="/login"
+                    className="w-full py-3 rounded-xl border border-gray-300 dark:border-gray-600 text-center dark:text-white"
+                  >
                     Login
                   </Link>
 
-                  <Link href="/register" className="bg-blue-600 text-white text-center py-2 rounded">
-                    Register
+                  <Link
+                    onClick={() => setOpen(false)}
+                    href="/signup"
+                    className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-center font-semibold shadow-lg shadow-blue-500/20 transition"
+                  >
+                    Sign Up
                   </Link>
+
                 </div>
               )}
+
             </div>
           </motion.div>
         )}

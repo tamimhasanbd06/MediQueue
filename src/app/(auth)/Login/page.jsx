@@ -1,10 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import toast from "react-hot-toast";
+import { authClient } from "@/lib/auth-client";
 
 export default function LoginPage() {
+
+  const router = useRouter();
+
+  const [loading, setLoading] = useState(false);
+
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -13,28 +20,45 @@ export default function LoginPage() {
   const [showPass, setShowPass] = useState(false);
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // simple validation
     if (!form.email || !form.password) {
-      toast.error("Email and Password required");
-      return;
+      return toast.error("Email and Password required");
     }
 
     try {
-      toast.loading("Logging in...");
+      setLoading(true);
 
-      // 👉 backend connect here
-      // const res = await fetch("/api/login", {...})
+      const { error } =
+        await authClient.signIn.email({
+          email: form.email,
+          password: form.password,
+        });
 
-      toast.dismiss();
+      if (error) {
+        return toast.error(
+          error.message || "Login failed"
+        );
+      }
+
       toast.success("Login successful!");
-    } catch (error) {
-      toast.dismiss();
-      toast.error("Invalid credentials!");
+
+      // redirect to home
+      router.push("/");
+
+    } catch (err) {
+      console.log(err);
+      toast.error("Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -49,7 +73,7 @@ export default function LoginPage() {
         </h1>
 
         <p className="text-center text-gray-500 mt-2 mb-6">
-          Login to your MediQueue account
+          Login to your account
         </p>
 
         {/* FORM */}
@@ -60,16 +84,19 @@ export default function LoginPage() {
             name="email"
             type="email"
             placeholder="Email"
+            value={form.email}
             onChange={handleChange}
-            className="w-full p-3 rounded-xl border focus:ring-2 focus:ring-blue-500 outline-none transition hover:scale-[1.01]"
+            className="w-full p-3 rounded-xl border focus:ring-2 focus:ring-blue-500 outline-none"
           />
 
           {/* PASSWORD */}
           <div className="relative">
+
             <input
               name="password"
               type={showPass ? "text" : "password"}
               placeholder="Password"
+              value={form.password}
               onChange={handleChange}
               className="w-full p-3 rounded-xl border focus:ring-2 focus:ring-blue-500 outline-none"
             />
@@ -81,14 +108,16 @@ export default function LoginPage() {
             >
               {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
+
           </div>
 
           {/* BUTTON */}
           <button
             type="submit"
+            disabled={loading}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition active:scale-95 shadow-md"
           >
-            Login
+            {loading ? "Loading..." : "Login"}
           </button>
 
         </form>

@@ -1,13 +1,43 @@
 import { betterAuth } from "better-auth";
-import { MongoClient } from "mongodb";
-import { mongodbAdapter } from "better-auth/adapters/mongodb";
 
-const client = new MongoClient(process.env.MONGODB_URL);
-const db = client.db('mediqueue');
+import { mongodbAdapter }
+from "better-auth/adapters/mongodb";
+
+import { MongoClient }
+from "mongodb";
+
+const mongoURI =
+  process.env.MONGODB_URL;
+
+if (!mongoURI) {
+
+  throw new Error(
+    "MONGODB_URL missing"
+  );
+}
+
+const client =
+  new MongoClient(mongoURI);
+
+await client.connect();
+
+const db =
+  client.db("mediqueue");
 
 export const auth = betterAuth({
+
   database: mongodbAdapter(db, {
-    // Optional: if you don't provide a client, database transactions won't be enabled.
-    client
+    client,
   }),
+
+  emailAndPassword: {
+    enabled: true,
+  },
+
+  trustedOrigins: [
+    "http://localhost:3000",
+  ],
+
+  secret:
+    process.env.BETTER_AUTH_SECRET,
 });

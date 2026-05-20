@@ -1,161 +1,275 @@
 "use client";
 
 import { useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import Link from "next/link";
 import toast from "react-hot-toast";
+import { Eye, EyeOff } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
 
 export default function SignupPage() {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    photo: "",
-    password: "",
-    confirmPassword: "",
-  });
 
-  const [showPass, setShowPass] = useState(false);
-  const [showConfirmPass, setShowConfirmPass] = useState(false);
+  const [loading, setLoading] = useState(false);
 
+  const [showPassword, setShowPassword] =
+    useState(false);
+
+  const [showConfirmPassword,
+    setShowConfirmPassword] =
+    useState(false);
+
+  const [formData, setFormData] =
+    useState({
+      name: "",
+      email: "",
+      image: "",
+      password: "",
+      confirmPassword: "",
+    });
+
+  // HANDLE INPUT
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
   };
 
-  const validatePassword = (pass) => {
-    return (
-      /[A-Z]/.test(pass) &&
-      /[a-z]/.test(pass) &&
-      pass.length >= 6
-    );
-  };
-
+  // HANDLE SUBMIT
   const handleSubmit = async (e) => {
+
     e.preventDefault();
 
-    if (!form.name || !form.email || !form.password) {
-      toast.error("All fields are required");
-      return;
+    // EMPTY FIELD CHECK
+    for (let key in formData) {
+
+      if (!formData[key]) {
+
+        return toast.error(
+          "All fields are required"
+        );
+      }
     }
 
-    if (!validatePassword(form.password)) {
-      toast.error(
-        "Password must contain uppercase, lowercase & 6+ characters"
+    // PASSWORD MATCH CHECK
+    if (
+      formData.password !==
+      formData.confirmPassword
+    ) {
+
+      return toast.error(
+        "Passwords do not match"
       );
-      return;
-    }
-
-    if (form.password !== form.confirmPassword) {
-      toast.error("Passwords do not match");
-      return;
     }
 
     try {
-      toast.loading("Creating account...");
 
-      // 👉 backend connect here later
-      // await fetch("/api/signup", {...})
+      setLoading(true);
 
-      toast.dismiss();
-      toast.success("Account created successfully!");
+      const { error } =
+        await authClient.signUp.email({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          image: formData.image,
+        });
+
+      // ERROR
+      if (error) {
+
+        return toast.error(
+          error.message || "Signup failed"
+        );
+      }
+
+      // SUCCESS
+      toast.success(
+        "Account created successfully"
+      );
+
+      // RESET FORM
+      setFormData({
+        name: "",
+        email: "",
+        image: "",
+        password: "",
+        confirmPassword: "",
+      });
+
+      // REDIRECT
+      window.location.href = "/login";
+
     } catch (error) {
-      toast.dismiss();
-      toast.error("Signup failed. Try again!");
+
+      console.log(error);
+
+      toast.error(
+        "Something went wrong"
+      );
+
+    } finally {
+
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-gray-100 to-slate-200 px-4">
 
-      <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl border border-gray-200 p-8">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
 
-        {/* HEADER */}
-        <h1 className="text-3xl font-bold text-center text-gray-800">
-          Create Account
+      <div className="w-full max-w-md bg-white p-8 rounded-3xl shadow-xl">
+
+        {/* TITLE */}
+        <h1 className="text-3xl font-bold text-center text-blue-600 mb-2">
+
+          Sign Up
+
         </h1>
 
-        <p className="text-center text-gray-500 mt-2 mb-6">
-          Join MediQueue & start learning
+        <p className="text-center text-gray-500 mb-6">
+
+          Create your account
+
         </p>
 
         {/* FORM */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-4"
+        >
 
           {/* NAME */}
           <input
+            type="text"
             name="name"
             placeholder="Full Name"
+            value={formData.name}
             onChange={handleChange}
-            className="w-full p-3 rounded-xl border focus:ring-2 focus:ring-blue-500 outline-none transition hover:scale-[1.01]"
+            className="w-full border px-4 py-3 rounded-xl outline-none focus:ring-2 focus:ring-blue-500"
           />
 
           {/* EMAIL */}
           <input
-            name="email"
             type="email"
-            placeholder="Email"
+            name="email"
+            placeholder="Email Address"
+            value={formData.email}
             onChange={handleChange}
-            className="w-full p-3 rounded-xl border focus:ring-2 focus:ring-blue-500 outline-none transition hover:scale-[1.01]"
+            className="w-full border px-4 py-3 rounded-xl outline-none focus:ring-2 focus:ring-blue-500"
           />
 
-          {/* PHOTO */}
+          {/* IMAGE */}
           <input
-            name="photo"
+            type="text"
+            name="image"
             placeholder="Photo URL"
+            value={formData.image}
             onChange={handleChange}
-            className="w-full p-3 rounded-xl border focus:ring-2 focus:ring-blue-500 outline-none transition hover:scale-[1.01]"
+            className="w-full border px-4 py-3 rounded-xl outline-none focus:ring-2 focus:ring-blue-500"
           />
 
           {/* PASSWORD */}
           <div className="relative">
+
             <input
+              type={
+                showPassword
+                  ? "text"
+                  : "password"
+              }
               name="password"
-              type={showPass ? "text" : "password"}
               placeholder="Password"
+              value={formData.password}
               onChange={handleChange}
-              className="w-full p-3 rounded-xl border focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full border px-4 py-3 rounded-xl outline-none focus:ring-2 focus:ring-blue-500"
             />
+
             <button
               type="button"
-              onClick={() => setShowPass(!showPass)}
-              className="absolute right-3 top-3 text-gray-500"
+              onClick={() =>
+                setShowPassword(
+                  !showPassword
+                )
+              }
+              className="absolute right-4 top-4 text-gray-500"
             >
-              {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
+
+              {showPassword
+                ? <EyeOff size={20} />
+                : <Eye size={20} />
+              }
+
             </button>
+
           </div>
 
           {/* CONFIRM PASSWORD */}
           <div className="relative">
+
             <input
+              type={
+                showConfirmPassword
+                  ? "text"
+                  : "password"
+              }
               name="confirmPassword"
-              type={showConfirmPass ? "text" : "password"}
               placeholder="Confirm Password"
+              value={
+                formData.confirmPassword
+              }
               onChange={handleChange}
-              className="w-full p-3 rounded-xl border focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full border px-4 py-3 rounded-xl outline-none focus:ring-2 focus:ring-blue-500"
             />
+
             <button
               type="button"
               onClick={() =>
-                setShowConfirmPass(!showConfirmPass)
+                setShowConfirmPassword(
+                  !showConfirmPassword
+                )
               }
-              className="absolute right-3 top-3 text-gray-500"
+              className="absolute right-4 top-4 text-gray-500"
             >
-              {showConfirmPass ? <EyeOff size={18} /> : <Eye size={18} />}
-            </button>
-          </div>
 
-          {/* PASSWORD RULE */}
-          <p className="text-xs text-gray-500">
-            Must include uppercase, lowercase & minimum 6 characters
-          </p>
+              {showConfirmPassword
+                ? <EyeOff size={20} />
+                : <Eye size={20} />
+              }
+
+            </button>
+
+          </div>
 
           {/* BUTTON */}
           <button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition active:scale-95 shadow-md"
+            disabled={loading}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold"
           >
-            Sign Up
+
+            {loading
+              ? "Loading..."
+              : "Create Account"
+            }
+
           </button>
 
         </form>
+
+        {/* LOGIN LINK */}
+        <p className="text-center text-sm text-gray-500 mt-6">
+
+          Already have an account?
+
+          <Link
+            href="/login"
+            className="text-blue-600 ml-1 hover:underline"
+          >
+            Login
+          </Link>
+
+        </p>
+
       </div>
     </div>
   );
