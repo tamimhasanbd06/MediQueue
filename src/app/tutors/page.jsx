@@ -9,40 +9,26 @@ export default function TutorsPage() {
   const [tutors, setTutors] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  /* =========================
-     FILTER STATES
-  ========================= */
   const [searchText, setSearchText] = useState("");
   const [subjectText, setSubjectText] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startMonth, setStartMonth] = useState("");
+  const [endMonth, setEndMonth] = useState("");
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-  /* =========================
-     FETCH TUTORS
-  ========================= */
+  /* FETCH */
   const fetchTutors = async () => {
     try {
       setLoading(true);
-
-      if (!API_URL) {
-        throw new Error("NEXT_PUBLIC_API_URL is missing");
-      }
 
       const res = await fetch(`${API_URL}/tutors`, {
         cache: "no-store",
       });
 
-      if (!res.ok) {
-        throw new Error("Failed to fetch tutors");
-      }
-
       const data = await res.json();
-
       setTutors(Array.isArray(data) ? data : []);
-    } catch (error) {
-      console.error("Tutor Fetch Error:", error);
+    } catch (err) {
+      console.log(err);
       setTutors([]);
     } finally {
       setLoading(false);
@@ -53,283 +39,133 @@ export default function TutorsPage() {
     fetchTutors();
   }, []);
 
-  /* =========================
-     FILTER DATA
-  ========================= */
-  const filteredTutors = useMemo(() => {
-    return tutors.filter((tutor) => {
-      const matchesSearch =
-        tutor?.name
-          ?.toLowerCase()
-          .includes(searchText.toLowerCase());
-
-      const matchesSubject =
-        tutor?.subject
-          ?.toLowerCase()
-          .includes(subjectText.toLowerCase());
-
-      const matchesStartDate = startDate
-        ? tutor?.courseStartMonth
-            ?.toLowerCase()
-            .includes(startDate.toLowerCase())
-        : true;
-
-      const matchesEndDate = endDate
-        ? tutor?.courseEndMonth
-            ?.toLowerCase()
-            .includes(endDate.toLowerCase())
-        : true;
-
+  /* FILTER */
+  const filtered = useMemo(() => {
+    return tutors.filter((t) => {
       return (
-        matchesSearch &&
-        matchesSubject &&
-        matchesStartDate &&
-        matchesEndDate
+        t?.name?.toLowerCase().includes(searchText.toLowerCase()) &&
+        t?.subject?.toLowerCase().includes(subjectText.toLowerCase()) &&
+        t?.courseStartMonth?.toLowerCase().includes(startMonth.toLowerCase()) &&
+        t?.courseEndMonth?.toLowerCase().includes(endMonth.toLowerCase())
       );
     });
-  }, [tutors, searchText, subjectText, startDate, endDate]);
+  }, [tutors, searchText, subjectText, startMonth, endMonth]);
 
-  /* =========================
-     RESET FILTERS
-  ========================= */
-  const handleReset = () => {
+  const resetAll = () => {
     setSearchText("");
     setSubjectText("");
-    setStartDate("");
-    setEndDate("");
+    setStartMonth("");
+    setEndMonth("");
   };
 
   return (
     <>
-      {/* =========================
-          METADATA
-      ========================= */}
       <Head>
-        <title>Tutors | MediQueue</title>
-
-        <meta
-          name="description"
-          content="Find professional tutors, filter by subject and course duration, and book sessions easily."
-        />
-
-        <meta
-          name="keywords"
-          content="Tutors, MediQueue, Online Tutors, Education, Learning"
-        />
-
-        <meta name="author" content="MediQueue" />
+        <title>Tutors Page</title>
+        <meta name="description" content="Find best tutors easily" />
       </Head>
 
-      <section className="min-h-screen bg-gradient-to-b from-white via-slate-50 to-blue-50 py-16 px-4 md:px-8">
+      <section className="min-h-screen bg-gradient-to-b from-white via-gray-50 to-blue-50 px-4 md:px-10 py-14">
 
-        {/* =========================
-            HEADER
-        ========================= */}
-        <div className="max-w-7xl mx-auto text-center mb-16">
-
-          <p className="uppercase tracking-[6px] text-blue-600 font-semibold mb-4">
-            MediQueue Tutors
-          </p>
-
-          <h1 className="text-4xl md:text-6xl font-black text-gray-900 mb-6">
+        {/* HEADER */}
+        <div className="text-center mb-14">
+          <h1 className="text-4xl md:text-5xl font-black text-gray-900">
             Find Your Perfect Tutor
           </h1>
-
-          <p className="max-w-3xl mx-auto text-gray-600 text-lg leading-relaxed">
-            Explore professional tutors and discover the perfect learning
-            experience for your goals.
+          <p className="text-gray-600 mt-3">
+            Search, filter and book your learning session
           </p>
-
         </div>
 
-        {/* =========================
-            FILTER SECTION
-        ========================= */}
-        <div className="max-w-7xl mx-auto mb-14">
+        {/* FILTER */}
+        <div className="max-w-7xl mx-auto mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
 
-          <div className="bg-white border border-gray-200 rounded-3xl shadow-xl p-6 md:p-8">
+            <input
+              placeholder="Tutor name"
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              className="p-3 rounded-xl border bg-white"
+            />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-5">
+            <input
+              placeholder="Subject"
+              value={subjectText}
+              onChange={(e) => setSubjectText(e.target.value)}
+              className="p-3 rounded-xl border bg-white"
+            />
 
-              {/* TUTOR NAME */}
-              <input
-                type="text"
-                placeholder="Search tutor..."
-                value={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-50 outline-none focus:ring-2 focus:ring-blue-500"
-              />
+            <input
+              placeholder="Start month"
+              value={startMonth}
+              onChange={(e) => setStartMonth(e.target.value)}
+              className="p-3 rounded-xl border bg-white"
+            />
 
-              {/* SUBJECT */}
-              <input
-                type="text"
-                placeholder="Search subject..."
-                value={subjectText}
-                onChange={(e) => setSubjectText(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-50 outline-none focus:ring-2 focus:ring-blue-500"
-              />
+            <input
+              placeholder="End month"
+              value={endMonth}
+              onChange={(e) => setEndMonth(e.target.value)}
+              className="p-3 rounded-xl border bg-white"
+            />
 
-              {/* START DATE */}
-              <input
-                type="text"
-                placeholder="Start month..."
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-50 outline-none focus:ring-2 focus:ring-blue-500"
-              />
-
-              {/* END DATE */}
-              <input
-                type="text"
-                placeholder="End month..."
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-50 outline-none focus:ring-2 focus:ring-blue-500"
-              />
-
-              {/* RESET */}
-              <button
-                onClick={handleReset}
-                className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition duration-300"
-              >
-                Reset All
-              </button>
-
-            </div>
+            <button
+              onClick={resetAll}
+              className="bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700"
+            >
+              Reset
+            </button>
 
           </div>
-
         </div>
 
-        {/* =========================
-            LOADING
-        ========================= */}
+        {/* GRID */}
         {loading ? (
-          <div className="flex justify-center items-center py-32">
-            <span className="loading loading-infinity loading-xl"></span>
-          </div>
-        ) : filteredTutors.length === 0 ? (
-          <div className="text-center py-28">
-
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              No Tutors Found
-            </h2>
-
-            <p className="text-gray-600">
-              Try changing your search or filter options.
-            </p>
-
-          </div>
+          <div className="text-center py-20">Loading...</div>
         ) : (
           <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
 
-            {filteredTutors.map((tutor) => (
-              <div
-                key={tutor?._id}
-                className="bg-white rounded-3xl overflow-hidden border border-gray-200 shadow-lg hover:shadow-2xl transition-all duration-500 flex flex-col group"
-              >
+            {filtered.map((tutor) => (
+              <Link key={tutor?._id} href={`/tutors/${tutor?._id}`}>
 
-                {/* IMAGE */}
-                <Link href={`/tutors/${tutor?._id}`}>
+                <div className="bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition cursor-pointer">
 
-                  <div className="relative h-72 overflow-hidden cursor-pointer">
-
+                  {/* IMAGE */}
+                  <div className="relative h-64">
                     <Image
-                      src={
-                        tutor?.photoURL ||
-                        "https://i.ibb.co/4pDNDk1/avatar.png"
-                      }
-                      alt={tutor?.name || "Tutor"}
+                      src={tutor?.photoURL}
+                      alt={tutor?.name}
                       fill
-                      className="object-cover group-hover:scale-110 transition duration-700"
+                      className="object-cover"
                     />
-
-                    {/* OVERLAY */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-
-                    {/* SUBJECT BADGE */}
-                    <div className="absolute top-4 left-4">
-
-                      <span className="bg-blue-600 text-white text-xs px-4 py-2 rounded-full font-semibold shadow-lg">
-                        {tutor?.subject || "No Subject"}
-                      </span>
-
-                    </div>
-
                   </div>
 
-                </Link>
+                  {/* CONTENT */}
+                  <div className="p-5 space-y-2">
 
-                {/* CONTENT */}
-                <div className="p-6 flex flex-col flex-grow">
+                    <h2 className="text-xl font-bold">{tutor?.name}</h2>
 
-                  {/* NAME */}
-                  <h2 className="text-2xl font-bold text-gray-900 mb-3">
-                    {tutor?.name || "Unknown Tutor"}
-                  </h2>
-
-                  {/* PRICE */}
-                  <div className="mb-5">
-
-                    <p className="text-sm text-gray-500 mb-1">
-                      Session Fee
+                    <p className="text-blue-600 font-black text-2xl">
+                      ৳ {tutor?.fee}
                     </p>
 
-                    <h3 className="text-4xl font-black text-blue-600">
-                      ৳ {tutor?.fee || 0}
-                    </h3>
+                    <p className="text-sm text-gray-600">
+                      {tutor?.subject}
+                    </p>
+
+                    <p className="text-sm text-gray-500">
+                      {tutor?.courseStartMonth} - {tutor?.courseEndMonth}
+                    </p>
+
+                    <button className="w-full mt-3 bg-blue-600 text-white py-3 rounded-xl font-bold">
+                      Book Session
+                    </button>
 
                   </div>
-
-                  {/* DETAILS */}
-                  <div className="space-y-3 mb-6">
-
-                    <div className="flex justify-between text-sm">
-
-                      <span className="text-gray-500">
-                        Subject
-                      </span>
-
-                      <span className="font-medium text-gray-900">
-                        {tutor?.subject || "N/A"}
-                      </span>
-
-                    </div>
-
-                    <div className="flex justify-between text-sm">
-
-                      <span className="text-gray-500">
-                        Start Month
-                      </span>
-
-                      <span className="font-medium text-gray-900">
-                        {tutor?.courseStartMonth || "N/A"}
-                      </span>
-
-                    </div>
-
-                    <div className="flex justify-between text-sm">
-
-                      <span className="text-gray-500">
-                        End Month
-                      </span>
-
-                      <span className="font-medium text-gray-900">
-                        {tutor?.courseEndMonth || "N/A"}
-                      </span>
-
-                    </div>
-
-                  </div>
-
-                  {/* BUTTON */}
-                  <button className="mt-auto w-full py-4 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold transition duration-300">
-                    Book Session
-                  </button>
 
                 </div>
 
-              </div>
+              </Link>
             ))}
 
           </div>
