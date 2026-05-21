@@ -1,4 +1,5 @@
 import { createAuthClient } from "better-auth/react";
+import { jwtClient } from "better-auth/client/plugins"
 
 export const authClient = createAuthClient({
   baseURL:
@@ -6,9 +7,9 @@ export const authClient = createAuthClient({
       .NEXT_PUBLIC_BETTER_AUTH_URL,
 });
 
-export const {
-  signIn,
-  signUp,
-  signOut,
-  useSession,
-} = authClient;
+ plugins: [
+    jwtClient() 
+  ]
+
+
+export const { signIn, signUp, signOut, useSession,} = authClient;

@@ -5,8 +5,11 @@ import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import toast from "react-hot-toast";
 import { authClient } from "@/lib/auth-client";
+import { data } from "framer-motion/client";
 
 export default function LoginPage() {
+
+ 
 
   const router = useRouter();
 
@@ -26,8 +29,13 @@ export default function LoginPage() {
     });
   };
 
+
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+
 
     // simple validation
     if (!form.email || !form.password) {
