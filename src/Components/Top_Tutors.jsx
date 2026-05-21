@@ -10,63 +10,57 @@ export default function FeaturedTutors() {
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-  const fetchTutors = async () => {
-    try {
-      setLoading(true);
-
-      if (!API_URL) {
-        throw new Error("API URL missing");
-      }
-
-      const res = await fetch(`${API_URL}/tutors`, {
-        cache: "no-store",
-      });
-
-      const data = await res.json();
-
-      setTutors(Array.isArray(data) ? data.slice(0, 6) : []);
-    } catch (error) {
-      console.error("Fetch Error:", error);
-      setTutors([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchTutors = async () => {
+      try {
+        setLoading(true);
+
+        const res = await fetch(`${API_URL}/tutors`, {
+          cache: "no-store",
+        });
+
+        const data = await res.json();
+        setTutors(Array.isArray(data) ? data.slice(0, 6) : []);
+      } catch (err) {
+        setTutors([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchTutors();
-  }, []);
+  }, [API_URL]);
 
   return (
-    <section className="py-16 px-4 md:px-8 bg-gradient-to-b from-white to-blue-50">
+    <section className="py-12 sm:py-16 px-4 bg-gradient-to-b from-white to-blue-50">
 
-      {/* TITLE */}
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-black text-gray-900">
+      {/* HEADER */}
+      <div className="text-center mb-10 sm:mb-14">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-gray-900">
           Featured Tutors
-        </h1>
-        <p className="text-gray-600 mt-3">
-          Only top 6 tutors are shown here
+        </h2>
+        <p className="text-sm sm:text-base text-gray-600 mt-2">
+          Top 6 expert tutors available for booking
         </p>
       </div>
 
       {/* LOADING */}
       {loading ? (
         <div className="flex justify-center py-20">
-          <span className="loading loading-infinity loading-xl"></span>
+          <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
       ) : (
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
 
           {tutors.map((tutor) => (
             <div
               key={tutor?._id}
-              className="bg-white rounded-3xl shadow-lg border hover:shadow-2xl transition overflow-hidden flex flex-col"
+              className="group bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col"
             >
 
               {/* IMAGE */}
               <Link href={`/tutors/${tutor?._id}`}>
-                <div className="relative h-72">
+                <div className="relative h-56 sm:h-64 overflow-hidden">
 
                   <Image
                     src={
@@ -75,11 +69,12 @@ export default function FeaturedTutors() {
                     }
                     alt={tutor?.name}
                     fill
-                    className="object-cover"
+                    className="object-cover group-hover:scale-105 transition duration-500"
                   />
 
-                  <div className="absolute top-4 left-4">
-                    <span className="bg-blue-600 text-white px-4 py-2 text-xs rounded-full">
+                  {/* SUBJECT BADGE */}
+                  <div className="absolute top-3 left-3">
+                    <span className="bg-blue-600 text-white text-[10px] sm:text-xs px-3 py-1 rounded-full shadow">
                       {tutor?.subject}
                     </span>
                   </div>
@@ -88,48 +83,58 @@ export default function FeaturedTutors() {
               </Link>
 
               {/* CONTENT */}
-              <div className="p-6 flex flex-col flex-grow">
+              <div className="p-4 sm:p-6 flex flex-col flex-grow">
 
                 {/* NAME */}
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900">
                   {tutor?.name}
-                </h2>
-
-                {/* FEE */}
-                <h3 className="text-3xl font-black text-blue-600 mb-4">
-                  ৳ {tutor?.fee}
                 </h3>
 
-                {/* SUBJECT */}
-                <div className="text-sm text-gray-600 mb-2">
-                  <span className="font-semibold">Subject: </span>
-                  {tutor?.subject}
-                </div>
+                {/* PRICE */}
+                <p className="text-xl sm:text-2xl font-black text-blue-600 mt-1">
+                  ৳ {tutor?.fee}
+                </p>
 
-                {/* COURSE DATE */}
-                <div className="text-sm text-gray-600 mb-1">
-                  <span className="font-semibold">Start: </span>
-                  {tutor?.courseStartMonth}
-                </div>
+                {/* DETAILS */}
+                <div className="mt-3 space-y-1 text-xs sm:text-sm text-gray-600">
 
-                <div className="text-sm text-gray-600 mb-5">
-                  <span className="font-semibold">End: </span>
-                  {tutor?.courseEndMonth}
+                  <p>
+                    <span className="font-semibold text-gray-800">
+                      Subject:
+                    </span>{" "}
+                    {tutor?.subject}
+                  </p>
+
+                  <p>
+                    <span className="font-semibold text-gray-800">
+                      Start:
+                    </span>{" "}
+                    {tutor?.courseStartMonth}
+                  </p>
+
+                  <p>
+                    <span className="font-semibold text-gray-800">
+                      End:
+                    </span>{" "}
+                    {tutor?.courseEndMonth}
+                  </p>
+
                 </div>
 
                 {/* BUTTON */}
-                <button className="mt-auto w-full py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold transition">
+                <Link
+                  href={`/tutors/${tutor?._id}`}
+                  className="mt-5 w-full text-center py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-all duration-300 active:scale-95"
+                >
                   Book Session
-                </button>
+                </Link>
 
               </div>
-
             </div>
           ))}
 
         </div>
       )}
-
     </section>
   );
 }
