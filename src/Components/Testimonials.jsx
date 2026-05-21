@@ -17,7 +17,7 @@ const testimonials = [
     subject: "Physics",
     image: "https://i.pravatar.cc/150?img=5",
     review:
-      "The booking system is super easy and smooth. I can schedule classes anytime without hassle.",
+      "The booking system is super smooth. I can schedule classes anytime without hassle.",
   },
   {
     id: 3,
@@ -25,73 +25,87 @@ const testimonials = [
     subject: "English",
     image: "https://i.pravatar.cc/150?img=8",
     review:
-      "I love how quickly I found a tutor. The platform feels very professional and secure.",
+      "I found a tutor very quickly. The platform feels professional and secure.",
+  },
+  {
+    id: 4,
+    name: "Ayesha Khan",
+    subject: "Chemistry",
+    image: "https://i.pravatar.cc/150?img=15",
+    review:
+      "Great platform! The tutors are very helpful and the system is very easy to use.",
   },
 ];
 
 export default function SuccessStories() {
   return (
-    <section className="w-full bg-white dark:bg-gray-950 py-20 px-6 md:px-10 lg:px-16">
+    <section className="w-full bg-gradient-to-b from-white to-blue-50 dark:from-gray-950 dark:to-gray-900 py-14 sm:py-20 px-4 sm:px-6 lg:px-16">
+
       <div className="max-w-7xl mx-auto">
 
         {/* HEADER */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <p className="text-blue-500 uppercase tracking-[3px] font-semibold text-sm mb-4">
+        <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
+
+          <p className="text-blue-500 uppercase tracking-[3px] text-xs sm:text-sm font-semibold mb-3">
             Success Stories
           </p>
 
-          <h2 className="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white mb-6">
-            What Our Students Say
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white">
+            What Students Say About Us
           </h2>
 
-          <p className="text-gray-600 dark:text-gray-300 text-lg">
-            Real experiences from students who improved their learning journey
-            using MediQueue tutor booking system.
+          <p className="mt-4 text-sm sm:text-base text-gray-600 dark:text-gray-300">
+            Real experiences from learners who improved their academic journey using MediQueue.
           </p>
+
         </div>
 
-        {/* CARDS */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+        {/* GRID (4 CARDS) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
           {testimonials.map((item) => (
             <div
               key={item.id}
-              className="group bg-gray-50 dark:bg-gray-900 p-8 rounded-2xl shadow-lg hover:shadow-2xl border border-gray-100 dark:border-gray-800 transition duration-500"
+              className="group bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-6
+              transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
             >
-              {/* QUOTE ICON */}
-              <FaQuoteLeft className="text-blue-500 text-3xl mb-6" />
+
+              {/* QUOTE */}
+              <FaQuoteLeft className="text-blue-500 text-2xl mb-4" />
 
               {/* REVIEW */}
-              <p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
+              <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-5">
                 {item.review}
               </p>
 
-              {/* STAR RATING */}
-              <div className="flex gap-1 text-yellow-400 mb-6">
-                <FaStar />
-                <FaStar />
-                <FaStar />
-                <FaStar />
-                <FaStar />
+              {/* STARS */}
+              <div className="flex gap-1 text-yellow-400 mb-5">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <FaStar key={i} />
+                ))}
               </div>
 
-              {/* USER INFO */}
-              <div className="flex items-center gap-4">
+              {/* USER */}
+              <div className="flex items-center gap-3">
+
                 <img
                   src={item.image}
                   alt={item.name}
-                  className="w-14 h-14 rounded-full object-cover border-2 border-blue-500"
+                  className="w-12 h-12 rounded-full object-cover border-2 border-blue-500"
                 />
 
                 <div>
-                  <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
                     {item.name}
                   </h4>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
+
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
                     {item.subject}
                   </p>
                 </div>
+
               </div>
+
             </div>
           ))}
 

@@ -13,52 +13,42 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-gray-900 text-gray-300 border-t border-gray-800">
-      <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-14 py-14">
+    <footer className="w-full bg-gradient-to-b from-gray-950 to-black text-gray-300 border-t border-gray-800">
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-14 py-14">
 
         {/* TOP GRID */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
 
           {/* BRAND */}
           <div>
-            <h2 className="text-3xl font-extrabold text-blue-500 mb-4">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-blue-500">
               MediQueue
             </h2>
 
-            <p className="text-sm leading-7 text-gray-400">
-              Simplifying tutor booking for students through secure scheduling,
-              organized sessions, and seamless learning experiences.
+            <p className="mt-4 text-sm sm:text-base text-gray-400 leading-relaxed">
+              A modern tutor booking platform designed to simplify learning,
+              scheduling, and student success with secure systems.
             </p>
 
             {/* SOCIAL */}
-            <div className="flex items-center gap-4 mt-6">
-              <a
-                href="#"
-                className="w-10 h-10 rounded-full bg-gray-800 hover:bg-blue-600 flex items-center justify-center transition"
-              >
-                <FaFacebookF />
-              </a>
+            <div className="flex items-center gap-3 mt-6">
 
-              <a
-                href="#"
-                className="w-10 h-10 rounded-full bg-gray-800 hover:bg-blue-600 flex items-center justify-center transition"
-              >
-                <FaLinkedinIn />
-              </a>
+              {[
+                FaFacebookF,
+                FaLinkedinIn,
+                FaGithub,
+                FaXTwitter,
+              ].map((Icon, i) => (
+                <a
+                  key={i}
+                  href="#"
+                  className="w-10 h-10 rounded-full bg-gray-900 hover:bg-blue-600 flex items-center justify-center transition-all duration-300 hover:scale-110"
+                >
+                  <Icon className="text-sm" />
+                </a>
+              ))}
 
-              <a
-                href="#"
-                className="w-10 h-10 rounded-full bg-gray-800 hover:bg-blue-600 flex items-center justify-center transition"
-              >
-                <FaGithub />
-              </a>
-
-              <a
-                href="#"
-                className="w-10 h-10 rounded-full bg-gray-800 hover:bg-blue-600 flex items-center justify-center transition"
-              >
-                <FaXTwitter />
-              </a>
             </div>
           </div>
 
@@ -69,35 +59,24 @@ export default function Footer() {
             </h3>
 
             <ul className="space-y-3 text-sm">
-              <li>
-                <Link href="/tutors" className="hover:text-blue-500 transition">
-                  Browse Tutors
-                </Link>
-              </li>
 
-              <li>
-                <Link href="/add-tutor" className="hover:text-blue-500 transition">
-                  Become a Tutor
-                </Link>
-              </li>
+              {[
+                ["Browse Tutors", "/tutors"],
+                ["Become Tutor", "/add-tutor"],
+                ["Booked Sessions", "/booked-sessions"],
+                ["Manage Tutors", "/my-tutors"],
+                ["Home", "/"],
+              ].map(([name, href]) => (
+                <li key={href}>
+                  <Link
+                    href={href}
+                    className="text-gray-400 hover:text-blue-500 transition duration-300 hover:translate-x-1 inline-block"
+                  >
+                    {name}
+                  </Link>
+                </li>
+              ))}
 
-              <li>
-                <Link href="/booked-sessions" className="hover:text-blue-500 transition">
-                  Booked Sessions
-                </Link>
-              </li>
-
-              <li>
-                <Link href="/my-tutors" className="hover:text-blue-500 transition">
-                  Manage Tutors
-                </Link>
-              </li>
-
-              <li>
-                <Link href="/" className="hover:text-blue-500 transition">
-                  Home
-                </Link>
-              </li>
             </ul>
           </div>
 
@@ -108,35 +87,24 @@ export default function Footer() {
             </h3>
 
             <ul className="space-y-3 text-sm">
-              <li>
-                <Link href="/login" className="hover:text-blue-500 transition">
-                  Login
-                </Link>
-              </li>
 
-              <li>
-                <Link href="/register" className="hover:text-blue-500 transition">
-                  Register
-                </Link>
-              </li>
+              {[
+                ["Login", "/login"],
+                ["Register", "/register"],
+                ["FAQ", "/faq"],
+                ["Contact", "/contact"],
+                ["Privacy Policy", "/privacy-policy"],
+              ].map(([name, href]) => (
+                <li key={href}>
+                  <Link
+                    href={href}
+                    className="text-gray-400 hover:text-blue-500 transition duration-300 hover:translate-x-1 inline-block"
+                  >
+                    {name}
+                  </Link>
+                </li>
+              ))}
 
-              <li>
-                <Link href="/faq" className="hover:text-blue-500 transition">
-                  FAQ
-                </Link>
-              </li>
-
-              <li>
-                <Link href="/contact" className="hover:text-blue-500 transition">
-                  Contact
-                </Link>
-              </li>
-
-              <li>
-                <Link href="/privacy-policy" className="hover:text-blue-500 transition">
-                  Privacy Policy
-                </Link>
-              </li>
             </ul>
           </div>
 
@@ -146,51 +114,55 @@ export default function Footer() {
               Contact Info
             </h3>
 
-            <ul className="space-y-4 text-sm">
+            <div className="space-y-4 text-sm text-gray-400">
 
-              <li className="flex items-start gap-3">
+              <div className="flex items-start gap-3">
                 <FaEnvelope className="text-blue-500 mt-1" />
                 <span>support@mediqueue.com</span>
-              </li>
+              </div>
 
-              <li className="flex items-start gap-3">
+              <div className="flex items-start gap-3">
                 <FaPhone className="text-blue-500 mt-1" />
                 <span>+880 1883-650010</span>
-              </li>
+              </div>
 
-              <li className="flex items-start gap-3">
+              <div className="flex items-start gap-3">
                 <FaLocationDot className="text-blue-500 mt-1" />
                 <span>Dhaka, Bangladesh</span>
-              </li>
+              </div>
 
-            </ul>
+            </div>
           </div>
+
         </div>
 
-        {/* BOTTOM */}
+        {/* DIVIDER */}
         <div className="border-t border-gray-800 mt-12 pt-6">
+
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
 
-            <p className="text-sm text-gray-500 text-center md:text-left">
-              © {new Date().getFullYear()} MediQueue. All Rights Reserved.
+            <p className="text-xs sm:text-sm text-gray-500 text-center md:text-left">
+              © {new Date().getFullYear()} MediQueue. All rights reserved.
             </p>
 
-            <div className="flex items-center gap-6 text-sm text-gray-500">
-              <Link href="/terms" className="hover:text-blue-500 transition">
-                Terms
-              </Link>
+            <div className="flex items-center gap-5 text-xs sm:text-sm">
 
-              <Link href="/privacy-policy" className="hover:text-blue-500 transition">
-                Privacy
-              </Link>
+              {["Terms", "Privacy", "Cookies"].map((item) => (
+                <Link
+                  key={item}
+                  href="/"
+                  className="text-gray-500 hover:text-blue-500 transition"
+                >
+                  {item}
+                </Link>
+              ))}
 
-              <Link href="/cookies" className="hover:text-blue-500 transition">
-                Cookies
-              </Link>
             </div>
 
           </div>
+
         </div>
+
       </div>
     </footer>
   );
