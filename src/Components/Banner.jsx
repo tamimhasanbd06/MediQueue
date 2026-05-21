@@ -103,7 +103,7 @@ export default function Banner() {
                       </Link>
 
                       <Link
-                        href="/register"
+                        href="/login"
                         className="px-5 sm:px-7 py-3 sm:py-4 rounded-xl border border-white/30 text-white text-sm sm:text-base hover:bg-white hover:text-black transition"
                       >
                         Get Started
