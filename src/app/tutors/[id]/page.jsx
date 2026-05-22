@@ -1,5 +1,4 @@
-"use client";
-
+"use client"
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
@@ -20,23 +19,33 @@ export default function TutorDetailsPage() {
         setLoading(true);
         setError("");
 
-        const res = await fetch(`${API_URL}/tutors/${id}`, {
+        // ফেচ কলের আগে টোকেন যাচাই করা
+        const res = await fetch(`${API_URL}/auth/check`, {
           method: "GET",
-          credentials: "include", // 🔥 IMPORTANT FOR JWT COOKIE
+          credentials: "include", // টোকেন কুকি
           headers: {
             "Content-Type": "application/json",
           },
         });
 
-        const data = await res.json();
-
-        // ❌ Unauthorized → backend JWT fail হলে এখানে আসবে
+        // যদি টোকেন বৈধ না থাকে
         if (res.status === 401) {
           router.push("/login");
           return;
         }
 
-        if (!res.ok) {
+        // এরপর টিউটর ডেটা ফেচ করা
+        const tutorRes = await fetch(`${API_URL}/tutors/${id}`, {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        const data = await tutorRes.json();
+
+        if (!tutorRes.ok) {
           throw new Error(data?.message || "Tutor not found");
         }
 
@@ -52,7 +61,6 @@ export default function TutorDetailsPage() {
     if (id) fetchTutor();
   }, [id, API_URL, router]);
 
-  /* ================= LOADING ================= */
   if (loading) {
     return (
       <div className="h-screen flex items-center justify-center">
@@ -61,7 +69,6 @@ export default function TutorDetailsPage() {
     );
   }
 
-  /* ================= ERROR ================= */
   if (error || !tutor) {
     return (
       <div className="h-screen flex flex-col items-center justify-center">
@@ -79,12 +86,9 @@ export default function TutorDetailsPage() {
     );
   }
 
-  /* ================= UI ================= */
   return (
     <section className="min-h-screen bg-gray-50 py-10 px-4">
       <div className="max-w-5xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden">
-
-        {/* IMAGE */}
         <div className="relative h-80 w-full">
           <Image
             src={tutor.photoURL}
@@ -93,28 +97,14 @@ export default function TutorDetailsPage() {
             className="object-cover"
           />
         </div>
-
-        {/* CONTENT */}
         <div className="p-8 space-y-4">
-
-          <h1 className="text-3xl font-bold">
-            {tutor.name}
-          </h1>
-
-          <p className="text-gray-600">
-            {tutor.subject}
-          </p>
-
-          <p className="text-2xl font-bold text-blue-600">
-            ৳ {tutor.fee}
-          </p>
-
+          <h1 className="text-3xl font-bold">{tutor.name}</h1>
+          <p className="text-gray-600">{tutor.subject}</p>
+          <p className="text-2xl font-bold text-blue-600">৳ {tutor.fee}</p>
           <button className="w-full bg-blue-600 text-white py-3 rounded-xl font-bold">
             Book Session
           </button>
-
         </div>
-
       </div>
     </section>
   );
