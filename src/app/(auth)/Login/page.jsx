@@ -18,8 +18,11 @@ import {
 import toast from "react-hot-toast";
 
 import { authClient } from "@/lib/auth-client";
+import { data } from "framer-motion/client";
 
 export default function LoginPage() {
+
+ 
   const router = useRouter();
 
   const [loading, setLoading] =
@@ -111,26 +114,33 @@ export default function LoginPage() {
     } finally {
       setGoogleLoading(false);
     }
+
+    
   };
 
+
+
+
+
+  
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-blue-50 via-white to-slate-100 dark:from-gray-950 dark:via-gray-900 dark:to-black flex items-center justify-center px-4 py-10">
+    <div className="relative min-h-screen overflow-hidden bg-linear-to-br from-blue-50 via-white to-slate-100 dark:from-gray-950 dark:via-gray-900 dark:to-black flex items-center justify-center px-4 py-10">
 
       {/* BACKGROUND GLOW */}
-      <div className="absolute top-[-120px] left-[-120px] w-[260px] h-[260px] sm:w-[400px] sm:h-[400px] bg-blue-500/20 blur-3xl rounded-full"></div>
+      <div className="absolute -top-30 -left-30 w-65 h-65 sm:w-100 sm:h-100 bg-blue-500/20 blur-3xl rounded-full"></div>
 
-      <div className="absolute bottom-[-120px] right-[-120px] w-[260px] h-[260px] sm:w-[400px] sm:h-[400px] bg-cyan-400/20 blur-3xl rounded-full"></div>
+      <div className="absolute -bottom-30 -right-30 w-65 h-65 sm:w-100 sm:h-100 bg-cyan-400/20 blur-3xl rounded-full"></div>
 
       {/* CARD */}
       <div className="relative z-10 w-full max-w-md">
 
-        <div className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-2xl border border-white/20 dark:border-gray-800 rounded-[32px] shadow-[0_20px_80px_rgba(0,0,0,0.12)] overflow-hidden">
+        <div className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-2xl border border-white/20 dark:border-gray-800 rounded-4xl shadow-[0_20px_80px_rgba(0,0,0,0.12)] overflow-hidden">
 
           {/* TOP SECTION */}
           <div className="px-6 sm:px-8 pt-8 sm:pt-10 text-center">
 
             {/* LOGO */}
-            <div className="mx-auto mb-5 w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-gradient-to-br from-blue-600 to-cyan-500 flex items-center justify-center shadow-xl shadow-blue-500/30">
+            <div className="mx-auto mb-5 w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-linear-to-br from-blue-600 to-cyan-500 flex items-center justify-center shadow-xl shadow-blue-500/30">
 
               <span className="text-white text-2xl sm:text-3xl font-black">
                 M
@@ -161,7 +171,7 @@ export default function LoginPage() {
               type="button"
               onClick={handleGoogleLogin}
               disabled={googleLoading}
-              className="group w-full h-[56px] sm:h-[60px] rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 hover:border-blue-400 hover:shadow-lg hover:shadow-blue-500/10 transition-all duration-300 flex items-center justify-center gap-3 text-gray-700 dark:text-gray-200 font-semibold"
+              className="group w-full h-14 sm:h-15 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 hover:border-blue-400 hover:shadow-lg hover:shadow-blue-500/10 transition-all duration-300 flex items-center justify-center gap-3 text-gray-700 dark:text-gray-200 font-semibold"
             >
 
               <FcGoogle className="text-2xl" />
@@ -202,7 +212,7 @@ export default function LoginPage() {
 
                 <div className="relative">
 
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-[18px] h-[18px]" />
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-4.5 h-4.5" />
 
                   <input
                     name="email"
@@ -210,7 +220,7 @@ export default function LoginPage() {
                     placeholder="Enter your email"
                     value={form.email}
                     onChange={handleChange}
-                    className="w-full h-[56px] sm:h-[60px] rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 pl-12 pr-4 text-gray-800 dark:text-white placeholder:text-gray-400 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-300"
+                    className="w-full h-14 sm:h-15 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 pl-12 pr-4 text-gray-800 dark:text-white placeholder:text-gray-400 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-300"
                   />
 
                 </div>
@@ -239,7 +249,7 @@ export default function LoginPage() {
 
                 <div className="relative">
 
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-[18px] h-[18px]" />
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-4.5 h-4.5" />
 
                   <input
                     name="password"
@@ -251,7 +261,7 @@ export default function LoginPage() {
                     placeholder="Enter your password"
                     value={form.password}
                     onChange={handleChange}
-                    className="w-full h-[56px] sm:h-[60px] rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 pl-12 pr-14 text-gray-800 dark:text-white placeholder:text-gray-400 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-300"
+                    className="w-full h-14 sm:h-15 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 pl-12 pr-14 text-gray-800 dark:text-white placeholder:text-gray-400 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-300"
                   />
 
                   <button
@@ -278,7 +288,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="group relative overflow-hidden w-full h-[58px] sm:h-[62px] rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-bold text-sm sm:text-base shadow-xl shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 hover:scale-[1.01] active:scale-[0.99]"
+                className="group relative overflow-hidden w-full h-14.5 sm:h-15.5 rounded-2xl bg-linear-to-r from-blue-600 to-cyan-500 text-white font-bold text-sm sm:text-base shadow-xl shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 hover:scale-[1.01] active:scale-[0.99]"
               >
 
                 <span className="relative z-10">
@@ -287,7 +297,7 @@ export default function LoginPage() {
                     : "Login Account"}
                 </span>
 
-                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-700 opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                <div className="absolute inset-0 bg-linear-to-r from-cyan-500 to-blue-700 opacity-0 group-hover:opacity-100 transition duration-500"></div>
 
               </button>
 

@@ -41,7 +41,7 @@ const features = [
 
 export default function WhyChooseMediQueue() {
   return (
-    <section className="w-full bg-gradient-to-b from-white to-blue-50 dark:from-gray-950 dark:to-gray-900 py-14 sm:py-20 px-4 sm:px-6 lg:px-16">
+    <section className="w-full bg-linear-to-b from-white to-blue-50 dark:from-gray-950 dark:to-gray-900 py-14 sm:py-20 px-4 sm:px-6 lg:px-16">
 
       <div className="max-w-7xl mx-auto">
 

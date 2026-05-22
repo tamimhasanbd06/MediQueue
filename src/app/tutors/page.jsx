@@ -65,7 +65,7 @@ export default function TutorsPage() {
         <meta name="description" content="Find best tutors easily" />
       </Head>
 
-      <section className="min-h-screen bg-gradient-to-b from-white via-gray-50 to-blue-50 px-4 md:px-10 py-14">
+      <section className="min-h-screen bg-linear-to-b from-white via-gray-50 to-blue-50 px-4 md:px-10 py-14">
 
         {/* HEADER */}
         <div className="text-center mb-14">

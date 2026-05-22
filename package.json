@@ -11,8 +11,10 @@
   "dependencies": {
     "@better-auth/mongo-adapter": "^1.6.11",
     "better-auth": "^1.6.11",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "framer-motion": "^12.38.0",
+    "jsonwebtoken": "^9.0.3",
     "lucide-react": "^1.16.0",
     "mongodb": "^7.2.0",
     "next": "16.2.6",

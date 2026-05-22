@@ -32,7 +32,7 @@ export default function FeaturedTutors() {
   }, [API_URL]);
 
   return (
-    <section className="py-12 sm:py-16 px-4 bg-gradient-to-b from-white to-blue-50">
+    <section className="py-12 sm:py-16 px-4 bg-linear-to-b from-white to-blue-50">
 
       {/* HEADER */}
       <div className="text-center mb-10 sm:mb-14">
@@ -83,7 +83,7 @@ export default function FeaturedTutors() {
               </Link>
 
               {/* CONTENT */}
-              <div className="p-4 sm:p-6 flex flex-col flex-grow">
+              <div className="p-4 sm:p-6 flex flex-col grow">
 
                 {/* NAME */}
                 <h3 className="text-lg sm:text-xl font-bold text-gray-900">

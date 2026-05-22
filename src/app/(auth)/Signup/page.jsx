@@ -181,17 +181,17 @@ export default function SignupPage() {
 
   return (
 
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-gray-950 dark:via-gray-900 dark:to-black flex items-center justify-center px-4 py-10">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-blue-100 dark:from-gray-950 dark:via-gray-900 dark:to-black flex items-center justify-center px-4 py-10">
 
       <div className="w-full max-w-md">
 
         {/* CARD */}
-        <div className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border border-white/20 dark:border-gray-800 rounded-[32px] shadow-[0_10px_60px_rgba(0,0,0,0.08)] dark:shadow-[0_10px_60px_rgba(0,0,0,0.4)] p-6 sm:p-8">
+        <div className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border border-white/20 dark:border-gray-800 rounded-4xl shadow-[0_10px_60px_rgba(0,0,0,0.08)] dark:shadow-[0_10px_60px_rgba(0,0,0,0.4)] p-6 sm:p-8">
 
           {/* HEADER */}
           <div className="text-center mb-8">
 
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center mx-auto shadow-lg shadow-blue-500/30 mb-5">
+            <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-blue-500 to-blue-700 flex items-center justify-center mx-auto shadow-lg shadow-blue-500/30 mb-5">
 
               <span className="text-white text-2xl font-black">
                 M
@@ -232,7 +232,7 @@ export default function SignupPage() {
           {/* DIVIDER */}
           <div className="relative flex items-center justify-center my-7">
 
-            <div className="absolute w-full h-[1px] bg-gray-200 dark:bg-gray-800"></div>
+            <div className="absolute w-full h-px bg-gray-200 dark:bg-gray-800"></div>
 
             <span className="relative px-4 bg-white dark:bg-gray-900 text-sm text-gray-500">
               OR
@@ -382,7 +382,7 @@ export default function SignupPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-14 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold text-base shadow-lg shadow-blue-500/30 transition-all duration-300 hover:scale-[1.01]"
+              className="w-full h-14 rounded-2xl bg-linear-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold text-base shadow-lg shadow-blue-500/30 transition-all duration-300 hover:scale-[1.01]"
             >
 
               {loading

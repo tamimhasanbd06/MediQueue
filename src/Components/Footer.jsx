@@ -13,7 +13,7 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-gradient-to-b from-gray-950 to-black text-gray-300 border-t border-gray-800">
+    <footer className="w-full bg-linear-to-b from-gray-950 to-black text-gray-300 border-t border-gray-800">
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-14 py-14">
 

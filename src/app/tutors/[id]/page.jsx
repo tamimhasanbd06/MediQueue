@@ -83,7 +83,7 @@ export default function TutorDetailsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100 py-10 px-4">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 to-blue-100 py-10 px-4">
 
       <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden">
 
@@ -94,10 +94,10 @@ export default function TutorDetailsPage() {
             alt={tutor.name}
             width={1200}
             height={500}
-            className="w-full h-[360px] object-cover"
+            className="w-full h-90 object-cover"
           />
 
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30" />
+          <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/30" />
 
           <div className="absolute bottom-6 left-6 text-white">
             <h1 className="text-4xl font-bold">{tutor.name}</h1>
@@ -194,7 +194,7 @@ export default function TutorDetailsPage() {
           <div className="space-y-6">
 
             {/* PRICE CARD */}
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6 rounded-2xl text-center">
+            <div className="bg-linear-to-r from-blue-600 to-indigo-600 text-white p-6 rounded-2xl text-center">
               <FaMoneyBillWave className="mx-auto text-2xl mb-2" />
               <p className="text-sm">Course Fee</p>
               <h2 className="text-4xl font-bold">৳{tutor.fee}</h2>

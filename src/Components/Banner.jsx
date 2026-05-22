@@ -6,6 +6,7 @@ import { Autoplay, EffectFade } from "swiper/modules";
 
 import "swiper/css";
 import "swiper/css/effect-fade";
+import Image from "next/image";
 
 const slides = [
   {
@@ -57,15 +58,17 @@ export default function Banner() {
             <div className="relative w-full h-full">
 
               {/* IMAGE */}
-              <img
+              <Image
                 src={slide.image}
                 alt={slide.heading}
+                width={500}
+                height={500}
                 className="absolute inset-0 w-full h-full object-cover scale-110"
               />
 
               {/* OVERLAYS */}
-              <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/30" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
+              <div className="absolute inset-0 bg-linear-to-r from-black/85 via-black/60 to-black/30" />
+              <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-black/30" />
               <div className="absolute inset-0 bg-blue-900/10" />
 
               {/* CONTENT */}
