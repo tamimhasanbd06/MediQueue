@@ -4,7 +4,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "**", // এই অংশে * চিহ্ন দিয়ে সব হোস্টনেম allow করা যাবে
+        hostname: "**", 
       },
     ],
   },

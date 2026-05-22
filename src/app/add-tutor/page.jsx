@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+
 import {
   FaUser,
   FaImage,
@@ -14,11 +15,12 @@ import {
   FaChalkboardTeacher,
   FaLayerGroup,
 } from "react-icons/fa";
-import toast from "react-hot-toast";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function AddTutorPage() {
   const router = useRouter();
-
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const [loading, setLoading] = useState(false);
@@ -48,6 +50,7 @@ export default function AddTutorPage() {
     });
   };
 
+  // ✅ FULL VALIDATION
   const validate = () => {
     if (!form.name) return "Name is required";
     if (!form.photoURL) return "Photo URL is required";
@@ -85,7 +88,10 @@ export default function AddTutorPage() {
       }
 
       toast.success("Tutor added successfully!");
-      router.push("/tutors");
+
+      setTimeout(() => {
+        router.push("/tutors");
+      }, 1200);
     } catch (err) {
       toast.error(err.message);
     } finally {
@@ -95,6 +101,10 @@ export default function AddTutorPage() {
 
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 to-slate-100 py-10 px-4">
+
+      {/* ✅ TOAST CONTAINER */}
+      <ToastContainer position="top-right" autoClose={2000} />
+
       <div className="max-w-5xl mx-auto bg-white shadow-2xl rounded-3xl p-8">
 
         <h1 className="text-3xl font-bold text-center mb-8">
@@ -103,47 +113,20 @@ export default function AddTutorPage() {
 
         <form onSubmit={handleSubmit} className="grid md:grid-cols-2 gap-6">
 
-          {/* NAME */}
           <Input icon={<FaUser />} name="name" placeholder="Tutor Name" onChange={handleChange} />
-
-          {/* PHOTO */}
           <Input icon={<FaImage />} name="photoURL" placeholder="Photo URL" onChange={handleChange} />
-
-          {/* SUBJECT */}
           <Input icon={<FaBook />} name="subject" placeholder="Subject" onChange={handleChange} />
-
-          {/* HOURLY FEE */}
           <Input icon={<FaMoneyBill />} name="hourlyFee" placeholder="Hourly Fee" onChange={handleChange} />
-
-          {/* DAYS */}
           <Input icon={<FaCalendar />} name="availableDays" placeholder="Available Days" onChange={handleChange} />
-
-          {/* TIME */}
           <Input icon={<FaClock />} name="availableTime" placeholder="Available Time" onChange={handleChange} />
-
-          {/* INSTITUTION */}
           <Input icon={<FaUniversity />} name="institution" placeholder="Institution" onChange={handleChange} />
-
-          {/* EXPERIENCE */}
           <Input icon={<FaChalkboardTeacher />} name="experience" placeholder="Experience" onChange={handleChange} />
-
-          {/* LOCATION */}
           <Input icon={<FaMapMarkerAlt />} name="location" placeholder="Location" onChange={handleChange} />
-
-          {/* TEACHING MODE */}
-          <Input icon={<FaLayerGroup />} name="teachingMode" placeholder="Teaching Mode (Online/Offline)" onChange={handleChange} />
-
-          {/* COURSE START */}
+          <Input icon={<FaLayerGroup />} name="teachingMode" placeholder="Teaching Mode" onChange={handleChange} />
           <Input icon={<FaCalendar />} name="courseStartMonth" placeholder="Start Month" onChange={handleChange} />
-
-          {/* COURSE END */}
           <Input icon={<FaCalendar />} name="courseEndMonth" placeholder="End Month" onChange={handleChange} />
-
-          {/* TOTAL SEATS */}
           <Input icon={<FaLayerGroup />} name="totalSeats" placeholder="Total Seats" onChange={handleChange} />
-
-          {/* EXPERTISE */}
-          <Input icon={<FaBook />} name="expertise" placeholder="Expertise (comma separated)" onChange={handleChange} />
+          <Input icon={<FaBook />} name="expertise" placeholder="Expertise" onChange={handleChange} />
 
           {/* SUBMIT */}
           <div className="md:col-span-2">
