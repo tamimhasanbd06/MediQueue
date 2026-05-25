@@ -2,8 +2,11 @@
 
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { saveAuthToken } from "@/lib/auth-client";
 
 export default function MyTutorsPage() {
+  const router = useRouter();
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
   const [tutors, setTutors] = useState([]);
@@ -23,7 +26,14 @@ export default function MyTutorsPage() {
     try {
       setLoading(true);
 
-      const token = localStorage.getItem("token");
+      const token =
+        localStorage.getItem("token") ||
+        (await saveAuthToken());
+
+      if (!token) {
+        router.push("/login");
+        return;
+      }
 
       const res = await fetch(`${API_URL}/my-tutors`, {
         headers: {
@@ -32,6 +42,19 @@ export default function MyTutorsPage() {
       });
 
       const data = await res.json();
+
+      if (res.status === 401) {
+        localStorage.removeItem("token");
+        router.push("/login");
+        return;
+      }
+
+      if (!res.ok) {
+        throw new Error(
+          data.message ||
+            "Failed to load tutors"
+        );
+      }
 
       setTutors(data || []);
     } catch (err) {
@@ -68,7 +91,14 @@ export default function MyTutorsPage() {
     if (!selectedTutor?._id) return;
 
     try {
-      const token = localStorage.getItem("token");
+      const token =
+        localStorage.getItem("token") ||
+        (await saveAuthToken());
+
+      if (!token) {
+        router.push("/login");
+        return;
+      }
 
       const res = await fetch(
         `${API_URL}/tutors/${selectedTutor._id}`,
@@ -86,6 +116,12 @@ export default function MyTutorsPage() {
       );
 
       const data = await res.json();
+
+      if (res.status === 401) {
+        localStorage.removeItem("token");
+        router.push("/login");
+        return;
+      }
 
       if (!res.ok) throw new Error(data.message || "Update failed");
 
@@ -105,7 +141,14 @@ export default function MyTutorsPage() {
     if (!deleteId) return;
 
     try {
-      const token = localStorage.getItem("token");
+      const token =
+        localStorage.getItem("token") ||
+        (await saveAuthToken());
+
+      if (!token) {
+        router.push("/login");
+        return;
+      }
 
       const res = await fetch(`${API_URL}/tutors/${deleteId}`, {
         method: "DELETE",
@@ -115,6 +158,12 @@ export default function MyTutorsPage() {
       });
 
       const data = await res.json();
+
+      if (res.status === 401) {
+        localStorage.removeItem("token");
+        router.push("/login");
+        return;
+      }
 
       if (!res.ok) throw new Error(data.message);
 
@@ -137,7 +186,7 @@ export default function MyTutorsPage() {
   // =========================
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-black text-gray-900 dark:text-white">
         <p className="text-lg font-semibold animate-pulse">
           Loading your tutors...
         </p>
@@ -146,23 +195,23 @@ export default function MyTutorsPage() {
   }
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="min-h-screen p-6 max-w-6xl mx-auto bg-white dark:bg-black text-gray-900 dark:text-white">
 
-      <h1 className="text-3xl font-bold mb-6">
+      <h1 className="text-3xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-yellow-300 dark:via-pink-400 dark:to-cyan-300 bg-clip-text text-transparent">
         My Tutors
       </h1>
 
       {/* EMPTY STATE */}
       {tutors.length === 0 ? (
-        <div className="text-center py-20 text-gray-500">
+        <div className="text-center py-20 text-gray-500 dark:text-gray-300">
           No tutors found. Add your first tutor.
         </div>
       ) : (
         <div className="overflow-x-auto">
 
-          <table className="w-full border rounded-lg overflow-hidden">
+          <table className="w-full border border-gray-200 dark:border-zinc-700 rounded-lg overflow-hidden">
 
-            <thead className="bg-gray-100">
+            <thead className="bg-gray-100 dark:bg-zinc-900">
               <tr>
                 <th className="p-3">Name</th>
                 <th className="p-3">Subject</th>
@@ -175,7 +224,7 @@ export default function MyTutorsPage() {
               {tutors.map((tutor) => (
                 <tr
                   key={tutor._id}
-                  className="border-t text-center"
+                  className="border-t border-gray-200 dark:border-zinc-700 text-center"
                 >
                   <td className="p-3">{tutor.name}</td>
                   <td className="p-3">{tutor.subject}</td>
@@ -187,7 +236,7 @@ export default function MyTutorsPage() {
 
                     <button
                       onClick={() => openUpdate(tutor)}
-                      className="px-3 py-1 bg-blue-500 text-white rounded"
+                      className="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded"
                     >
                       Update
                     </button>
@@ -197,7 +246,7 @@ export default function MyTutorsPage() {
                         setDeleteId(tutor._id);
                         setIsDeleteOpen(true);
                       }}
-                      className="px-3 py-1 bg-red-500 text-white rounded"
+                      className="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded"
                     >
                       Delete
                     </button>
@@ -214,15 +263,15 @@ export default function MyTutorsPage() {
 
       {/* ================= UPDATE MODAL ================= */}
       {isUpdateOpen && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
-          <div className="bg-white p-6 rounded w-100">
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center px-4">
+          <div className="bg-white dark:bg-zinc-950 text-gray-900 dark:text-white p-6 rounded w-[400px] max-w-full dark:border dark:border-zinc-700">
 
             <h2 className="text-xl font-bold mb-4">
               Update Tutor
             </h2>
 
             <input
-              className="border p-2 w-full mb-2"
+              className="border border-gray-300 dark:border-zinc-700 bg-white dark:bg-black text-gray-900 dark:text-white p-2 w-full mb-2 outline-none"
               value={form.name}
               onChange={(e) =>
                 setForm({ ...form, name: e.target.value })
@@ -231,7 +280,7 @@ export default function MyTutorsPage() {
             />
 
             <input
-              className="border p-2 w-full mb-2"
+              className="border border-gray-300 dark:border-zinc-700 bg-white dark:bg-black text-gray-900 dark:text-white p-2 w-full mb-2 outline-none"
               value={form.subject}
               onChange={(e) =>
                 setForm({ ...form, subject: e.target.value })
@@ -240,7 +289,7 @@ export default function MyTutorsPage() {
             />
 
             <input
-              className="border p-2 w-full mb-2"
+              className="border border-gray-300 dark:border-zinc-700 bg-white dark:bg-black text-gray-900 dark:text-white p-2 w-full mb-2 outline-none"
               value={form.hourlyFee}
               onChange={(e) =>
                 setForm({
@@ -275,8 +324,8 @@ export default function MyTutorsPage() {
 
       {/* ================= DELETE MODAL ================= */}
       {isDeleteOpen && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
-          <div className="bg-white p-6 rounded w-87.5 text-center">
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center px-4">
+          <div className="bg-white dark:bg-zinc-950 text-gray-900 dark:text-white p-6 rounded w-[350px] max-w-full text-center dark:border dark:border-zinc-700">
 
             <h2 className="text-lg font-bold mb-4">
               Are you sure?

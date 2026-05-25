@@ -1,14 +1,108 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+@custom-variant dark (&:where(.dark, .dark *));
 
+
+
+html,
+body {
+  min-height: 100%;
+}
 
 body {
   background-color: white;
   color: black;
 }
 
-body.dark-mode {
-  background-color: #121212;
+html.dark body {
+  background-color: #050505;
   color: white;
+}
+
+html.dark section,
+html.dark main,
+html.dark nav,
+html.dark footer,
+html.dark .bg-white,
+html.dark .bg-gray-50,
+html.dark .bg-gray-100,
+html.dark .bg-slate-50,
+html.dark .bg-blue-50,
+html.dark .from-white,
+html.dark .via-white,
+html.dark .to-blue-50,
+html.dark .to-slate-100,
+html.dark .to-blue-100 {
+  background-color: #050505 !important;
+  color: white !important;
+}
+
+html.dark table,
+html.dark input,
+html.dark textarea,
+html.dark select {
+  background-color: #111111 !important;
+  color: white !important;
+  border-color: #2a2a2a !important;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: #cbd5e1 !important;
+}
+
+html.dark p,
+html.dark span,
+html.dark li,
+html.dark td,
+html.dark th,
+html.dark label,
+html.dark a,
+html.dark button,
+html.dark div {
+  color: inherit;
+}
+
+html.dark .text-gray-900,
+html.dark .text-gray-800,
+html.dark .text-gray-700,
+html.dark .text-gray-600,
+html.dark .text-gray-500,
+html.dark .text-gray-400,
+html.dark .text-slate-900,
+html.dark .text-slate-800,
+html.dark .text-slate-700,
+html.dark .text-slate-600,
+html.dark .text-black {
+  color: white !important;
+}
+
+html.dark h1,
+html.dark h2 {
+  background: linear-gradient(
+    90deg,
+    #60a5fa,
+    #a78bfa,
+    #22d3ee
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+}
+
+html.dark .text-white,
+html.dark .bg-blue-600,
+html.dark .bg-blue-700,
+html.dark .from-blue-600,
+html.dark .to-blue-700,
+html.dark .from-blue-500,
+html.dark .to-blue-700 {
+  color: white !important;
+}
+
+html.dark .shadow-lg,
+html.dark .shadow-2xl,
+html.dark .shadow-xl {
+  box-shadow: 0 20px 60px rgba(59, 130, 246, 0.16) !important;
 }

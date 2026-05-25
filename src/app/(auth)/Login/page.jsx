@@ -15,7 +15,10 @@ import { FcGoogle } from "react-icons/fc";
 
 import toast from "react-hot-toast";
 
-import { authClient } from "@/lib/auth-client";
+import {
+  authClient,
+  saveAuthToken,
+} from "@/lib/auth-client";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -73,18 +76,13 @@ export default function LoginPage() {
       }
 
       // =========================
-      // GET SESSION
+      // CREATE + STORE JWT TOKEN
       // =========================
-      const session =
-        await authClient.getSession();
+      const token = await saveAuthToken();
 
-      const userId =
-        session?.data?.user?.id;
-
-      if (userId) {
-        localStorage.setItem(
-          "userId",
-          userId
+      if (!token) {
+        return toast.error(
+          "JWT token create failed"
         );
       }
 

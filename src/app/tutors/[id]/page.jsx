@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
+import { saveAuthToken } from "@/lib/auth-client";
 
 import {
   FaMapMarkerAlt,
@@ -30,9 +31,20 @@ export default function TutorDetailsPage() {
       try {
         setLoading(true);
 
+        const token =
+          localStorage.getItem("token") ||
+          (await saveAuthToken());
+
+        if (!token) {
+          router.push("/login");
+          return;
+        }
+
         const authRes = await fetch(`${API_URL}/auth/check`, {
           method: "GET",
-          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
 
         if (authRes.status === 401) {
@@ -42,7 +54,9 @@ export default function TutorDetailsPage() {
 
         const res = await fetch(`${API_URL}/tutors/${id}`, {
           method: "GET",
-          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
 
         const data = await res.json();

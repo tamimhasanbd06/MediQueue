@@ -9,9 +9,15 @@ import {
   FiX,
   FiLogOut,
   FiUser,
+  FiSun,
+  FiMoon,
 } from "react-icons/fi";
 
-import { authClient } from "@/lib/auth-client";
+import {
+  authClient,
+  saveAuthToken,
+  clearAuthToken,
+} from "@/lib/auth-client";
 import Image from "next/image";
 
 export default function Navbar() {
@@ -31,7 +37,69 @@ export default function Navbar() {
     setProfileDropdownOpen,
   ] = useState(false);
 
+  const [theme, setTheme] =
+    useState("light");
+
   const dropdownRef = useRef(null);
+
+  // =========================
+  // THEME SETUP
+  // =========================
+
+  useEffect(() => {
+    const savedTheme =
+      localStorage.getItem("theme") ||
+      "light";
+
+    setTheme(savedTheme);
+
+    document.documentElement.classList.toggle(
+      "dark",
+      savedTheme === "dark"
+    );
+
+    document.documentElement.setAttribute(
+      "data-theme",
+      savedTheme
+    );
+  }, []);
+
+  const handleThemeToggle = () => {
+    const nextTheme =
+      theme === "dark"
+        ? "light"
+        : "dark";
+
+    setTheme(nextTheme);
+
+    localStorage.setItem(
+      "theme",
+      nextTheme
+    );
+
+    document.documentElement.classList.toggle(
+      "dark",
+      nextTheme === "dark"
+    );
+
+    document.documentElement.setAttribute(
+      "data-theme",
+      nextTheme
+    );
+  };
+
+  // =========================
+  // JWT TOKEN SYNC
+  // =========================
+
+  useEffect(() => {
+    if (user) {
+      saveAuthToken();
+      return;
+    }
+
+    clearAuthToken();
+  }, [user?.id]);
 
   // =========================
   // SAFE IMAGE CHECK
@@ -78,6 +146,7 @@ export default function Navbar() {
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
+          clearAuthToken();
           setMobileMenuOpen(false);
           setProfileDropdownOpen(false);
 
@@ -241,6 +310,19 @@ export default function Navbar() {
               {/* RIGHT SECTION */}
 
               <div className="flex items-center gap-4">
+
+                <button
+                  type="button"
+                  onClick={handleThemeToggle}
+                  className="w-11 h-11 rounded-2xl border border-gray-200 text-gray-700 flex items-center justify-center hover:border-blue-500 hover:text-blue-500 transition-all duration-300"
+                  aria-label="Toggle theme"
+                >
+                  {theme === "dark" ? (
+                    <FiSun className="text-xl" />
+                  ) : (
+                    <FiMoon className="text-xl" />
+                  )}
+                </button>
 
                 {!user ? (
                   <div className="flex items-center gap-3">
@@ -466,14 +548,29 @@ export default function Navbar() {
                 MediQueue
               </h2>
 
-              <button
-                onClick={() =>
-                  setMobileMenuOpen(false)
-                }
-                className="text-3xl text-gray-700"
-              >
-                <FiX />
-              </button>
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={handleThemeToggle}
+                  className="w-10 h-10 rounded-2xl border border-gray-200 text-gray-700 flex items-center justify-center"
+                  aria-label="Toggle theme"
+                >
+                  {theme === "dark" ? (
+                    <FiSun className="text-xl" />
+                  ) : (
+                    <FiMoon className="text-xl" />
+                  )}
+                </button>
+
+                <button
+                  onClick={() =>
+                    setMobileMenuOpen(false)
+                  }
+                  className="text-3xl text-gray-700"
+                >
+                  <FiX />
+                </button>
+              </div>
             </div>
 
             {/* USER */}

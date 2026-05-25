@@ -20,7 +20,10 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // ✅ BETTER AUTH
-import { useSession } from "@/lib/auth-client";
+import {
+  useSession,
+  saveAuthToken,
+} from "@/lib/auth-client";
 
 export default function AddTutorPage() {
   const router = useRouter();
@@ -127,11 +130,23 @@ export default function AddTutorPage() {
         creator: creatorData,
       };
 
+      const token =
+        localStorage.getItem("token") ||
+        (await saveAuthToken());
+
+      if (!token) {
+        router.push("/login");
+        throw new Error(
+          "Please login again"
+        );
+      }
+
       const res = await fetch(`${API_URL}/tutors`, {
         method: "POST",
 
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
 
         credentials: "include",
@@ -181,16 +196,16 @@ export default function AddTutorPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-slate-100 py-10 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-slate-100 dark:from-black dark:to-black py-10 px-4 text-gray-900 dark:text-white">
       {/* ✅ TOAST */}
       <ToastContainer
         position="top-right"
         autoClose={2000}
       />
 
-      <div className="max-w-5xl mx-auto bg-white shadow-2xl rounded-3xl p-8">
+      <div className="max-w-5xl mx-auto bg-white dark:bg-zinc-950 shadow-2xl rounded-3xl p-8 dark:border dark:border-zinc-800">
         {/* TITLE */}
-        <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">
+        <h1 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-yellow-300 dark:via-pink-400 dark:to-cyan-300 bg-clip-text text-transparent">
           Add New Tutor
         </h1>
 
@@ -336,7 +351,7 @@ export default function AddTutorPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-700 transition-all duration-300 text-white py-4 rounded-2xl font-bold text-lg"
+              className="w-full bg-blue-600 hover:bg-blue-700 transition-all duration-300 text-white py-4 rounded-2xl font-bold text-lg disabled:opacity-60"
             >
               {loading
                 ? "Submitting..."
@@ -362,8 +377,8 @@ function Input({
   type = "text",
 }) {
   return (
-    <div className="flex items-center gap-3 border border-gray-200 rounded-2xl px-4 py-3 bg-gray-50 focus-within:border-blue-500 transition">
-      <span className="text-blue-600 text-lg">
+    <div className="flex items-center gap-3 border border-gray-200 dark:border-zinc-700 rounded-2xl px-4 py-3 bg-gray-50 dark:bg-black focus-within:border-blue-500 transition">
+      <span className="text-blue-600 dark:text-cyan-300 text-lg">
         {icon}
       </span>
 
@@ -373,7 +388,7 @@ function Input({
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className="w-full bg-transparent outline-none text-gray-700"
+        className="w-full bg-transparent outline-none text-gray-700 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500"
       />
     </div>
   );

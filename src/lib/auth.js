@@ -11,6 +11,18 @@ if (!mongoURI) {
 
 const client = new MongoClient(mongoURI);
 
+const socialProviders = {};
+
+if (
+  process.env.GOOGLE_CLIENT_ID &&
+  process.env.GOOGLE_CLIENT_SECRET
+) {
+  socialProviders.google = {
+    clientId: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  };
+}
+
 await client.connect();
 
 const db = client.db("mediqueue");
@@ -23,6 +35,10 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
+
+  ...(Object.keys(socialProviders).length
+    ? { socialProviders }
+    : {}),
 
   trustedOrigins: [
     "http://localhost:3000",

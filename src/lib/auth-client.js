@@ -1,5 +1,4 @@
 import { createAuthClient } from "better-auth/react";
-import { jwtClient } from "better-auth/client/plugins"
 
 export const authClient = createAuthClient({
   baseURL:
@@ -7,9 +6,49 @@ export const authClient = createAuthClient({
       .NEXT_PUBLIC_BETTER_AUTH_URL,
 });
 
- plugins: [
-    jwtClient() 
-  ]
+export const saveAuthToken = async () => {
+  if (typeof window === "undefined") {
+    return null;
+  }
 
+  const res = await fetch("/api/jwt", {
+    method: "GET",
+    cache: "no-store",
+    credentials: "include",
+  });
 
-export const { signIn, signUp, signOut, useSession,} = authClient;
+  const data = await res.json();
+
+  if (!res.ok || !data?.token) {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    return null;
+  }
+
+  localStorage.setItem("token", data.token);
+
+  if (data?.user?.id) {
+    localStorage.setItem(
+      "userId",
+      data.user.id
+    );
+  }
+
+  return data.token;
+};
+
+export const clearAuthToken = () => {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  localStorage.removeItem("token");
+  localStorage.removeItem("userId");
+};
+
+export const {
+  signIn,
+  signUp,
+  signOut,
+  useSession,
+} = authClient;
