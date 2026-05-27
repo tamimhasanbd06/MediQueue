@@ -124,92 +124,111 @@ export default function LoginPage() {
     };
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-blue-100 dark:from-gray-950 dark:via-gray-900 dark:to-black flex items-center justify-center px-4 py-10">
+      
+      <div className="w-full max-w-md">
 
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max-w-md p-8 border rounded-2xl"
-      >
-        <h1 className="text-3xl font-bold mb-6">
-          Login
-        </h1>
+        {/* CARD MATCHING SIGNUP */}
+        <div className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border border-white/20 dark:border-gray-800 rounded-4xl shadow-[0_10px_60px_rgba(0,0,0,0.08)] dark:shadow-[0_10px_60px_rgba(0,0,0,0.4)] p-6 sm:p-8">
 
-        <div className="space-y-4">
+          {/* HEADER MATCHING SIGNUP */}
+          <div className="text-center mb-8">
+            
+            <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-blue-500 to-blue-700 flex items-center justify-center mx-auto shadow-lg shadow-blue-500/30 mb-5">
+              <span className="text-white text-2xl font-black">
+                M
+              </span>
+            </div>
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={form.email}
-            onChange={handleChange}
-            className="w-full border p-3 rounded-xl"
-          />
+            <h1 className="text-3xl sm:text-4xl font-black text-gray-900 dark:text-white tracking-tight">
+              Welcome Back
+            </h1>
 
-          <div className="relative">
-
-            <input
-              type={
-                showPass
-                  ? "text"
-                  : "password"
-              }
-              name="password"
-              placeholder="Password"
-              value={form.password}
-              onChange={handleChange}
-              className="w-full border p-3 rounded-xl"
-            />
-
-            <button
-              type="button"
-              onClick={() =>
-                setShowPass(!showPass)
-              }
-              className="absolute right-4 top-4"
-            >
-              {showPass ? (
-                <EyeOff size={18} />
-              ) : (
-                <Eye size={18} />
-              )}
-            </button>
-
+            <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 mt-3 leading-relaxed">
+              Login to MediQueue and access premium expert tutors easily.
+            </p>
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-600 text-white p-3 rounded-xl"
-          >
-            {loading
-              ? "Logging..."
-              : "Login"}
-          </button>
-
+          {/* GOOGLE BUTTON */}
           <button
             type="button"
             onClick={handleGoogleLogin}
-            className="w-full border p-3 rounded-xl flex items-center justify-center gap-2"
+            disabled={googleLoading}
+            className="w-full h-14 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300 flex items-center justify-center gap-3 font-semibold text-gray-700 dark:text-gray-200 hover:scale-[1.01]"
           >
-            <FcGoogle size={22} />
-            Continue with Google
+            <FcGoogle className="text-2xl" />
+            {googleLoading ? "Connecting..." : "Continue with Google"}
           </button>
 
-          <p className="text-center">
-            Don’t have an account?
+          {/* DIVIDER */}
+          <div className="relative flex items-center justify-center my-7">
+            <div className="absolute w-full h-px bg-gray-200 dark:bg-gray-800"></div>
+            <span className="relative px-4 bg-white dark:bg-gray-900 text-sm text-gray-500">
+              OR
+            </span>
+          </div>
 
+          {/* FORM */}
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-5"
+          >
+            {/* EMAIL WITH INTERNAL ICON */}
+            <div className="relative">
+              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="email"
+                name="email"
+                placeholder="Email Address"
+                value={form.email}
+                onChange={handleChange}
+                className="w-full h-14 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 pl-12 pr-4 text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500 transition"
+              />
+            </div>
+
+            {/* PASSWORD WITH INTERNAL ICON AND TOGGLE BUTTON */}
+            <div className="relative">
+              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type={showPass ? "text" : "password"}
+                name="password"
+                placeholder="Password"
+                value={form.password}
+                onChange={handleChange}
+                className="w-full h-14 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 pl-12 pr-14 text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500 transition"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPass(!showPass)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
+              >
+                {showPass ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
+
+            {/* LOGIN SUBMIT BUTTON */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full h-14 rounded-2xl bg-linear-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold text-base shadow-lg shadow-blue-500/30 transition-all duration-300 hover:scale-[1.01]"
+            >
+              {loading ? "Logging in..." : "Login"}
+            </button>
+          </form>
+
+          {/* SIGNUP LINK */}
+          <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-8">
+            Don’t have an account?
             <Link
               href="/signup"
-              className="text-blue-600 ml-2"
+              className="ml-1 font-semibold text-blue-600 hover:text-blue-700 hover:underline"
             >
               Register
             </Link>
           </p>
 
         </div>
-
-      </form>
-
+      </div>
     </div>
   );
 }

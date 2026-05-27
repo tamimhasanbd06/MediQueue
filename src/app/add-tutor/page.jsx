@@ -261,10 +261,16 @@ export default function AddTutorPage() {
         dark:to-blue-950
       "
     >
-      {/* TOAST */}
+      {/* EXPLICITLY THEMED TOASTCONTAINER CONFIGURATION */}
       <ToastContainer
         position="top-right"
         autoClose={2000}
+        toastClassName={() =>
+          "relative flex p-4 min-h-10 rounded-2xl justify-between overflow-hidden cursor-pointer shadow-2xl border border-gray-200/50 dark:border-zinc-800 bg-white dark:bg-black text-gray-900 dark:text-white"
+        }
+        bodyClassName={() => 
+          "flex items-center text-sm font-bold text-gray-900 dark:text-white"
+        }
       />
 
       {/* CONTAINER */}
@@ -300,8 +306,7 @@ export default function AddTutorPage() {
               text-base md:text-lg
             "
           >
-            Create premium tutor profile with
-            professional details
+            Create premium tutor profile with professional details
           </p>
         </div>
 
@@ -313,6 +318,7 @@ export default function AddTutorPage() {
           <Input
             icon={<FaUser />}
             name="name"
+            label="Tutor Name"
             placeholder="Tutor Name"
             value={form.name}
             onChange={handleChange}
@@ -322,6 +328,7 @@ export default function AddTutorPage() {
           <Input
             icon={<FaImage />}
             name="photoURL"
+            label="Photo URL"
             placeholder="Photo URL"
             value={form.photoURL}
             onChange={handleChange}
@@ -331,6 +338,7 @@ export default function AddTutorPage() {
           <Input
             icon={<FaBook />}
             name="subject"
+            label="Subject"
             placeholder="Subject"
             value={form.subject}
             onChange={handleChange}
@@ -340,6 +348,7 @@ export default function AddTutorPage() {
           <Input
             icon={<FaCalendar />}
             name="availableDays"
+            label="Available Days"
             placeholder="Available Days"
             value={form.availableDays}
             onChange={handleChange}
@@ -349,6 +358,7 @@ export default function AddTutorPage() {
           <Input
             icon={<FaClock />}
             name="availableTime"
+            label="Available Time"
             placeholder="Available Time"
             value={form.availableTime}
             onChange={handleChange}
@@ -359,6 +369,7 @@ export default function AddTutorPage() {
             icon={<FaMoneyBill />}
             name="hourlyFee"
             type="number"
+            label="Hourly Fee"
             placeholder="Hourly Fee"
             value={form.hourlyFee}
             onChange={handleChange}
@@ -369,6 +380,7 @@ export default function AddTutorPage() {
             icon={<FaLayerGroup />}
             name="totalSeats"
             type="number"
+            label="Total Seats"
             placeholder="Total Seats"
             value={form.totalSeats}
             onChange={handleChange}
@@ -379,6 +391,7 @@ export default function AddTutorPage() {
             icon={<FaLayerGroup />}
             name="maxStudents"
             type="number"
+            label="Max Students"
             placeholder="Max Students"
             value={form.maxStudents}
             onChange={handleChange}
@@ -388,6 +401,7 @@ export default function AddTutorPage() {
           <Input
             icon={<FaCalendar />}
             name="courseStartMonth"
+            label="Course Start Month"
             placeholder="Course Start Month"
             value={form.courseStartMonth}
             onChange={handleChange}
@@ -397,6 +411,7 @@ export default function AddTutorPage() {
           <Input
             icon={<FaCalendar />}
             name="courseEndMonth"
+            label="Course End Month"
             placeholder="Course End Month"
             value={form.courseEndMonth}
             onChange={handleChange}
@@ -406,6 +421,7 @@ export default function AddTutorPage() {
           <Input
             icon={<FaUniversity />}
             name="institution"
+            label="Institution"
             placeholder="Institution"
             value={form.institution}
             onChange={handleChange}
@@ -415,6 +431,7 @@ export default function AddTutorPage() {
           <Input
             icon={<FaChalkboardTeacher />}
             name="experience"
+            label="Experience"
             placeholder="Experience"
             value={form.experience}
             onChange={handleChange}
@@ -424,6 +441,7 @@ export default function AddTutorPage() {
           <Input
             icon={<FaMapMarkerAlt />}
             name="location"
+            label="Location"
             placeholder="Location"
             value={form.location}
             onChange={handleChange}
@@ -433,6 +451,7 @@ export default function AddTutorPage() {
           <Input
             icon={<FaLayerGroup />}
             name="teachingMode"
+            label="Teaching Mode"
             placeholder="Teaching Mode"
             value={form.teachingMode}
             onChange={handleChange}
@@ -442,6 +461,7 @@ export default function AddTutorPage() {
           <Input
             icon={<FaBook />}
             name="expertise"
+            label="Expertise"
             placeholder="Expertise"
             value={form.expertise}
             onChange={handleChange}
@@ -452,6 +472,7 @@ export default function AddTutorPage() {
             icon={<FaMoneyBill />}
             name="fee"
             type="number"
+            label="Course Fee"
             placeholder="Course Fee"
             value={form.fee}
             onChange={handleChange}
@@ -492,6 +513,7 @@ export default function AddTutorPage() {
 function Input({
   icon,
   name,
+  label,
   placeholder,
   onChange,
   value,
@@ -499,46 +521,50 @@ function Input({
   darkMode,
 }) {
   return (
-    <div
-      className={`
-        flex items-center gap-3
-        rounded-2xl px-4 py-3
-        border transition-all duration-300
-
-        ${
-          darkMode
-            ? "bg-[#0B1120]/80 border-blue-900/40"
-            : "bg-gray-50 border-gray-200"
-        }
-      `}
-    >
-      {/* ICON */}
-      <span className="text-blue-600 dark:text-blue-400 text-lg">
-        {icon}
-      </span>
-
-      {/* INPUT */}
-      <input
-        type={type}
-        min={
-          type === "number"
-            ? "0"
-            : undefined
-        }
-        name={name}
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
+    <div className="flex flex-col gap-2 w-full">
+      <label className="text-sm font-bold text-blue-600 dark:text-blue-400 tracking-wide">
+        {label}
+      </label>
+      
+      <div
         className={`
-          w-full bg-transparent outline-none
+          flex items-center gap-3
+          rounded-2xl px-4 py-3
+          border transition-all duration-300
 
           ${
             darkMode
-              ? "text-blue-300 placeholder:text-blue-400"
-              : "text-gray-700 placeholder:text-gray-400"
+              ? "bg-[#0B1120]/80 border-blue-900/40"
+              : "bg-gray-50 border-gray-200"
           }
         `}
-      />
+      >
+        <span className="text-blue-600 dark:text-blue-400 text-lg">
+          {icon}
+        </span>
+
+        <input
+          type={type}
+          min={
+            type === "number"
+              ? "0"
+              : undefined
+          }
+          name={name}
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          className={`
+            w-full bg-transparent outline-none
+
+            ${
+              darkMode
+                ? "text-blue-300 placeholder:text-blue-400"
+                : "text-gray-700 placeholder:text-gray-400"
+            }
+          `}
+        />
+      </div>
     </div>
   );
 }
