@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import {
@@ -19,7 +19,6 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// ✅ BETTER AUTH
 import {
   useSession,
   saveAuthToken,
@@ -27,12 +26,23 @@ import {
 
 export default function AddTutorPage() {
   const router = useRouter();
+
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-  // ✅ GET LOGGED USER
   const { data: session } = useSession();
 
   const [loading, setLoading] = useState(false);
+
+  // GLOBAL DARK MODE
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const darkMode =
+    mounted &&
+    document.documentElement.classList.contains("dark");
 
   const [form, setForm] = useState({
     name: "",
@@ -54,31 +64,71 @@ export default function AddTutorPage() {
     courseDuration: "",
   });
 
-  // ✅ HANDLE CHANGE
+  // HANDLE CHANGE
   const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    // NUMBER FIELD VALIDATION
+    const numberFields = [
+      "hourlyFee",
+      "totalSeats",
+      "maxStudents",
+      "fee",
+    ];
+
+    // PREVENT NEGATIVE NUMBER
+    if (numberFields.includes(name)) {
+      if (Number(value) < 0) {
+        toast.error(
+          "Negative numbers are not allowed"
+        );
+
+        return;
+      }
+    }
+
     setForm({
       ...form,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
   };
 
-  // ✅ VALIDATION
+  // VALIDATION
   const validate = () => {
-    if (!form.name.trim()) return "Tutor name is required";
-    if (!form.photoURL.trim()) return "Photo URL is required";
-    if (!form.subject.trim()) return "Subject is required";
-    if (!form.availableDays.trim()) return "Available days required";
-    if (!form.availableTime.trim()) return "Available time required";
-    if (!form.hourlyFee.trim()) return "Hourly fee required";
-    if (!form.totalSeats.trim()) return "Total seats required";
-    if (!form.institution.trim()) return "Institution required";
-    if (!form.location.trim()) return "Location required";
-    if (!form.teachingMode.trim()) return "Teaching mode required";
+    if (!form.name.trim())
+      return "Tutor name is required";
+
+    if (!form.photoURL.trim())
+      return "Photo URL is required";
+
+    if (!form.subject.trim())
+      return "Subject is required";
+
+    if (!form.availableDays.trim())
+      return "Available days required";
+
+    if (!form.availableTime.trim())
+      return "Available time required";
+
+    if (!form.hourlyFee.trim())
+      return "Hourly fee required";
+
+    if (!form.totalSeats.trim())
+      return "Total seats required";
+
+    if (!form.institution.trim())
+      return "Institution required";
+
+    if (!form.location.trim())
+      return "Location required";
+
+    if (!form.teachingMode.trim())
+      return "Teaching mode required";
 
     return null;
   };
 
-  // ✅ SUBMIT
+  // SUBMIT
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -92,13 +142,13 @@ export default function AddTutorPage() {
     try {
       setLoading(true);
 
-      // ✅ AUTO COURSE DURATION
+      // AUTO COURSE DURATION
       const courseDuration = `${form.courseStartMonth.slice(
         0,
         3
       )} - ${form.courseEndMonth.slice(0, 3)}`;
 
-      // ✅ GET USER DATA FROM SESSION
+      // USER DATA
       const creatorData = session?.user
         ? {
             id: session.user.id,
@@ -111,11 +161,12 @@ export default function AddTutorPage() {
             key: "system",
           };
 
-      // ✅ FINAL DATA
+      // FINAL DATA
       const tutorData = {
         ...form,
 
         hourlyFee: Number(form.hourlyFee),
+
         totalSeats: Number(form.totalSeats),
 
         maxStudents: Number(
@@ -126,7 +177,6 @@ export default function AddTutorPage() {
 
         courseDuration,
 
-        // ✅ AUTO CREATOR
         creator: creatorData,
       };
 
@@ -136,6 +186,7 @@ export default function AddTutorPage() {
 
       if (!token) {
         router.push("/login");
+
         throw new Error(
           "Please login again"
         );
@@ -162,9 +213,11 @@ export default function AddTutorPage() {
         );
       }
 
-      toast.success("Tutor added successfully!");
+      toast.success(
+        "Tutor added successfully!"
+      );
 
-      // ✅ RESET FORM
+      // RESET FORM
       setForm({
         name: "",
         photoURL: "",
@@ -196,18 +249,61 @@ export default function AddTutorPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-slate-100 dark:from-black dark:to-black py-10 px-4 text-gray-900 dark:text-white">
-      {/* ✅ TOAST */}
+    <div
+      className="
+        min-h-screen py-10 px-4
+        transition-all duration-500
+
+        bg-gray-50
+        dark:bg-gradient-to-br
+        dark:from-black
+        dark:via-[#020817]
+        dark:to-blue-950
+      "
+    >
+      {/* TOAST */}
       <ToastContainer
         position="top-right"
         autoClose={2000}
       />
 
-      <div className="max-w-5xl mx-auto bg-white dark:bg-zinc-950 shadow-2xl rounded-3xl p-8 dark:border dark:border-zinc-800">
+      {/* CONTAINER */}
+      <div
+        className="
+          max-w-5xl mx-auto
+          rounded-3xl p-8
+          transition-all duration-500
+
+          bg-white border border-gray-200 shadow-2xl
+
+          dark:bg-black/40
+          dark:border-blue-900/40
+        "
+      >
         {/* TITLE */}
-        <h1 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-yellow-300 dark:via-pink-400 dark:to-cyan-300 bg-clip-text text-transparent">
-          Add New Tutor
-        </h1>
+        <div className="text-center mb-10">
+          <h1
+            className="
+              text-4xl md:text-5xl
+              font-black
+              text-blue-600
+              mb-3
+            "
+          >
+            Add New Tutor
+          </h1>
+
+          <p
+            className="
+              text-gray-600
+              dark:text-blue-300
+              text-base md:text-lg
+            "
+          >
+            Create premium tutor profile with
+            professional details
+          </p>
+        </div>
 
         {/* FORM */}
         <form
@@ -220,6 +316,7 @@ export default function AddTutorPage() {
             placeholder="Tutor Name"
             value={form.name}
             onChange={handleChange}
+            darkMode={darkMode}
           />
 
           <Input
@@ -228,6 +325,7 @@ export default function AddTutorPage() {
             placeholder="Photo URL"
             value={form.photoURL}
             onChange={handleChange}
+            darkMode={darkMode}
           />
 
           <Input
@@ -236,6 +334,7 @@ export default function AddTutorPage() {
             placeholder="Subject"
             value={form.subject}
             onChange={handleChange}
+            darkMode={darkMode}
           />
 
           <Input
@@ -244,6 +343,7 @@ export default function AddTutorPage() {
             placeholder="Available Days"
             value={form.availableDays}
             onChange={handleChange}
+            darkMode={darkMode}
           />
 
           <Input
@@ -252,6 +352,7 @@ export default function AddTutorPage() {
             placeholder="Available Time"
             value={form.availableTime}
             onChange={handleChange}
+            darkMode={darkMode}
           />
 
           <Input
@@ -261,6 +362,7 @@ export default function AddTutorPage() {
             placeholder="Hourly Fee"
             value={form.hourlyFee}
             onChange={handleChange}
+            darkMode={darkMode}
           />
 
           <Input
@@ -270,6 +372,7 @@ export default function AddTutorPage() {
             placeholder="Total Seats"
             value={form.totalSeats}
             onChange={handleChange}
+            darkMode={darkMode}
           />
 
           <Input
@@ -279,6 +382,7 @@ export default function AddTutorPage() {
             placeholder="Max Students"
             value={form.maxStudents}
             onChange={handleChange}
+            darkMode={darkMode}
           />
 
           <Input
@@ -287,6 +391,7 @@ export default function AddTutorPage() {
             placeholder="Course Start Month"
             value={form.courseStartMonth}
             onChange={handleChange}
+            darkMode={darkMode}
           />
 
           <Input
@@ -295,6 +400,7 @@ export default function AddTutorPage() {
             placeholder="Course End Month"
             value={form.courseEndMonth}
             onChange={handleChange}
+            darkMode={darkMode}
           />
 
           <Input
@@ -303,6 +409,7 @@ export default function AddTutorPage() {
             placeholder="Institution"
             value={form.institution}
             onChange={handleChange}
+            darkMode={darkMode}
           />
 
           <Input
@@ -311,6 +418,7 @@ export default function AddTutorPage() {
             placeholder="Experience"
             value={form.experience}
             onChange={handleChange}
+            darkMode={darkMode}
           />
 
           <Input
@@ -319,6 +427,7 @@ export default function AddTutorPage() {
             placeholder="Location"
             value={form.location}
             onChange={handleChange}
+            darkMode={darkMode}
           />
 
           <Input
@@ -327,6 +436,7 @@ export default function AddTutorPage() {
             placeholder="Teaching Mode"
             value={form.teachingMode}
             onChange={handleChange}
+            darkMode={darkMode}
           />
 
           <Input
@@ -335,6 +445,7 @@ export default function AddTutorPage() {
             placeholder="Expertise"
             value={form.expertise}
             onChange={handleChange}
+            darkMode={darkMode}
           />
 
           <Input
@@ -344,6 +455,7 @@ export default function AddTutorPage() {
             placeholder="Course Fee"
             value={form.fee}
             onChange={handleChange}
+            darkMode={darkMode}
           />
 
           {/* BUTTON */}
@@ -351,7 +463,16 @@ export default function AddTutorPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-700 transition-all duration-300 text-white py-4 rounded-2xl font-bold text-lg disabled:opacity-60"
+              className="
+                w-full py-4 rounded-2xl
+                bg-blue-600 hover:bg-blue-700
+                text-white font-bold text-lg
+
+                transition-all duration-300
+                hover:scale-[1.01]
+
+                disabled:opacity-60
+              "
             >
               {loading
                 ? "Submitting..."
@@ -364,9 +485,9 @@ export default function AddTutorPage() {
   );
 }
 
-/* ========================================= */
+/* ====================================== */
 /* INPUT COMPONENT */
-/* ========================================= */
+/* ====================================== */
 
 function Input({
   icon,
@@ -375,20 +496,48 @@ function Input({
   onChange,
   value,
   type = "text",
+  darkMode,
 }) {
   return (
-    <div className="flex items-center gap-3 border border-gray-200 dark:border-zinc-700 rounded-2xl px-4 py-3 bg-gray-50 dark:bg-black focus-within:border-blue-500 transition">
-      <span className="text-blue-600 dark:text-cyan-300 text-lg">
+    <div
+      className={`
+        flex items-center gap-3
+        rounded-2xl px-4 py-3
+        border transition-all duration-300
+
+        ${
+          darkMode
+            ? "bg-[#0B1120]/80 border-blue-900/40"
+            : "bg-gray-50 border-gray-200"
+        }
+      `}
+    >
+      {/* ICON */}
+      <span className="text-blue-600 dark:text-blue-400 text-lg">
         {icon}
       </span>
 
+      {/* INPUT */}
       <input
         type={type}
+        min={
+          type === "number"
+            ? "0"
+            : undefined
+        }
         name={name}
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className="w-full bg-transparent outline-none text-gray-700 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500"
+        className={`
+          w-full bg-transparent outline-none
+
+          ${
+            darkMode
+              ? "text-blue-300 placeholder:text-blue-400"
+              : "text-gray-700 placeholder:text-gray-400"
+          }
+        `}
       />
     </div>
   );
