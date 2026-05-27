@@ -1,31 +1,13 @@
-
 "use client";
-
 import { useEffect, useMemo, useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import { toast } from "react-hot-toast";
 
-const months = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
+const months = [ "January", "February", "March", "April", "May", "June","July","August", "September","October", "November", "December",];
 
 export default function TutorsPage() {
-  /* =========================================================
-     STATES
-  ========================================================= */
   const [tutors, setTutors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchText, setSearchText] = useState("");
@@ -35,12 +17,8 @@ export default function TutorsPage() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [viewLimit, setViewLimit] = useState(18);
   const [mounted, setMounted] = useState(false);
-
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-  /* =========================================================
-     MOUNT & ADAPTIVE LAYOUT
-  ========================================================= */
   useEffect(() => {
     setMounted(true);
 
@@ -60,9 +38,7 @@ export default function TutorsPage() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  /* =========================================================
-     FETCH DATA
-  ========================================================= */
+
   const fetchTutors = async () => {
     try {
       setLoading(true);
@@ -82,9 +58,7 @@ export default function TutorsPage() {
     fetchTutors();
   }, []);
 
-  /* =========================================================
-     FILTER LOGIC
-  ========================================================= */
+
   const filtered = useMemo(() => {
     return tutors.filter((t) => {
       return (
@@ -116,24 +90,11 @@ export default function TutorsPage() {
         <title>Tutors Page</title>
       </Head>
 
-      <section
-        className="
-          min-h-screen
-          px-4 md:px-10
-          py-16
-          transition-colors 
-          duration-500
-          bg-[#FFF8F2]
-          dark:bg-black
-        "
-      >
-        {/* Dynamic Premium Ambient Light Accents */}
+      <section className=" min-h-screen px-4 md:px-10 py-16 transition-colors  duration-500 bg-[#FFF8F2] dark:bg-black" >
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/5 dark:bg-blue-500/5 rounded-full blur-3xl pointer-events-none"></div>
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-600/5 dark:bg-blue-600/5 rounded-full blur-3xl pointer-events-none"></div>
 
-        {/* =========================================================
-            HEADER
-        ========================================================= */}
+  
         <div className="relative text-center mb-16 z-10">
           <span className="text-xs font-bold tracking-widest uppercase text-blue-600 dark:text-blue-400 px-4 py-1.5 bg-blue-50 dark:bg-zinc-900 border border-blue-500/10 dark:border-blue-400/10 rounded-xl">
             Expert Learning Network
@@ -146,141 +107,46 @@ export default function TutorsPage() {
           </p>
         </div>
 
-        {/* =========================================================
-            FILTER CONTROLS BAR
-        ========================================================= */}
-        <div
-          className="
-            relative
-            max-w-7xl mx-auto
-            mb-14
-            rounded-3xl
-            p-5 md:p-6
-            border
-            transition-all duration-300
-            bg-white
-            border-blue-500/20
-            shadow-[0_8px_30px_rgba(59,130,246,0.02)]
-            dark:bg-zinc-950
-            dark:border-blue-400/20
-            hover:border-blue-500/30
-            dark:hover:border-blue-400/30
-            z-10
-          "
-        >
+        <div className=" relative max-w-7xl mx-auto mb-14 rounded-3xl p-5 md:p-6 border transition-all duration-300 bg-white border-blue-500/20 shadow-[0_8px_30px_rgba(59,130,246,0.02)] dark:bg-zinc-950 dark:border-blue-400/20 hover:border-blue-500/30 dark:hover:border-blue-400/30 z-10" >
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-            {/* NAME FIELD */}
-            <input
-              placeholder="Tutor name"
-              value={searchText}
+      
+            <input placeholder="Tutor name" value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
-              className="
-                p-4
-                rounded-2xl
-                border
-                outline-none
-                transition-all duration-300
-                focus:ring-4
-                focus:ring-blue-500/5
-                w-full
-                bg-white border-blue-500/15 text-gray-900 placeholder:text-gray-400 focus:border-blue-600 shadow-2xs
-                dark:bg-zinc-900 dark:border-blue-400/15 dark:text-blue-400 dark:placeholder:text-zinc-500 dark:focus:border-blue-500
-              "
-            />
+              className=" p-4 rounded-2xl border outline-none
+                transition-all duration-300 focus:ring-4 focus:ring-blue-500/5 w-full bg-white border-blue-500/15 text-gray-900 placeholder:text-gray-400 focus:border-blue-600 shadow-2xs dark:bg-zinc-900 dark:border-blue-400/15 dark:text-blue-400 dark:placeholder:text-zinc-500 dark:focus:border-blue-500" />
 
-            {/* SUBJECT FIELD */}
-            <input
-              placeholder="Subject"
-              value={subjectText}
+    
+            <input placeholder="Subject" value={subjectText}
               onChange={(e) => setSubjectText(e.target.value)}
-              className="
-                p-4
-                rounded-2xl
-                border
-                outline-none
-                transition-all duration-300
-                focus:ring-4
-                focus:ring-blue-500/5
-                w-full
-                bg-white border-blue-500/15 text-gray-900 placeholder:text-gray-400 focus:border-blue-600 shadow-2xs
-                dark:bg-zinc-900 dark:border-blue-400/15 dark:text-blue-400 dark:placeholder:text-zinc-500 dark:focus:border-blue-500
-              "
-            />
+              className=" p-4 rounded-2xl border outline-none transition-all duration-300 focus:ring-4 focus:ring-blue-500/5 w-full bg-white border-blue-500/15 text-gray-900 placeholder:text-gray-400 focus:border-blue-600 shadow-2xs dark:bg-zinc-900 dark:border-blue-400/15 dark:text-blue-400 dark:placeholder:text-zinc-500 dark:focus:border-blue-500" />
 
-            {/* START MONTH DROPDOWN */}
+   
             <select
-              value={startMonth}
-              onChange={(e) => setStartMonth(e.target.value)}
-              className="
-                p-4
-                rounded-2xl
-                border
-                outline-none
-                transition-all duration-300
-                focus:ring-4
-                focus:ring-blue-500/5
-                w-full cursor-pointer
-                bg-white border-blue-500/15 text-gray-900 focus:border-blue-600 shadow-2xs
-                dark:bg-zinc-900 dark:border-blue-400/15 dark:text-blue-400 dark:focus:border-blue-500
-              "
-            >
+              value={startMonth} onChange={(e) => setStartMonth(e.target.value)}
+              className=" p-4 rounded-2xl border outline-none transition-all duration-300 focus:ring-4 focus:ring-blue-500/5 w-full cursor-pointer bg-white border-blue-500/15 text-gray-900 focus:border-blue-600 shadow-2xs dark:bg-zinc-900 dark:border-blue-400/15 dark:text-blue-400 dark:focus:border-blue-500">
               <option value="" className="dark:bg-zinc-950 text-gray-400">Start Month</option>
               {months.map((m) => (
                 <option key={m} value={m} className="dark:bg-zinc-950 text-gray-900 dark:text-white">{m}</option>
               ))}
             </select>
 
-            {/* END MONTH DROPDOWN */}
             <select
               value={endMonth}
               onChange={(e) => setEndMonth(e.target.value)}
-              className="
-                p-4
-                rounded-2xl
-                border
-                outline-none
-                transition-all duration-300
-                focus:ring-4
-                focus:ring-blue-500/5
-                w-full cursor-pointer
-                bg-white border-blue-500/15 text-gray-900 focus:border-blue-600 shadow-2xs
-                dark:bg-zinc-900 dark:border-blue-400/15 dark:text-blue-400 dark:focus:border-blue-500
-              "
-            >
+              className=" p-4 rounded-2xl border outline-none transition-all duration-300 focus:ring-4 focus:ring-blue-500/5 w-full cursor-pointer bg-white border-blue-500/15 text-gray-900 focus:border-blue-600 shadow-2xs dark:bg-zinc-900 dark:border-blue-400/15 dark:text-blue-400 dark:focus:border-blue-500">
               <option value="" className="dark:bg-zinc-950 text-gray-400">End Month</option>
               {months.map((m) => (
                 <option key={m} value={m} className="dark:bg-zinc-950 text-gray-900 dark:text-white">{m}</option>
               ))}
             </select>
-
-            {/* RESET TRIGGER BUTTON */}
             <button
               onClick={resetAll}
-              className="
-                p-4 rounded-2xl
-                w-full
-                bg-blue-600
-                hover:bg-blue-500
-                text-white
-                font-bold
-                transition-all duration-300
-                hover:scale-[1.01]
-                active:scale-[0.99]
-                shadow-md
-                shadow-blue-600/5
-                hover:shadow-blue-600/15
-                md:col-span-2
-                lg:col-span-1
-              "
-            >
+              className=" p-4 rounded-2xl  w-full bg-blue-600 hover:bg-blue-500 text-white font-bold transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] shadow-md shadow-blue-600/5 hover:shadow-blue-600/15  md:col-span-2 lg:col-span-1">
               Reset Filters
             </button>
           </div>
         </div>
 
-        {/* =========================================================
-            STATE NOTIFICATIONS (LOADING & BLANK STATUS)
-        ========================================================= */}
         {loading ? (
           <div className="flex justify-center items-center py-32 relative z-10">
             <div className="w-14 h-14 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
@@ -295,40 +161,15 @@ export default function TutorsPage() {
             </p>
           </div>
         ) : (
-          /* =========================================================
-              CARDS FEED GRID
-          ========================================================= */
+   
           <div className="max-w-7xl mx-auto space-y-12 relative z-10">
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
               {visibleTutors.map((tutor) => {
                 const isSoldOut = tutor?.maxStudents <= 0;
 
                 return (
-                  <Link
-                    key={tutor?._id}
-                    href={`/tutors/${tutor?._id}`}
-                    className="
-                      group
-                      rounded-3xl
-                      overflow-hidden
-                      flex
-                      flex-col
-                      border
-                      transition-all
-                      duration-300
-                      bg-white
-                      border-blue-500/15
-                      shadow-[0_4px_25px_rgba(59,130,246,0.015)]
-                      hover:border-blue-500/40
-                      hover:shadow-[0_12px_35px_rgba(59,130,246,0.08)]
-                      hover:-translate-y-1
-                      dark:bg-zinc-950
-                      dark:border-blue-400/15
-                      dark:shadow-none
-                      dark:hover:border-blue-400/40
-                      dark:hover:shadow-[0_12px_40px_rgba(59,130,246,0.12)]
-                    "
-                  >
+                  <Link key={tutor?._id} href={`/tutors/${tutor?._id}`}
+                    className=" group rounded-3xl overflow-hidden flex flex-col border transition-all duration-300 bg-white border-blue-500/15 shadow-[0_4px_25px_rgba(59,130,246,0.015)] hover:border-blue-500/40 hover:shadow-[0_12px_35px_rgba(59,130,246,0.08)] hover:-translate-y-1 dark:bg-zinc-950 dark:border-blue-400/15 dark:shadow-none dark:hover:border-blue-400/40 dark:hover:shadow-[0_12px_40px_rgba(59,130,246,0.12)]" >
                     {/* AVATAR/PORTRAIT FRAME CONTAINER */}
                     <div className="relative h-64 overflow-hidden bg-gray-100 dark:bg-zinc-900">
                       <Image
@@ -339,7 +180,7 @@ export default function TutorsPage() {
                       />
                       
                       {/* Linear Smooth Dynamic Shading Layer Over Profile Card Photo */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent"></div>
+                      <div className="absolute inset-0 bg-linear-to-t from-black/50 via-black/10 to-transparent"></div>
 
                       {/* AREA SUBJECT IDENTIFIER TAG */}
                       <div className="absolute top-4 left-4">
@@ -352,20 +193,16 @@ export default function TutorsPage() {
                       <div className="absolute top-4 right-4">
                         <span
                           className={`px-3.5 py-1.5 rounded-xl text-[11px] font-bold tracking-wider uppercase shadow-sm backdrop-blur-xs ${
-                            isSoldOut
-                              ? "bg-red-500/90 text-white"
-                              : "bg-emerald-500/90 text-white"
-                          }`}
-                        >
+                            isSoldOut ? "bg-red-500/90 text-white" : "bg-emerald-500/90 text-white"}`}>
                           {isSoldOut ? "No Seats Left" : `${tutor?.maxStudents} Seats Open`}
                         </span>
                       </div>
                     </div>
 
-                    {/* INTERACTIVE CONTENT MODULE LAYOUT */}
+
                     <div className="p-6 flex flex-col grow justify-between space-y-5">
                       
-                      {/* IDENTITY DETAILS */}
+          
                       <div>
                         <h2 className="text-xl font-black text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-1 tracking-tight">
                           {tutor?.name}
@@ -375,7 +212,7 @@ export default function TutorsPage() {
                         </p>
                       </div>
 
-                      {/* PRICE INDEX STRIP */}
+                
                       <div className="flex items-center justify-between border-t border-b border-gray-100 dark:border-zinc-900 py-4">
                         <div>
                           <p className="text-[10px] font-bold tracking-widest uppercase text-gray-400 dark:text-zinc-500">
@@ -396,18 +233,8 @@ export default function TutorsPage() {
                         </div>
                       </div>
 
-                      {/* SCHEDULING MODULE LAYER */}
-                      <div
-                        className="
-                          flex items-center justify-between
-                          px-4 py-3
-                          rounded-xl
-                          bg-blue-50/40
-                          border border-blue-500/5
-                          dark:bg-blue-950/10
-                          dark:border-blue-400/5
-                        "
-                      >
+           
+                      <div className=" flex items-center justify-between px-4 py-3 rounded-xl bg-blue-50/40 border border-blue-500/5 dark:bg-blue-950/10 dark:border-blue-400/5" >
                         <div>
                           <p className="text-[10px] font-bold uppercase tracking-wider text-blue-600/80 dark:text-blue-400/80">
                             Start Month
@@ -417,7 +244,7 @@ export default function TutorsPage() {
                           </h4>
                         </div>
 
-                        <div className="w-6 h-[2px] bg-blue-500/20 dark:bg-blue-400/20 rounded-full"></div>
+                        <div className="w-6 h-0.5 bg-blue-500/20 dark:bg-blue-400/20 rounded-full"></div>
 
                         <div className="text-right">
                           <p className="text-[10px] font-bold uppercase tracking-wider text-blue-600/80 dark:text-blue-400/80">
@@ -429,19 +256,9 @@ export default function TutorsPage() {
                         </div>
                       </div>
 
-                      {/* INTERACTIVE COMPONENT BOOK ACTION BUTTON */}
-                      <div
-                        className={`
-                          w-full text-center py-3.5 rounded-xl
-                          text-white font-bold text-sm tracking-wide
-                          transition-all duration-300
-                          ${
-                            isSoldOut
-                              ? "bg-gray-200 dark:bg-zinc-900 text-gray-400 dark:text-zinc-600 cursor-not-allowed"
-                              : "bg-blue-600 group-hover:bg-blue-500 shadow-sm shadow-blue-600/5 group-hover:shadow-blue-600/15"
-                          }
-                        `}
-                      >
+               
+                      <div className={` w-full text-center py-3.5 rounded-xl text-white font-bold text-sm tracking-wide transition-all duration-300
+                          ${ isSoldOut ? "bg-gray-200 dark:bg-zinc-900 text-gray-400 dark:text-zinc-600 cursor-not-allowed" : "bg-blue-600 group-hover:bg-blue-500 shadow-sm shadow-blue-600/5 group-hover:shadow-blue-600/15" }`} >
                         {isSoldOut ? "No Seats Available" : "Book Session"}
                       </div>
                     </div>
@@ -450,27 +267,12 @@ export default function TutorsPage() {
               })}
             </div>
 
-            {/* =========================================================
-                PAGINATION EXPANSION COMPONENT CONTROLS
-            ========================================================= */}
+            
             {filtered.length > viewLimit && (
               <div className="flex justify-center pt-4">
                 <button
                   onClick={() => setIsExpanded(!isExpanded)}
-                  className="
-                    px-8 py-3.5 rounded-2xl
-                    bg-blue-600
-                    hover:bg-blue-500
-                    text-white
-                    font-bold text-base
-                    transition-all duration-300
-                    hover:scale-[1.01]
-                    active:scale-[0.99]
-                    shadow-lg
-                    shadow-blue-600/5
-                    hover:shadow-blue-600/15
-                  "
-                >
+                  className=" px-8 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-base transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] shadow-lg shadow-blue-600/5 hover:shadow-blue-600/15 " >
                   {isExpanded ? "Show Less" : "Show More"}
                 </button>
               </div>

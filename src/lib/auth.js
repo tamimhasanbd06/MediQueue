@@ -4,27 +4,12 @@ import { MongoClient } from "mongodb";
 import { jwt } from "better-auth/plugins";
 
 const mongoURI = process.env.MONGODB_URL;
-
 if (!mongoURI) {
   throw new Error("MONGODB_URL missing");
 }
 
 const client = new MongoClient(mongoURI);
-
-const socialProviders = {};
-
-if (
-  process.env.GOOGLE_CLIENT_ID &&
-  process.env.GOOGLE_CLIENT_SECRET
-) {
-  socialProviders.google = {
-    clientId: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  };
-}
-
 await client.connect();
-
 const db = client.db("mediqueue");
 
 export const auth = betterAuth({
@@ -36,9 +21,13 @@ export const auth = betterAuth({
     enabled: true,
   },
 
-  ...(Object.keys(socialProviders).length
-    ? { socialProviders }
-    : {}),
+  // ভুলটি এখানে ঠিক করা হয়েছে: সরাসরি socialProviders অবজেক্ট দিন
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+    },
+  },
 
   trustedOrigins: [
     "http://localhost:3000",

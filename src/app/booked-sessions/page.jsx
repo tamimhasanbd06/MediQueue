@@ -5,38 +5,21 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { saveAuthToken } from "@/lib/auth-client";
 import { toast } from "react-hot-toast";
-import {
-  FaBookOpen,
-  FaMoneyBillWave,
-  FaCalendarAlt,
-  FaTrashAlt,
-  FaSearch,
-  FaUser,
-} from "react-icons/fa";
+import { FaBookOpen, FaMoneyBillWave,  FaCalendarAlt,FaTrashAlt, FaSearch,FaUser,} from "react-icons/fa";
 
 export default function BookedSessionsPage() {
-  /* =========================================================
-     STATES
-  ========================================================= */
   const router = useRouter();
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
   const [cancelLoading, setCancelLoading] = useState("");
   const [searchText, setSearchText] = useState("");
-
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
-  /* =========================================================
-     MOUNT DETECTOR
-  ========================================================= */
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  /* =========================================================
-     FETCH SESSIONS
-  ========================================================= */
+
   const fetchSessions = async () => {
     try {
       setLoading(true);
@@ -75,9 +58,7 @@ export default function BookedSessionsPage() {
     fetchSessions();
   }, []);
 
-  /* =========================================================
-     FILTERED SESSIONS
-  ========================================================= */
+
   const filteredSessions = useMemo(() => {
     return sessions.filter(
       (session) =>
@@ -86,9 +67,6 @@ export default function BookedSessionsPage() {
     );
   }, [sessions, searchText]);
 
-  /* =========================================================
-     CANCEL SESSION
-  ========================================================= */
   const handleCancel = async (id) => {
     try {
       setCancelLoading(id);
@@ -116,17 +94,13 @@ export default function BookedSessionsPage() {
     }
   };
 
-  /* =========================================================
-     TOTAL PRICE
-  ========================================================= */
+
   const totalPrice = sessions.reduce(
     (total, item) => total + Number(item?.fee || 0),
     0
   );
 
-  /* =========================================================
-     LOADING STATE SCREEN
-  ========================================================= */
+
   if (loading) {
     return (
       <div className="h-screen flex items-center justify-center bg-white dark:bg-zinc-950 transition-all duration-500">
@@ -136,21 +110,9 @@ export default function BookedSessionsPage() {
   }
 
   return (
-    <section
-      className="
-        min-h-screen
-        px-4 sm:px-6 lg:px-8
-        py-12
-        transition-colors duration-500
-        bg-gray-50
-        dark:bg-zinc-950
-      "
-    >
+    <section className=" min-h-screen px-4 sm:px-6 lg:px-8 py-12 transition-colors duration-500
+        bg-gray-50 dark:bg-zinc-950" >
       <div className="max-w-7xl mx-auto space-y-10">
-        
-        {/* =========================================================
-            HEADER MODULE
-        ========================================================= */}
         <div className="text-center max-w-3xl mx-auto space-y-3">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-gray-900 dark:text-white">
             My <span className="text-blue-600 dark:text-blue-400">Booked Sessions</span>
@@ -160,65 +122,23 @@ export default function BookedSessionsPage() {
           </p>
         </div>
 
-        {/* =========================================================
-            TOP CONTROL BAR (SEARCH & TOTAL STRIP)
-        ========================================================= */}
+  
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
-          
-          {/* SEARCH INPUT BAR */}
-          <div
-            className="
-              lg:col-span-2
-              flex items-center
-              rounded-3xl
-              p-5
-              border
-              bg-white
-              border-blue-500/20
-              dark:bg-zinc-900/40
-              dark:border-blue-400/20
-              shadow-[0_8px_30px_rgba(59,130,246,0.01)]
-            "
-          >
+
+
+          <div className=" lg:col-span-2 flex items-center rounded-3xl p-5 border bg-white border-blue-500/20 dark:bg-zinc-900/40 dark:border-blue-400/20 shadow-[0_8px_30px_rgba(59,130,246,0.01)]" >
             <div className="relative w-full">
               <FaSearch className="absolute left-5 top-1/2 -translate-y-1/2 text-blue-500 dark:text-blue-400 text-lg" />
               <input
-                type="text"
-                placeholder="Search by tutor name or learning subject..."
-                value={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
-                className="
-                  w-full
-                  pl-14 pr-5 py-4
-                  rounded-2xl
-                  border
-                  outline-none
-                  text-sm
-                  transition-all duration-300
-                  focus:ring-4
-                  focus:ring-blue-500/5
-                  bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-400 focus:border-blue-500
-                  dark:bg-zinc-900 dark:border-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-blue-400
-                "
-              />
+                type="text" placeholder="Search by tutor name or learning subject..." value={searchText} onChange={(e) => setSearchText(e.target.value)}
+                className=" w-full pl-14 pr-5 py-4 rounded-2xl border outline-none text-sm transition-all duration-300 focus:ring-4 focus:ring-blue-500/5  bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-400 focus:border-blue-500 dark:bg-zinc-900 dark:border-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-blue-400 " />
             </div>
           </div>
 
-          {/* TOTAL COURSE FEE SECTION (WHITE LIGHT / BLACK DARK) */}
+       
+       
           <div
-            className="
-              rounded-3xl
-              p-6
-              border
-              flex flex-col justify-center
-              bg-white
-              border-blue-500/30
-              dark:bg-black
-              dark:border-blue-400/30
-              shadow-[0_10px_35px_rgba(59,130,246,0.03)]
-              relative overflow-hidden
-            "
-          >
+            className=" rounded-3xl p-6 border flex flex-col justify-center bg-white border-blue-500/30 dark:bg-black dark:border-blue-400/30 shadow-[0_10px_35px_rgba(59,130,246,0.03)] relative overflow-hidden">
             <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-full blur-xl pointer-events-none"></div>
             <div className="flex items-center justify-between">
               <div>
@@ -242,22 +162,10 @@ export default function BookedSessionsPage() {
           </div>
         </div>
 
-        {/* =========================================================
-            EMPTY STATUS RESPONSE
-        ========================================================= */}
+
+
         {filteredSessions.length === 0 ? (
-          <div
-            className="
-              rounded-3xl
-              p-12 md:p-20
-              text-center
-              border
-              bg-white
-              border-blue-500/20
-              dark:bg-zinc-900/20
-              dark:border-blue-400/20
-            "
-          >
+          <div className=" rounded-3xl p-12 md:p-20 text-center border bg-white border-blue-500/20 dark:bg-zinc-900/20 dark:border-blue-400/20" >
             <div className="w-20 h-20 mx-auto mb-6 rounded-2xl flex items-center justify-center bg-blue-50 dark:bg-blue-950/20 border border-blue-500/10">
               <FaBookOpen className="text-3xl text-blue-600 dark:text-blue-400" />
             </div>
@@ -267,46 +175,23 @@ export default function BookedSessionsPage() {
             <p className="text-sm text-gray-500 dark:text-zinc-400 max-w-sm mx-auto mb-6">
               There are no tutor configurations matching your specific criteria filter parameters right now.
             </p>
-            <button
-              onClick={() => router.push("/tutors")}
-              className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm tracking-wide transition-all duration-300"
-            >
+            <button onClick={() => router.push("/tutors")}
+              className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm tracking-wide transition-all duration-300" >
               Explore Instructors
             </button>
           </div>
         ) : (
           <>
-            {/* =========================================================
-                MOBILE & TABLET CARD CONTAINER (Hidden >= lg)
-            ========================================================= */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:hidden">
               {filteredSessions.map((session) => (
-                <div
-                  key={session._id}
-                  className="
-                    group
-                    rounded-3xl
-                    overflow-hidden
-                    border
-                    bg-white
-                    border-blue-500/20
-                    dark:bg-zinc-900/40
-                    dark:border-blue-400/20
-                    transition-all duration-300
-                    hover:shadow-lg
-                    hover:border-blue-500/40
-                    dark:hover:border-blue-400/40
-                    flex flex-col
-                  "
-                >
+                <div key={session._id}
+                  className=" group rounded-3xl overflow-hidden border bg-white border-blue-500/20 dark:bg-zinc-900/40 dark:border-blue-400/20 transition-all duration-300 hover:shadow-lg hover:border-blue-500/40 dark:hover:border-blue-400/40 flex flex-col" >
                   <div className="relative h-48 w-full bg-gray-100 dark:bg-zinc-900">
                     <Image
                       src={session.tutorImage || "https://i.ibb.co/4pDNDk1/avatar.png"}
-                      alt={session.tutorName}
-                      fill
-                      className="object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                      alt={session.tutorName} fill
+                      className="object-cover" />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent"></div>
                     <div className="absolute top-4 left-4">
                       <span className="px-3 py-1 rounded-xl bg-blue-600 text-white text-[11px] font-bold tracking-wider uppercase shadow-sm">
                         {session.subject}
@@ -340,22 +225,16 @@ export default function BookedSessionsPage() {
                     </div>
 
                     <div className="flex gap-2 pt-2">
-                      <button
-                        onClick={() => router.push(`/tutors/${session.tutorId}`)}
+                      <button onClick={() => router.push(`/tutors/${session.tutorId}`)}
                         className="flex-1 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs tracking-wide transition-all"
                       >
                         View Details
                       </button>
-                      <button
-                        onClick={() => handleCancel(session._id)}
-                        disabled={cancelLoading === session._id}
-                        className="w-12 rounded-xl bg-red-500 hover:bg-red-600 text-white flex items-center justify-center transition-all disabled:opacity-50"
-                      >
+                      <button onClick={() => handleCancel(session._id)} disabled={cancelLoading === session._id}
+                        className="w-12 rounded-xl bg-red-500 hover:bg-red-600 text-white flex items-center justify-center transition-all disabled:opacity-50" >
                         {cancelLoading === session._id ? (
                           <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                        ) : (
-                          <FaTrashAlt className="text-sm" />
-                        )}
+                        ) : ( <FaTrashAlt className="text-sm" />)}
                       </button>
                     </div>
                   </div>
@@ -363,22 +242,10 @@ export default function BookedSessionsPage() {
               ))}
             </div>
 
-            {/* =========================================================
-                LAPTOP & DESKTOP DATA TABLE CONTAINER (Visible >= lg)
-            ========================================================= */}
-            <div
-              className="
-                hidden lg:block
-                rounded-3xl
-                overflow-hidden
-                border
-                bg-white
-                border-blue-500/20
-                dark:bg-zinc-900/30
-                dark:border-blue-400/20
-                shadow-[0_4px_30px_rgba(59,130,246,0.015)]
-              "
-            >
+          
+
+
+            <div className=" hidden lg:block rounded-3xl overflow-hidden border bg-white border-blue-500/20 dark:bg-zinc-900/30 dark:border-blue-400/20 shadow-[0_4px_30px_rgba(59,130,246,0.015)]" >
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="border-b border-blue-500/10 dark:border-blue-400/10 bg-gray-50/70 dark:bg-zinc-900/50">
@@ -401,14 +268,9 @@ export default function BookedSessionsPage() {
                 </thead>
                 <tbody className="divide-y divide-gray-100 dark:divide-zinc-900/60">
                   {filteredSessions.map((session) => (
-                    <tr
-                      key={session._id}
-                      className="
-                        hover:bg-blue-50/10 dark:hover:bg-blue-950/5 
-                        transition-colors duration-200
-                      "
-                    >
-                      {/* PROFILE */}
+                    <tr key={session._id}
+                      className=" hover:bg-blue-50/10 dark:hover:bg-blue-950/5  transition-colors duration-200">
+                 
                       <td className="p-5">
                         <div className="flex items-center gap-4">
                           <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-gray-100 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800 shadow-2xs">
@@ -430,14 +292,14 @@ export default function BookedSessionsPage() {
                         </div>
                       </td>
 
-                      {/* SUBJECT */}
+                   
                       <td className="p-5">
                         <span className="inline-block px-3 py-1 rounded-lg bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 font-bold text-xs border border-blue-500/5">
                           {session.subject}
                         </span>
                       </td>
 
-                      {/* BOOKING DATE */}
+               
                       <td className="p-5">
                         <div className="flex items-center gap-2 text-gray-700 dark:text-zinc-300 font-semibold text-sm">
                           <FaCalendarAlt className="text-gray-400 dark:text-zinc-600 text-xs" />
@@ -445,50 +307,25 @@ export default function BookedSessionsPage() {
                         </div>
                       </td>
 
-                      {/* TUITION FEE */}
                       <td className="p-5">
                         <span className="font-black text-gray-900 dark:text-white text-base">
                           ৳ {session.fee}
                         </span>
                       </td>
 
-                      {/* ACTIONS */}
                       <td className="p-5 text-right">
                         <div className="flex items-center justify-end gap-3">
                           <button
                             onClick={() => router.push(`/tutors/${session.tutorId}`)}
-                            className="
-                              px-4 py-2 
-                              rounded-xl 
-                              bg-blue-600 hover:bg-blue-500
-                              text-white font-bold text-xs 
-                              transition-all duration-200 
-                              shadow-2xs
-                            "
-                          >
+                            className=" px-4 py-2  rounded-xl  bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs  transition-all duration-200  shadow-2xs " >
                             View Details
                           </button>
                           
-                          <button
-                            onClick={() => handleCancel(session._id)}
-                            disabled={cancelLoading === session._id}
-                            title="Cancel Session"
-                            className="
-                              p-2.5 
-                              rounded-xl 
-                              bg-red-500/10 hover:bg-red-500
-                              text-red-500 hover:text-white
-                              border border-red-500/10
-                              transition-all duration-200 
-                              disabled:opacity-40
-                              flex items-center justify-center
-                            "
-                          >
+                          <button  onClick={() => handleCancel(session._id)} disabled={cancelLoading === session._id} title="Cancel Session"
+                            className=" p-2.5  rounded-xl  bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white border border-red-500/10 transition-all duration-200  disabled:opacity-40 flex items-center justify-center" >
                             {cancelLoading === session._id ? (
-                              <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
-                            ) : (
-                              <FaTrashAlt className="text-xs" />
-                            )}
+                              <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div> 
+                              ) : ( <FaTrashAlt className="text-xs" /> )}
                           </button>
                         </div>
                       </td>

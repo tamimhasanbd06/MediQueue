@@ -1,55 +1,30 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { saveAuthToken } from "@/lib/auth-client";
 import { toast } from "react-hot-toast";
-import {
-  FaMapMarkerAlt,
-  FaUniversity,
-  FaChalkboardTeacher,
-  FaClock,
-  FaMoneyBillWave,
-  FaUsers,
-  FaBookOpen,
-} from "react-icons/fa";
-
+import { FaMapMarkerAlt, FaUniversity, FaChalkboardTeacher, FaClock, FaMoneyBillWave, FaUsers, FaBookOpen,} from "react-icons/fa";
 export default function TutorDetailsPage() {
-  /* =========================================================
-     ROUTER
-  ========================================================= */
   const { id } = useParams();
   const router = useRouter();
-
-  /* =========================================================
-     STATES
-  ========================================================= */
   const [tutor, setTutor] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [mounted, setMounted] = useState(false);
   const [bookingLoading, setBookingLoading] = useState(false);
   const [alreadyBooked, setAlreadyBooked] = useState(false);
-
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-  /* =========================================================
-     MOUNT
-  ========================================================= */
+
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  /* =========================================================
-     DARK MODE
-  ========================================================= */
   const darkMode =
     mounted && document.documentElement.classList.contains("dark");
 
-  /* =========================================================
-     FETCH TUTOR
-  ========================================================= */
+
   useEffect(() => {
     const fetchTutor = async () => {
       try {
@@ -64,9 +39,7 @@ export default function TutorDetailsPage() {
           return router.push("/login");
         }
 
-        /* =========================================================
-           FETCH TUTOR DATA
-        ========================================================= */
+
         const res = await fetch(`${API_URL}/tutors/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -86,9 +59,7 @@ export default function TutorDetailsPage() {
 
         setTutor(data);
 
-        /* =========================================================
-           CHECK BOOKED SESSION
-        ========================================================= */
+
         const bookedRes = await fetch(`${API_URL}/booked-sessions`, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -111,9 +82,7 @@ export default function TutorDetailsPage() {
     }
   }, [id, API_URL, router]);
 
-  /* =========================================================
-     BOOK SESSION
-  ========================================================= */
+
   const handleBookSession = async () => {
     try {
       setBookingLoading(true);
@@ -151,9 +120,6 @@ export default function TutorDetailsPage() {
     }
   };
 
-  /* =========================================================
-     LOADING
-  ========================================================= */
   if (loading) {
     return (
       <div className="h-screen flex items-center justify-center bg-[#FFF8F2] dark:bg-black transition-all duration-500">
@@ -162,9 +128,7 @@ export default function TutorDetailsPage() {
     );
   }
 
-  /* =========================================================
-     ERROR
-  ========================================================= */
+
   if (!tutor || error) {
     return (
       <div className="h-screen flex flex-col items-center justify-center bg-[#FFF8F2] dark:bg-black text-center px-4 transition-all duration-500">
@@ -173,63 +137,26 @@ export default function TutorDetailsPage() {
           {error || "No tutors available on your requirements."}
         </p>
 
-        <button
-          onClick={() => router.push("/tutors")}
-          className="
-            mt-6 px-8 py-3.5
-            bg-blue-600 hover:bg-blue-700
-            text-white rounded-2xl
-            font-bold text-base
-            transition-all duration-300
-            hover:scale-[1.02] active:scale-[0.98]
-            shadow-md shadow-blue-600/10
-          "
-        >
+        <button onClick={() => router.push("/tutors")}
+          className=" mt-6 px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold text-base transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-md shadow-blue-600/10" >
           Back To Tutors
         </button>
       </div>
     );
   }
 
-  /* =========================================================
-     VALUES
-  ========================================================= */
+
   const bookedStudents = Number(tutor.totalSeats || 0);
   const maxStudents = Number(tutor.maxStudents || 0);
   const remainingSeats = maxStudents - bookedStudents;
   const noSeats = remainingSeats <= 0;
 
-  /* =========================================================
-     MAIN UI
-  ========================================================= */
+
   return (
-    <div
-      className="
-        min-h-screen
-        transition-colors duration-500
-        p-4 md:p-8
-        bg-[#FFF8F2]
-        dark:bg-black
-      "
-    >
-      <div
-        className="
-          max-w-7xl mx-auto
-          rounded-3xl
-          overflow-hidden
-          border
-          shadow-xl
-          transition-all duration-500
-          border-blue-500/20
-          bg-white
-          dark:border-blue-400/20
-          dark:bg-zinc-950
-        "
-      >
-        {/* =========================================================
-           HERO SECTION
-        ========================================================= */}
-        <div className="relative h-[260px] md:h-[440px]">
+    <div className="  min-h-screen transition-colors duration-500 p-4 md:p-8 bg-[#FFF8F2] dark:bg-black">
+      <div className=" max-w-7xl mx-auto rounded-3xl overflow-hidden border shadow-xl transition-all duration-500 border-blue-500/20 bg-white dark:border-blue-400/20 dark:bg-zinc-950" >
+
+        <div className="relative h-65 md:h-110">
           <Image
             src={tutor.photoURL}
             alt={tutor.name}
@@ -238,8 +165,7 @@ export default function TutorDetailsPage() {
             priority
           />
 
-          {/* OVERLAY */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20"></div>
+          <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-black/20"></div>
 
           {/* TOP TAGS */}
           <div className="absolute top-6 left-6 flex flex-wrap gap-3">
@@ -257,7 +183,7 @@ export default function TutorDetailsPage() {
             </span>
           </div>
 
-          {/* BOTTOM TEXT */}
+
           <div className="absolute bottom-0 left-0 p-6 md:p-10 text-white w-full">
             <h1 className="text-3xl md:text-5xl font-black tracking-tight drop-shadow-xs">
               {tutor.name}
@@ -269,14 +195,8 @@ export default function TutorDetailsPage() {
           </div>
         </div>
 
-        {/* =========================================================
-           CONTENT BODY
-        ========================================================= */}
         <div className="p-5 md:p-10">
-          
-          {/* =========================================================
-             TOP THREE CARDS (EXACT SAME STYLE SYSTEM)
-          ========================================================= */}
+        
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
             {/* FULL FEE CARD */}
             <div className="p-6 rounded-2xl border transition-all duration-300 hover:scale-[1.02] bg-white border-blue-500/20 dark:bg-zinc-900/50 dark:border-blue-400/20 shadow-[0_4px_20px_rgba(59,130,246,0.03)]">
@@ -288,7 +208,6 @@ export default function TutorDetailsPage() {
               </h2>
             </div>
 
-            {/* STUDENTS CARD */}
             <div className="p-6 rounded-2xl border transition-all duration-300 hover:scale-[1.02] bg-white border-blue-500/20 dark:bg-zinc-900/50 dark:border-blue-400/20 shadow-[0_4px_20px_rgba(59,130,246,0.03)]">
               <p className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 mb-2">
                 Enrolled Students
@@ -298,25 +217,19 @@ export default function TutorDetailsPage() {
               </h2>
             </div>
 
-            {/* AVAILABLE SEATS CARD */}
+
             <div className="p-6 rounded-2xl border transition-all duration-300 hover:scale-[1.02] bg-white border-blue-500/20 dark:bg-zinc-900/50 dark:border-blue-400/20 shadow-[0_4px_20px_rgba(59,130,246,0.03)]">
               <p className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 mb-2">
                 Available Seats
               </p>
               <h2
-                className={`
-                  text-4xl font-black
-                  ${noSeats ? "text-red-500" : "text-emerald-500"}
-                `}
-              >
+                className={` text-4xl font-black ${noSeats ? "text-red-500" : "text-emerald-500"} `}>
                 {remainingSeats > 0 ? remainingSeats : 0}
               </h2>
             </div>
           </div>
 
-          {/* =========================================================
-             DETAILS GRID MODULE
-          ========================================================= */}
+       
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             <Card icon={<FaBookOpen />} label="Subject" value={tutor.subject} />
             <Card icon={<FaChalkboardTeacher />} label="Experience" value={tutor.experience} />
@@ -332,69 +245,23 @@ export default function TutorDetailsPage() {
             <Card icon={<FaMoneyBillWave />} label="Full Fee" value={`৳${tutor.fee}`} />
           </div>
 
-          {/* =========================================================
-             BUTTON CONTROLS (UNIFIED STRUCTURE)
-          ========================================================= */}
           <div className="mt-12 flex flex-col lg:flex-row gap-5">
-            
-            {/* BOOK SESSION BUTTON (BLUE COLOR HIGHLIGHT) */}
-            <button
-              onClick={handleBookSession}
-              disabled={bookingLoading || alreadyBooked || noSeats}
-              className={`
-                flex-1 py-4 px-6 rounded-2xl
-                font-bold text-base tracking-wide
-                transition-all duration-300
-                shadow-md active:scale-[0.98]
-                ${
-                  bookingLoading || alreadyBooked || noSeats
-                    ? "bg-gray-300 dark:bg-zinc-800 text-gray-500 dark:text-zinc-500 cursor-not-allowed shadow-none"
-                    : "bg-blue-600 hover:bg-blue-500 text-white hover:scale-[1.01] shadow-blue-600/10 hover:shadow-blue-600/20"
-                }
-              `}
-            >
-              {bookingLoading
-                ? "Booking..."
-                : alreadyBooked
-                ? "Already Booked"
-                : noSeats
-                ? "No Seats Available"
-                : "Book Session"}
+   
+            <button onClick={handleBookSession} disabled={bookingLoading || alreadyBooked || noSeats}
+              className={` flex-1 py-4 px-6 rounded-2xl font-bold text-base tracking-wide
+                transition-all duration-300 shadow-md active:scale-[0.98]
+                ${ bookingLoading || alreadyBooked || noSeats ? "bg-gray-300 dark:bg-zinc-800 text-gray-500 dark:text-zinc-500 cursor-not-allowed shadow-none" : "bg-blue-600 hover:bg-blue-500 text-white hover:scale-[1.01] shadow-blue-600/10 hover:shadow-blue-600/20" } `} >
+              {bookingLoading ? "Booking..." : alreadyBooked ? "Already Booked" : noSeats ? "No Seats Available" : "Book Session"}
             </button>
 
-            {/* GO BACK BUTTON */}
-            <button
-              onClick={() => router.push("/tutors")}
-              className="
-                flex-1 py-4 px-6 rounded-2xl
-                font-bold text-base tracking-wide
-                transition-all duration-300
-                active:scale-[0.98] hover:scale-[1.01]
-                border-2 border-blue-600/30 text-blue-600
-                bg-white hover:bg-blue-50/50
-                dark:border-blue-400/30 dark:text-blue-400
-                dark:bg-zinc-900/20 dark:hover:bg-blue-950/20
-                shadow-xs
-              "
-            >
+ 
+            <button onClick={() => router.push("/tutors")}
+              className=" flex-1 py-4 px-6 rounded-2xl font-bold text-base tracking-wide transition-all duration-300 active:scale-[0.98] hover:scale-[1.01] border-2 border-blue-600/30 text-blue-600 bg-white hover:bg-blue-50/50 dark:border-blue-400/30 dark:text-blue-400 dark:bg-zinc-900/20 dark:hover:bg-blue-950/20 shadow-xs " >
               Go Back
             </button>
 
-            {/* MY SESSIONS BUTTON */}
-            <button
-              onClick={() => router.push("/booked-sessions")}
-              className="
-                flex-1 py-4 px-6 rounded-2xl
-                font-bold text-base tracking-wide
-                transition-all duration-300
-                active:scale-[0.98] hover:scale-[1.01]
-                border-2 border-blue-600/30 text-blue-600
-                bg-white hover:bg-blue-50/50
-                dark:border-blue-400/30 dark:text-blue-400
-                dark:bg-zinc-900/20 dark:hover:bg-blue-950/20
-                shadow-xs
-              "
-            >
+            <button onClick={() => router.push("/booked-sessions")}
+              className=" flex-1 py-4 px-6 rounded-2xl font-bold text-base tracking-wide transition-all duration-300 active:scale-[0.98] hover:scale-[1.01] border-2 border-blue-600/30 text-blue-600 bg-white hover:bg-blue-50/50 dark:border-blue-400/30 dark:text-blue-400 dark:bg-zinc-900/20 dark:hover:bg-blue-950/20 shadow-xs">
               My Sessions
             </button>
           </div>
@@ -405,33 +272,15 @@ export default function TutorDetailsPage() {
   );
 }
 
-/* =========================================================
-   SUB-CARD BLOCK COMPONENT
-========================================================= */
+
 function Card({ icon, label, value }) {
   return (
-    <div
-      className="
-        p-5 rounded-2xl border
-        flex items-center gap-4
-        transition-all duration-300
-        hover:scale-[1.01]
-        bg-white border-blue-500/10
-        dark:bg-zinc-900/30 dark:border-blue-400/10
-        shadow-[0_2px_12px_rgba(59,130,246,0.01)]
-      "
-    >
-      {/* ICON HOUSING */}
+    <div className=" p-5 rounded-2xl border flex items-center gap-4 transition-all duration-300 hover:scale-[1.01] bg-white border-blue-500/10 dark:bg-zinc-900/30 dark:border-blue-400/10 shadow-[0_2px_12px_rgba(59,130,246,0.01)]" >
+   
       <div
         className="
-          min-w-[50px] h-[50px]
-          rounded-xl
-          flex items-center justify-center
-          text-lg
-          bg-blue-50 text-blue-600
-          dark:bg-blue-950/40 dark:text-blue-400
-        "
-      >
+          min-w-12.5 h-12.5
+          rounded-xl flex items-center justify-center text-lg bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400 " >
         {icon}
       </div>
 

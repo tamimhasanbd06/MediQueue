@@ -88,7 +88,6 @@ export default function MyTutorsPage() {
     setModal((m) => ({ ...m, update: true }));
   };
 
-  // CHANGE
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -102,7 +101,7 @@ export default function MyTutorsPage() {
     setForm({ ...form, [name]: value });
   };
 
-  // UPDATE
+
   const handleUpdate = async () => {
     try {
       setSaving(true);
@@ -148,21 +147,15 @@ export default function MyTutorsPage() {
       const token =
         localStorage.getItem("token") ||
         (await saveAuthToken());
-
       const tutor = tutors.find((t) => t._id === deleteId);
-
       const res = await fetch(`${API_URL}/tutors/${deleteId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
-
       const data = await res.json();
       if (!res.ok) throw new Error(data.message);
-
       setTutors((prev) => prev.filter((t) => t._id !== deleteId));
-
       toast.success(`${tutor?.name} deleted`);
-
       setModal({ update: false, delete: false, success: true });
     } catch (err) {
       toast.error(err.message);
@@ -192,30 +185,25 @@ export default function MyTutorsPage() {
   }
 
   return (
-    <div className="min-h-screen p-4 md:p-10 bg-gradient-to-br from-white via-blue-50 to-slate-100 dark:from-black dark:via-[#020817] dark:to-blue-950 text-gray-900 dark:text-gray-100 transition-colors duration-300">
-      
-      <h1 className="text-center text-3xl md:text-6xl font-black mb-10 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 text-transparent bg-clip-text py-2">
+    <div className="min-h-screen p-4 md:p-10 bg-linear-to-br from-white via-blue-50 to-slate-100 dark:from-black dark:via-[#020817] dark:to-blue-950 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+      <h1 className="text-center text-3xl md:text-6xl font-black mb-10 bg-linear-to-r from-blue-600 via-purple-600 to-pink-500 text-transparent bg-clip-text py-2">
         My Tutors Dashboard
       </h1>
 
-      {/* SEARCH BAR (THICK BLUE BORDER) */}
+
       <div className="max-w-xl mx-auto mb-10 flex items-center gap-3 p-4 rounded-2xl bg-white dark:bg-[#0B1120] border-2 border-blue-500/80 dark:border-blue-500/60 shadow-xl focus-within:ring-4 focus-within:ring-blue-500/10 transition-all duration-300">
-        <FaSearch className="text-blue-500 text-lg flex-shrink-0" />
-        <input
-          value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-            setIsExpanded(false);
-          }}
+        <FaSearch className="text-blue-500 text-lg shrink-0" />
+        <input value={search}
+          onChange={(e) => { setSearch(e.target.value); setIsExpanded(false); }}
           placeholder="Search tutors by name or subject..."
           className="w-full bg-transparent outline-none border-none text-gray-900 dark:text-blue-200 placeholder:text-gray-400 dark:placeholder:text-blue-400/50 text-sm md:text-base font-medium"
         />
       </div>
 
-      {/* CONTENT MANAGEMENT WRAPPER */}
+
       <div className="max-w-7xl mx-auto space-y-8">
-        
-        {/* DESKTOP VIEW: TABLE WITH THICK BLUE BORDER */}
+
+
         <div className="hidden xl:block overflow-hidden rounded-3xl border-2 border-blue-500/80 dark:border-blue-500/60 shadow-2xl bg-white dark:bg-[#0B1120]">
           <table className="w-full border-collapse">
             <thead>
@@ -232,7 +220,7 @@ export default function MyTutorsPage() {
               {visibleTutors.map((tutor) => (
                 <tr key={tutor._id} className="hover:bg-blue-50/40 dark:hover:bg-blue-950/20 transition-all duration-200 group">
                   <td className="p-5 flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center font-black text-lg shadow-md flex-shrink-0">
+                    <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center font-black text-lg shadow-md shrink-0">
                       {tutor.name?.charAt(0)}
                     </div>
                     <div>
@@ -246,17 +234,13 @@ export default function MyTutorsPage() {
                   <td className="p-5 text-center text-sm font-medium text-gray-500 dark:text-blue-300/80">{tutor.location}</td>
                   <td className="p-5 text-center">
                     <div className="flex justify-center items-center gap-2">
-                      <button
-                        onClick={() => openUpdate(tutor)}
+                      <button onClick={() => openUpdate(tutor)}
                         className="p-3 bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 dark:hover:text-white rounded-xl transition-all duration-200 active:scale-95 shadow-sm"
                       >
                         <FaEdit size={16} />
                       </button>
                       <button
-                        onClick={() => {
-                          setDeleteId(tutor._id);
-                          setModal((m) => ({ ...m, delete: true }));
-                        }}
+                        onClick={() => { setDeleteId(tutor._id); setModal((m) => ({ ...m, delete: true })); }}
                         className="p-3 bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 hover:bg-red-600 hover:text-white dark:hover:bg-red-600 dark:hover:text-white rounded-xl transition-all duration-200 active:scale-95 shadow-sm"
                       >
                         <FaTrash size={16} />
@@ -272,19 +256,18 @@ export default function MyTutorsPage() {
         {/* TABLET & MOBILE VIEW: RESPONSIVE CARDS WITH THICK BLUE BORDER */}
         <div className="block xl:hidden grid grid-cols-1 md:grid-cols-2 gap-6">
           {visibleTutors.map((tutor) => (
-            <div 
-              key={tutor._id} 
+            <div key={tutor._id}
               className="rounded-3xl border-2 border-blue-500/80 dark:border-blue-500/60 bg-white dark:bg-[#0B1120] p-5 md:p-6 shadow-xl flex flex-col justify-between hover:shadow-2xl transition-all duration-300"
             >
               <div>
                 <div className="flex items-start gap-4 mb-4">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center font-black text-xl shadow-md flex-shrink-0">
+                  <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center font-black text-xl shadow-md shrink-0">
                     {tutor.name?.charAt(0)}
                   </div>
                   <div className="overflow-hidden">
                     <h3 className="font-bold text-lg text-gray-900 dark:text-gray-100 truncate">{tutor.name}</h3>
                     <p className="text-xs text-gray-500 dark:text-blue-400/60 font-medium truncate flex items-center gap-1 mt-0.5">
-                      <FaGraduationCap className="text-blue-500 flex-shrink-0" />
+                      <FaGraduationCap className="text-blue-500 shrink-0" />
                       {tutor.institution || "Independent Institution"}
                     </p>
                   </div>
@@ -305,11 +288,11 @@ export default function MyTutorsPage() {
 
                 <div className="space-y-2.5 my-4 text-xs md:text-sm text-gray-600 dark:text-gray-300 font-medium">
                   <div className="flex items-center gap-2">
-                    <FaUsers className="text-blue-400 w-4 flex-shrink-0" />
+                    <FaUsers className="text-blue-400 w-4 shrink-0" />
                     <span>{tutor.totalSeats || "0"} Active Seats</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <FaMapMarkerAlt className="text-blue-400 w-4 flex-shrink-0" />
+                    <FaMapMarkerAlt className="text-blue-400 w-4 shrink-0" />
                     <span className="truncate">{tutor.location}</span>
                   </div>
                 </div>
@@ -338,7 +321,7 @@ export default function MyTutorsPage() {
           ))}
         </div>
 
-        {/* EMPTY STATE */}
+
         {filteredTutors.length === 0 && (
           <div className="text-center py-16 rounded-3xl border-2 border-dashed border-blue-500/50 bg-white/50 dark:bg-black/10">
             <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 mb-1">No Matching Records Found</h3>
@@ -346,32 +329,23 @@ export default function MyTutorsPage() {
           </div>
         )}
 
-        {/* PAGINATION TRIGGER BUTTONS */}
+
         {filteredTutors.length > viewLimit && (
           <div className="flex justify-center pt-6">
             <button
               onClick={() => setIsExpanded(!isExpanded)}
-              className="
-                px-10 py-4 rounded-2xl
-                bg-blue-600 hover:bg-blue-700
-                text-white font-black text-sm uppercase tracking-wider
-                transition-all duration-300
-                hover:scale-[1.03] active:scale-[0.97]
-                shadow-xl shadow-blue-500/20
-              "
-            >
+              className=" px-10 py-4 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-black text-sm uppercase tracking-wider transition-all duration-300 hover:scale-[1.03] active:scale-[0.97] shadow-xl shadow-blue-500/20 " >
               {isExpanded ? "Show Less" : "Show More"}
             </button>
           </div>
         )}
       </div>
 
-      {/* UPDATE MODAL (OPTIMIZED FULL FORM SCROLLING WITH THICK BORDERS) */}
+
       {modal.update && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4">
-          <div className="w-full max-w-4xl max-h-[85vh] overflow-y-auto bg-white dark:bg-[#0B1120] border-4 border-blue-500/90 dark:border-blue-500/70 rounded-3xl p-5 md:p-8 shadow-2xl transition-all [overscroll-behavior:contain]">
-            
-            {/* STATIC TITLE HEADER LAYER (NO FLOATING LAYOUT) */}
+          <div className="w-full max-w-4xl max-h-[85vh] overflow-y-auto bg-white dark:bg-[#0B1120] border-4 border-blue-500/90 dark:border-blue-500/70 rounded-3xl p-5 md:p-8 shadow-2xl transition-all overscroll-contain">
+
             <div className="pb-4 mb-6 border-b-2 border-blue-500/20">
               <h2 className="text-2xl md:text-3xl font-black text-gray-900 dark:text-white">
                 Update Tutor Parameters
@@ -381,40 +355,33 @@ export default function MyTutorsPage() {
               </p>
             </div>
 
-            {/* HIGH MOBILITY RESPONSIVE FORM GRID GRID */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               {[
-                "name", "subject", "photoURL", "hourlyFee", 
-                "availableDays", "availableTime", "location", "institution", 
-                "experience", "teachingMode", "courseStartMonth", "courseEndMonth", 
+                "name", "subject", "photoURL", "hourlyFee",
+                "availableDays", "availableTime", "location", "institution",
+                "experience", "teachingMode", "courseStartMonth", "courseEndMonth",
                 "totalSeats", "maxStudents", "courseDuration", "fee"
               ].map((key) => (
                 <div key={key} className="flex flex-col gap-1.5">
                   <label className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400/80">
                     {key.replace(/([A-Z])/g, ' $1').trim()}
                   </label>
-                  <input
-                    name={key}
-                    value={form[key] || ""}
-                    onChange={handleChange}
-                    className="w-full p-3.5 rounded-xl text-gray-900 dark:text-blue-200 font-medium text-sm outline-none transition-all duration-200 border-2 border-blue-500/80 dark:border-blue-500/60 bg-white dark:bg-[#060b13] focus:ring-4 focus:ring-blue-500/20 placeholder:text-gray-300 dark:placeholder:text-blue-900/40"
-                  />
+                  <input name={key} value={form[key] || ""} onChange={handleChange}
+                    className="w-full p-3.5 rounded-xl text-gray-900 dark:text-blue-200 font-medium text-sm outline-none transition-all duration-200 border-2 border-blue-500/80 dark:border-blue-500/60 bg-white dark:bg-[#060b13] focus:ring-4 focus:ring-blue-500/20 placeholder:text-gray-300 dark:placeholder:text-blue-900/40" />
                 </div>
               ))}
             </div>
 
-            {/* ACTION TRAILING FOOTER */}
+
             <div className="flex justify-end items-center gap-3 mt-8 pt-5 border-t-2 border-blue-500/20">
               <button
                 onClick={() => setModal((m) => ({ ...m, update: false }))}
-                className="px-6 py-3.5 bg-gray-100 dark:bg-blue-950/40 text-gray-600 dark:text-blue-400 font-black rounded-xl hover:bg-gray-200 dark:hover:bg-blue-900/40 text-xs uppercase tracking-wide transition-all duration-200"
-              >
+                className="px-6 py-3.5 bg-gray-100 dark:bg-blue-950/40 text-gray-600 dark:text-blue-400 font-black rounded-xl hover:bg-gray-200 dark:hover:bg-blue-900/40 text-xs uppercase tracking-wide transition-all duration-200" >
                 Cancel Action
               </button>
               <button
                 onClick={handleUpdate}
-                className="px-8 py-3.5 bg-blue-600 text-white font-black rounded-xl hover:bg-blue-700 text-xs uppercase tracking-wide transition-all duration-200 shadow-md"
-              >
+                className="px-8 py-3.5 bg-blue-600 text-white font-black rounded-xl hover:bg-blue-700 text-xs uppercase tracking-wide transition-all duration-200 shadow-md" >
                 {saving ? "Saving Changes..." : "Save Configuration"}
               </button>
             </div>
@@ -422,28 +389,24 @@ export default function MyTutorsPage() {
         </div>
       )}
 
-      {/* DELETE DIALOG MODAL (THICK BLUE BORDER) */}
+
       {modal.delete && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white dark:bg-[#0B1120] border-4 border-blue-500/90 dark:border-blue-500/70 p-6 md:p-8 rounded-3xl max-w-sm w-full text-center shadow-2xl">
             <div className="w-16 h-16 rounded-full bg-red-50 dark:bg-red-950/30 flex items-center justify-center mx-auto mb-4">
               <FaTrash className="text-red-500 text-2xl" />
             </div>
-
             <h2 className="text-xl font-black mb-1 text-gray-900 dark:text-white">Delete Profile?</h2>
             <p className="text-xs text-gray-400 dark:text-blue-400/60 font-medium mb-6">This process dropped entry permanently.</p>
-
             <div className="flex justify-center items-center gap-3 w-full">
               <button
                 onClick={() => setModal((m) => ({ ...m, delete: false }))}
-                className="w-1/2 py-3 bg-gray-100 dark:bg-blue-950/40 text-gray-600 dark:text-blue-400 font-bold rounded-xl text-sm transition-all"
-              >
+                className="w-1/2 py-3 bg-gray-100 dark:bg-blue-950/40 text-gray-600 dark:text-blue-400 font-bold rounded-xl text-sm transition-all">
                 Cancel
               </button>
               <button
                 onClick={handleDelete}
-                className="w-1/2 py-3 bg-red-600 text-white font-bold rounded-xl text-sm transition-all"
-              >
+                className="w-1/2 py-3 bg-red-600 text-white font-bold rounded-xl text-sm transition-all">
                 Confirm Delete
               </button>
             </div>
@@ -451,21 +414,18 @@ export default function MyTutorsPage() {
         </div>
       )}
 
-      {/* SUCCESS MODAL (THICK BLUE BORDER) */}
+
       {modal.success && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white dark:bg-[#0B1120] border-4 border-blue-500/90 dark:border-blue-500/70 p-8 rounded-3xl max-w-sm w-full text-center shadow-2xl">
             <div className="w-16 h-16 rounded-full bg-emerald-50 dark:bg-emerald-950/30 flex items-center justify-center mx-auto mb-4">
               <span className="text-emerald-500 text-3xl font-black">✓</span>
             </div>
-            
             <h2 className="text-xl font-black text-gray-900 dark:text-white mb-2">Action Completed!</h2>
             <p className="text-xs text-gray-400 dark:text-blue-400/60 font-medium mb-6">Your configurations data synchronizations processed successfully.</p>
-
             <button
               onClick={() => setModal((m) => ({ ...m, success: false }))}
-              className="w-full py-3 bg-blue-600 text-white font-bold rounded-xl text-sm transition-all"
-            >
+              className="w-full py-3 bg-blue-600 text-white font-bold rounded-xl text-sm transition-all">
               Acknowledge
             </button>
           </div>

@@ -1,15 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import {
-  FaFacebookF,
-  FaLinkedinIn,
-  FaGithub,
-  FaXTwitter,
-  FaEnvelope,
-  FaPhone,
-  FaLocationDot,
-} from "react-icons/fa6";
+import { FaFacebookF, FaLinkedinIn, FaGithub, FaXTwitter, FaEnvelope, FaPhone, FaLocationDot,} from "react-icons/fa6";
 
 export default function Footer() {
   return (

@@ -57,11 +57,6 @@ export default function WhyChooseMediQueue() {
           </p>
         </div>
 
-        {/* CARDS CONTAINER */}
-        {/* grid-cols-1 -> Mobile: 1 card per line
-          sm:grid-cols-2 -> Tablet: 2 cards per line
-          lg:grid-cols-4 -> Desktop: 4 cards per line 
-        */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
           {features.map((feature) => (
             <div
@@ -70,23 +65,23 @@ export default function WhyChooseMediQueue() {
               transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-blue-500/[0.04] hover:border-blue-500/50 dark:hover:border-blue-400/50"
             >
               <div className="flex flex-col items-center w-full">
-                {/* ICON CONTAINER */}
+
                 <div className="w-16 h-16 rounded-2xl bg-blue-50 dark:bg-slate-800/50 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-blue-100 dark:group-hover:bg-slate-800 transition-all duration-300">
                   {feature.icon}
                 </div>
 
-                {/* TITLE */}
+      
                 <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 tracking-tight">
                   {feature.title}
                 </h3>
 
-                {/* DESCRIPTION */}
+        
                 <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-6">
                   {feature.description}
                 </p>
               </div>
 
-              {/* ACTION BUTTON */}
+     
               <Link
                 href="/tutors"
                 className="mt-auto w-full sm:w-auto px-6 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold tracking-wide hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500 transition-all active:scale-95 shadow-xs"
@@ -97,7 +92,7 @@ export default function WhyChooseMediQueue() {
           ))}
         </div>
 
-        {/* BOTTOM CTA */}
+
         <div className="text-center mt-12 sm:mt-20">
           <Link
             href="/signup"

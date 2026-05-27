@@ -5,31 +5,16 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import Image from "next/image";
 import { Camera, User, Mail, Link as LinkIcon, Save, X } from "lucide-react";
-
 import { useSession, saveAuthToken } from "@/lib/auth-client";
-
 export default function ProfilePage() {
   const router = useRouter();
   const fileInputRef = useRef(null);
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-
   const { data: session } = useSession();
-
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-
-  const [profile, setProfile] = useState({
-    name: "",
-    email: "",
-    image: "",
-  });
-
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    image: "",
-  });
-
+  const [profile, setProfile] = useState({ name: "", email: "", image: "", });
+  const [form, setForm] = useState({ name: "", email: "", image: "", });
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [preview, setPreview] = useState("");
 
@@ -79,9 +64,7 @@ export default function ProfilePage() {
     fetchProfile();
   }, []);
 
-  // =========================
-  // INPUT CHANGE
-  // =========================
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -95,9 +78,7 @@ export default function ProfilePage() {
     }
   };
 
-  // =========================
-  // FILE MANAGER UPLOAD HANDLE
-  // =========================
+
   const handleImageClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
@@ -126,18 +107,14 @@ export default function ProfilePage() {
     reader.readAsDataURL(file);
   };
 
-  // =========================
-  // OPEN EDIT
-  // =========================
+
   const openEdit = () => {
     setForm(profile);
     setPreview(profile.image);
     setIsEditOpen(true);
   };
 
-  // =========================
-  // SAVE PROFILE
-  // =========================
+
   const handleSave = async () => {
     try {
       setSaving(true);
@@ -184,9 +161,7 @@ export default function ProfilePage() {
     }
   };
 
-  // =========================
-  // LOADING UI
-  // =========================
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white dark:bg-black">
@@ -201,19 +176,13 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-purple-50 dark:from-black dark:via-[#050816] dark:to-[#020617] px-4 py-8 md:py-16 flex items-center justify-center">
+    <div className="min-h-screen bg-linear-to-br from-white via-blue-50 to-purple-50 dark:from-black dark:via-[#050816] dark:to-[#020617] px-4 py-8 md:py-16 flex items-center justify-center">
       
-      <input
-        type="file"
-        ref={fileInputRef}
-        onChange={handleFileChange}
-        accept="image/*"
-        className="hidden"
-      />
+      <input type="file" ref={fileInputRef} onChange={handleFileChange} accept="image/*"  className="hidden" />
 
       <div className="w-full max-w-xl md:max-w-2xl lg:max-w-3xl bg-white/90 dark:bg-black/80 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 shadow-2xl border border-gray-200 dark:border-gray-800 transition-all duration-300">
 
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-center mb-8 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 bg-clip-text text-transparent tracking-tight">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-center mb-8 bg-linear-to-r from-blue-600 via-indigo-600 to-blue-500 bg-clip-text text-transparent tracking-tight">
           My Profile
         </h1>
 
@@ -224,8 +193,7 @@ export default function ProfilePage() {
           >
             <Image
               src={profile?.image || "/avatar.png"}
-              alt="profile"
-              fill
+              alt="profile" fill
               className="object-cover transition-opacity duration-300 group-hover:opacity-80"
               priority
             />
@@ -301,8 +269,7 @@ export default function ProfilePage() {
               >
                 <Image
                   src={preview || "/avatar.png"}
-                  alt="preview"
-                  fill
+                  alt="preview" fill
                   className="object-cover group-hover:opacity-80 transition"
                 />
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white transition">
@@ -320,12 +287,7 @@ export default function ProfilePage() {
                 <label className="block text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-1 ml-1">Name</label>
                 <div className="relative">
                   <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <input
-                    type="text"
-                    name="name"
-                    value={form.name}
-                    onChange={handleChange}
-                    placeholder="Name"
+                  <input type="text" name="name" value={form.name} onChange={handleChange} placeholder="Name"
                     className="w-full h-12 bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-gray-800 rounded-xl pl-11 pr-4 text-sm font-semibold text-gray-900 dark:text-white outline-none focus:border-blue-600 dark:focus:border-blue-500 transition"
                   />
                 </div>
@@ -335,12 +297,7 @@ export default function ProfilePage() {
                 <label className="block text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-1 ml-1">Email</label>
                 <div className="relative">
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <input
-                    type="email"
-                    name="email"
-                    value={form.email}
-                    onChange={handleChange}
-                    placeholder="Email"
+                  <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="Email"
                     className="w-full h-12 bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-gray-800 rounded-xl pl-11 pr-4 text-sm font-semibold text-gray-900 dark:text-white outline-none focus:border-blue-600 dark:focus:border-blue-500 transition"
                   />
                 </div>
@@ -350,12 +307,7 @@ export default function ProfilePage() {
                 <label className="block text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-1 ml-1">Image URL</label>
                 <div className="relative">
                   <LinkIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <input
-                    type="text"
-                    name="image"
-                    value={form.image}
-                    onChange={handleChange}
-                    placeholder="Image URL (or upload above)"
+                  <input type="text" name="image" value={form.image} onChange={handleChange} placeholder="Image URL (or upload above)"
                     className="w-full h-12 bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-gray-800 rounded-xl pl-11 pr-4 text-sm font-semibold text-gray-900 dark:text-white outline-none focus:border-blue-600 dark:focus:border-blue-500 transition"
                   />
                 </div>
@@ -365,18 +317,13 @@ export default function ProfilePage() {
 
             <div className="flex items-center justify-end gap-3 mt-6 pt-4 border-t border-gray-100 dark:border-gray-900">
               
-              <button
-                type="button"
-                onClick={() => setIsEditOpen(false)}
+              <button type="button" onClick={() => setIsEditOpen(false)}
                 className="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 dark:bg-white/5 dark:hover:bg-white/10 text-gray-700 dark:text-gray-300 font-bold rounded-xl text-sm transition"
               >
                 Cancel
               </button>
 
-              <button
-                type="button"
-                onClick={handleSave}
-                disabled={saving}
+              <button type="button" onClick={handleSave} disabled={saving}
                 className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-bold rounded-xl text-sm transition disabled:opacity-50"
               >
                 <Save className="w-4 h-4" />

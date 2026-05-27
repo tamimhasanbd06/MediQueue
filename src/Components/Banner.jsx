@@ -12,7 +12,7 @@ const slides = [
   {
     id: 1,
     image:
-      "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1600&auto=format&fit=crop",
+      "https://s2.imgbb.ws/file/storage-sv2/xnFEA.png",
     badge: "Trusted Platform",
     heading: "Find Expert Tutors Anytime",
     subheading:
@@ -21,7 +21,7 @@ const slides = [
   {
     id: 2,
     image:
-      "https://images.unsplash.com/photo-1513258496099-48168024aec0?q=80&w=1600&auto=format&fit=crop",
+      "https://s1.imgbb.ws/file/storage-sv1/xnF3X.png",
     badge: "Smart Booking",
     heading: "Book Sessions Instantly",
     subheading:
@@ -30,7 +30,7 @@ const slides = [
   {
     id: 3,
     image:
-      "https://images.unsplash.com/photo-1503676382389-4809596d5290?q=80&w=1600&auto=format&fit=crop",
+      "https://s2.imgbb.ws/file/storage-sv2/xnubQ.png",
     badge: "Future Learning",
     heading: "Upgrade Your Education",
     subheading:
@@ -44,15 +44,10 @@ export default function Banner() {
 
       <Swiper
         modules={[Autoplay, EffectFade]}
-        effect="fade"
-        loop
-        speed={1200}
-        autoplay={{
+        effect="fade" loop speed={1200} autoplay={{
           delay: 4500,
-          disableOnInteraction: false,
-        }}
-        className="w-full h-full"
-      >
+          disableOnInteraction: false, }}
+        className="w-full h-full">
         {slides.map((slide) => (
           <SwiperSlide key={slide.id}>
             <div className="relative w-full h-full">

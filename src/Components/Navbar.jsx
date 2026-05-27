@@ -4,39 +4,18 @@ import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  FiMenu,
-  FiX,
-  FiLogOut,
-  FiUser,
-  FiSun,
-  FiMoon,
-  FiChevronDown,
-} from "react-icons/fi";
-
-import {
-  authClient,
-  saveAuthToken,
-  clearAuthToken,
-} from "@/lib/auth-client";
+import { FiMenu, FiX, FiLogOut, FiUser, FiSun, FiMoon, FiChevronDown,} from "react-icons/fi";
+import { authClient, saveAuthToken, clearAuthToken,} from "@/lib/auth-client";
 import Image from "next/image";
-
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
-
   const { data: session, isPending } = authClient.useSession();
   const user = session?.user;
-
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [theme, setTheme] = useState("light");
-
   const profileRef = useRef(null);
-
-  // =========================
-  // THEME SETUP
-  // =========================
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "light";
     setTheme(savedTheme);
@@ -52,9 +31,7 @@ export default function Navbar() {
     document.documentElement.setAttribute("data-theme", nextTheme);
   };
 
-  // =========================
-  // JWT TOKEN SYNC
-  // =========================
+
   useEffect(() => {
     if (user) {
       saveAuthToken();
@@ -79,12 +56,7 @@ export default function Navbar() {
   const handleLogout = async () => {
     await authClient.signOut({
       fetchOptions: {
-        onSuccess: () => {
-          clearAuthToken();
-          setMobileMenuOpen(false);
-          setProfileMenuOpen(false);
-          router.push("/login");
-        },
+        onSuccess: () => { clearAuthToken(); setMobileMenuOpen(false); setProfileMenuOpen(false); router.push("/login"); },
       },
     });
   };
@@ -116,7 +88,7 @@ export default function Navbar() {
             
             {/* LOGO BRANDING */}
             <Link href="/" className="group flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/20 transition-all duration-300 group-hover:rotate-6 group-hover:scale-105 group-hover:shadow-blue-500/40">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-linear-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/20 transition-all duration-300 group-hover:rotate-6 group-hover:scale-105 group-hover:shadow-blue-500/40">
                 <span className="text-lg font-black text-white">M</span>
               </div>
               <div>
@@ -146,7 +118,7 @@ export default function Navbar() {
                       {active && (
                         <motion.span
                           layoutId="desktopNavUnderline"
-                          className="absolute bottom-0 left-0 h-[3px] w-full rounded-full bg-blue-600 dark:bg-blue-400"
+                          className="absolute bottom-0 left-0 h-0.75 w-full rounded-full bg-blue-600 dark:bg-blue-400"
                         />
                       )}
                     </Link>
@@ -168,7 +140,7 @@ export default function Navbar() {
                         {active && (
                           <motion.span
                             layoutId="desktopNavUnderline"
-                            className="absolute bottom-0 left-0 h-[3px] w-full rounded-full bg-blue-600 dark:bg-blue-400"
+                            className="absolute bottom-0 left-0 h-0.75 w-full rounded-full bg-blue-600 dark:bg-blue-400"
                           />
                         )}
                       </Link>
@@ -186,7 +158,7 @@ export default function Navbar() {
                     {pathname === "/profile" && (
                       <motion.span
                         layoutId="desktopNavUnderline"
-                        className="absolute bottom-0 left-0 h-[3px] w-full rounded-full bg-blue-600 dark:bg-blue-400"
+                        className="absolute bottom-0 left-0 h-0.75 w-full rounded-full bg-blue-600 dark:bg-blue-400"
                       />
                     )}
                   </Link>
@@ -214,7 +186,7 @@ export default function Navbar() {
                     </Link>
                     <Link
                       href="/signup"
-                      className="rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-md shadow-blue-500/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-blue-500/20 active:scale-95"
+                      className="rounded-xl bg-linear-to-r from-blue-600 to-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-md shadow-blue-500/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-blue-500/20 active:scale-95"
                     >
                       Register
                     </Link>
@@ -235,7 +207,7 @@ export default function Navbar() {
                             className="h-full w-full object-cover"
                           />
                         ) : (
-                          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-blue-500 to-indigo-600 font-bold text-white text-sm">
+                          <div className="flex h-full w-full items-center justify-center bg-linear-to-br from-blue-500 to-indigo-600 font-bold text-white text-sm">
                             {getInitials(user?.name)}
                           </div>
                         )}
@@ -279,7 +251,7 @@ export default function Navbar() {
               </div>
             </div>
 
-            {/* MOBILE INTERFACE TRIGGER */}
+ 
             <button
               onClick={() => setMobileMenuOpen(true)}
               className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-slate-700 lg:hidden dark:border-slate-800 dark:text-slate-300"
@@ -290,27 +262,15 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* MOBILE FULL DRAWER INTERFACE */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setMobileMenuOpen(false)}
-              className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-sm"
-            />
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setMobileMenuOpen(false)} className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-sm"/>
 
-            <motion.div
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed bottom-0 right-0 top-0 z-50 flex w-full max-w-sm flex-col bg-white p-6 shadow-2xl dark:bg-slate-950"
-            >
+            <motion.div initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }} transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed bottom-0 right-0 top-0 z-50 flex w-full max-w-sm flex-col bg-white p-6 shadow-2xl dark:bg-slate-950">
               <div className="flex items-center justify-between pb-6 border-b border-slate-100 dark:border-slate-800">
-                <span className="text-xl font-black bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                <span className="text-xl font-black bg-linear-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                   MediQueue
                 </span>
                 <div className="flex items-center gap-2">
@@ -360,7 +320,7 @@ export default function Navbar() {
                       onClick={() => setMobileMenuOpen(false)}
                       className={`rounded-2xl px-5 py-3.5 text-sm font-bold tracking-wide transition-all duration-200 transform active:scale-98 ${
                         active
-                          ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/20"
+                          ? "bg-linear-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/20"
                           : "text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-900/60 dark:hover:text-white"
                       }`}
                     >
@@ -381,7 +341,7 @@ export default function Navbar() {
                           onClick={() => setMobileMenuOpen(false)}
                           className={`rounded-2xl px-5 py-3.5 text-sm font-bold tracking-wide transition-all duration-200 transform active:scale-98 ${
                             active
-                              ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/20"
+                              ? "bg-linear-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/20"
                               : "text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-900/60 dark:hover:text-white"
                           }`}
                         >
@@ -395,7 +355,7 @@ export default function Navbar() {
                       onClick={() => setMobileMenuOpen(false)}
                       className={`flex items-center gap-2.5 rounded-2xl px-5 py-3.5 text-sm font-bold tracking-wide transition-all duration-200 transform active:scale-98 ${
                         pathname === "/profile"
-                          ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/20"
+                          ? "bg-linear-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/20"
                           : "text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-900/60 dark:hover:text-white"
                       }`}
                     >
@@ -420,7 +380,7 @@ export default function Navbar() {
                     <Link
                       href="/signup"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="flex h-12 items-center justify-center rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-sm font-bold tracking-wide text-white shadow-md shadow-blue-500/10 active:scale-98"
+                      className="flex h-12 items-center justify-center rounded-2xl bg-linear-to-r from-blue-600 to-indigo-600 text-sm font-bold tracking-wide text-white shadow-md shadow-blue-500/10 active:scale-98"
                     >
                       Register
                     </Link>
