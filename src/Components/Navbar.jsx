@@ -4,9 +4,10 @@ import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiMenu, FiX, FiLogOut, FiUser, FiSun, FiMoon, FiChevronDown,} from "react-icons/fi";
-import { authClient, saveAuthToken, clearAuthToken,} from "@/lib/auth-client";
+import { FiMenu, FiX, FiLogOut, FiUser, FiSun, FiMoon, FiChevronDown, FiHome, FiBookOpen, FiPlusCircle, FiList, FiCalendar } from "react-icons/fi";
+import { authClient, saveAuthToken, clearAuthToken, } from "@/lib/auth-client";
 import Image from "next/image";
+
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
@@ -16,6 +17,7 @@ export default function Navbar() {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [theme, setTheme] = useState("light");
   const profileRef = useRef(null);
+
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "light";
     setTheme(savedTheme);
@@ -70,14 +72,14 @@ export default function Navbar() {
 
   // Navigation Setup
   const publicLinks = [
-    { name: "Home", href: "/" },
-    { name: "Tutors", href: "/tutors" },
+    { name: "Home", href: "/", icon: <FiHome className="text-base" /> },
+    { name: "Tutors", href: "/tutors", icon: <FiBookOpen className="text-base" /> },
   ];
 
   const privateLinks = [
-    { name: "Add Tutor", href: "/add-tutor" },
-    { name: "My Tutors", href: "/my-tutors" },
-    { name: "Booked Sessions", href: "/booked-sessions" },
+    { name: "Add Tutor", href: "/add-tutor", icon: <FiPlusCircle className="text-base" /> },
+    { name: "My Tutors", href: "/my-tutors", icon: <FiList className="text-base" /> },
+    { name: "Booked Sessions", href: "/booked-sessions", icon: <FiCalendar className="text-base" /> },
   ];
 
   return (
@@ -110,10 +112,11 @@ export default function Navbar() {
                     <Link
                       key={link.href}
                       href={link.href}
-                      className={`relative py-2 text-[14px] font-semibold transition-all duration-300 hover:text-blue-600 dark:hover:text-blue-400 ${
+                      className={`relative flex items-center gap-2 py-2 text-[14px] font-semibold transition-all duration-300 hover:text-blue-600 dark:hover:text-blue-400 ${
                         active ? "text-blue-600 dark:text-blue-400" : "text-slate-600 dark:text-slate-300"
                       }`}
                     >
+                      {link.icon}
                       {link.name}
                       {active && (
                         <motion.span
@@ -132,10 +135,11 @@ export default function Navbar() {
                       <Link
                         key={link.href}
                         href={link.href}
-                        className={`relative py-2 text-[14px] font-semibold transition-all duration-300 hover:text-blue-600 dark:hover:text-blue-400 ${
+                        className={`relative flex items-center gap-2 py-2 text-[14px] font-semibold transition-all duration-300 hover:text-blue-600 dark:hover:text-blue-400 ${
                           active ? "text-blue-600 dark:text-blue-400" : "text-slate-600 dark:text-slate-300"
                         }`}
                       >
+                        {link.icon}
                         {link.name}
                         {active && (
                           <motion.span
@@ -150,10 +154,11 @@ export default function Navbar() {
                 {user && (
                   <Link
                     href="/profile"
-                    className={`relative py-2 text-[14px] font-semibold transition-all duration-300 hover:text-blue-600 dark:hover:text-blue-400 ${
+                    className={`relative flex items-center gap-2 py-2 text-[14px] font-semibold transition-all duration-300 hover:text-blue-600 dark:hover:text-blue-400 ${
                       pathname === "/profile" ? "text-blue-600 dark:text-blue-400" : "text-slate-600 dark:text-slate-300"
                     }`}
                   >
+                    <FiUser className="text-base" />
                     Profile
                     {pathname === "/profile" && (
                       <motion.span
@@ -251,7 +256,7 @@ export default function Navbar() {
               </div>
             </div>
 
- 
+
             <button
               onClick={() => setMobileMenuOpen(true)}
               className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-slate-700 lg:hidden dark:border-slate-800 dark:text-slate-300"
@@ -318,12 +323,13 @@ export default function Navbar() {
                       key={link.href}
                       href={link.href}
                       onClick={() => setMobileMenuOpen(false)}
-                      className={`rounded-2xl px-5 py-3.5 text-sm font-bold tracking-wide transition-all duration-200 transform active:scale-98 ${
+                      className={`flex items-center gap-3 rounded-2xl px-5 py-3.5 text-sm font-bold tracking-wide transition-all duration-200 transform active:scale-98 ${
                         active
                           ? "bg-linear-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/20"
                           : "text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-900/60 dark:hover:text-white"
                       }`}
                     >
+                      {link.icon}
                       {link.name}
                     </Link>
                   );
@@ -339,12 +345,13 @@ export default function Navbar() {
                           key={link.href}
                           href={link.href}
                           onClick={() => setMobileMenuOpen(false)}
-                          className={`rounded-2xl px-5 py-3.5 text-sm font-bold tracking-wide transition-all duration-200 transform active:scale-98 ${
+                          className={`flex items-center gap-3 rounded-2xl px-5 py-3.5 text-sm font-bold tracking-wide transition-all duration-200 transform active:scale-98 ${
                             active
                               ? "bg-linear-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/20"
                               : "text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-900/60 dark:hover:text-white"
                           }`}
                         >
+                          {link.icon}
                           {link.name}
                         </Link>
                       );
@@ -353,13 +360,13 @@ export default function Navbar() {
                     <Link
                       href="/profile"
                       onClick={() => setMobileMenuOpen(false)}
-                      className={`flex items-center gap-2.5 rounded-2xl px-5 py-3.5 text-sm font-bold tracking-wide transition-all duration-200 transform active:scale-98 ${
+                      className={`flex items-center gap-3 rounded-2xl px-5 py-3.5 text-sm font-bold tracking-wide transition-all duration-200 transform active:scale-98 ${
                         pathname === "/profile"
                           ? "bg-linear-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/20"
                           : "text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-900/60 dark:hover:text-white"
                       }`}
                     >
-                      <FiUser className={pathname === "/profile" ? "text-white" : "text-slate-400"} /> 
+                      <FiUser className="text-base" /> 
                       Profile Account
                     </Link>
                   </>

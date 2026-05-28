@@ -27,17 +27,19 @@ export default function Footer() {
             <div className="flex items-center gap-3 mt-6">
 
               {[
-                FaFacebookF,
-                FaLinkedinIn,
-                FaGithub,
-                FaXTwitter,
-              ].map((Icon, i) => (
+                { Icon: FaFacebookF, url: "https://facebook.com" },
+                { Icon: FaLinkedinIn, url: "https://linkedin.com" },
+                { Icon: FaGithub, url: "https://github.com" },
+                { Icon: FaXTwitter, url: "https://x.com" },
+              ].map((item, i) => (
                 <a
                   key={i}
-                  href="#"
+                  href={item.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-10 h-10 rounded-full bg-gray-900 hover:bg-blue-600 flex items-center justify-center transition-all duration-300 hover:scale-110"
                 >
-                  <Icon className="text-sm" />
+                  <item.Icon className="text-sm" />
                 </a>
               ))}
 
@@ -53,11 +55,11 @@ export default function Footer() {
             <ul className="space-y-3 text-sm">
 
               {[
-                ["Browse Tutors", "/tutors"],
-                ["Become Tutor", "/add-tutor"],
+                 ["Home", "/"],
+                ["Tutors", "/tutors"],
+                ["Add Tutor", "/add-tutor"],
+                 ["My Tutors", "/my-tutors"],
                 ["Booked Sessions", "/booked-sessions"],
-                ["Manage Tutors", "/my-tutors"],
-                ["Home", "/"],
               ].map(([name, href]) => (
                 <li key={href}>
                   <Link
@@ -83,9 +85,8 @@ export default function Footer() {
               {[
                 ["Login", "/login"],
                 ["Register", "/register"],
-                ["FAQ", "/faq"],
-                ["Contact", "/contact"],
-                ["Privacy Policy", "/privacy-policy"],
+                ["FAQ", "/profile"],
+                ["My Profile", "/profile"],
               ].map(([name, href]) => (
                 <li key={href}>
                   <Link
@@ -110,7 +111,7 @@ export default function Footer() {
 
               <div className="flex items-start gap-3">
                 <FaEnvelope className="text-blue-500 mt-1" />
-                <span>support@mediqueue.com</span>
+                <span>tamimhasanbd@gmail.com</span>
               </div>
 
               <div className="flex items-start gap-3">

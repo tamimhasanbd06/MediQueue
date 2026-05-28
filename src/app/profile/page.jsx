@@ -4,8 +4,9 @@ import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import Image from "next/image";
-import { Camera, User, Mail, Link as LinkIcon, Save, X } from "lucide-react";
+import { Camera, User, Mail, Link as LinkIcon, Save, X, LogOut } from "lucide-react";
 import { useSession, saveAuthToken } from "@/lib/auth-client";
+
 export default function ProfilePage() {
   const router = useRouter();
   const fileInputRef = useRef(null);
@@ -161,6 +162,12 @@ export default function ProfilePage() {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    toast.success("Logged out successfully");
+    router.push("/login");
+  };
+
 
   if (loading) {
     return (
@@ -235,7 +242,15 @@ export default function ProfilePage() {
 
         </div>
 
-        <div className="flex justify-end mt-8 sm:mt-10">
+        <div className="flex flex-col sm:flex-row items-center justify-end gap-4 mt-8 sm:mt-10">
+          <button
+            onClick={handleLogout}
+            className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-red-600 dark:text-red-400 font-bold bg-red-50 hover:bg-red-100 dark:bg-red-950/30 dark:hover:bg-red-950/50 shadow-md transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+          >
+            <LogOut className="w-5 h-5" />
+            Logout
+          </button>
+          
           <button
             onClick={openEdit}
             className="w-full sm:w-auto px-8 py-4 rounded-xl text-white font-bold bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
