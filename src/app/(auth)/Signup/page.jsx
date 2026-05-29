@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import {
   Eye,
@@ -11,6 +12,7 @@ import {
   Lock,
   User,
   ImageIcon,
+  Link as LinkIcon,
 } from "lucide-react";
 
 import { FcGoogle } from "react-icons/fc";
@@ -18,6 +20,7 @@ import { FcGoogle } from "react-icons/fc";
 import { authClient } from "@/lib/auth-client";
 
 export default function SignupPage() {
+  const router = useRouter();
 
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
@@ -46,11 +49,9 @@ export default function SignupPage() {
   };
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
 
     for (let key in formData) {
-
       if (!formData[key]) {
         return toast.error(
           "All fields are required"
@@ -62,7 +63,6 @@ export default function SignupPage() {
       formData.password !==
       formData.confirmPassword
     ) {
-
       return toast.error(
         "Passwords do not match"
       );
@@ -77,14 +77,12 @@ export default function SignupPage() {
         formData.password
       )
     ) {
-
       return toast.error(
         "Password must contain uppercase, lowercase and minimum 6 characters"
       );
     }
 
     try {
-
       setLoading(true);
 
       const { error } =
@@ -117,24 +115,18 @@ export default function SignupPage() {
         "/login";
 
     } catch (error) {
-
       console.log(error);
-
       toast.error(
         "Something went wrong"
       );
-
     } finally {
-
       setLoading(false);
     }
   };
 
   const handleGoogleLogin =
     async () => {
-
       try {
-
         setGoogleLoading(true);
 
         await authClient.signIn.social({
@@ -143,15 +135,11 @@ export default function SignupPage() {
         });
 
       } catch (error) {
-
         console.log(error);
-
         toast.error(
           "Google login failed"
         );
-
       } finally {
-
         setGoogleLoading(false);
       }
     };
@@ -356,6 +344,16 @@ export default function SignupPage() {
                   ? "Creating Account..."
                   : "Create Account"}
 
+              </button>
+
+              {/* CREATE IMAGE URL LINK BUTTON */}
+              <button
+                type="button"
+                onClick={() => router.push("/image-urls")}
+                className="w-full h-14 flex items-center justify-center gap-2 border-2 rounded-2xl font-semibold text-base transition-all duration-300 hover:scale-[1.01] bg-gray-50/50 dark:bg-gray-950/50 border-blue-500/30 text-blue-600 dark:text-blue-400 dark:border-blue-500/20 hover:bg-blue-50/50 dark:hover:bg-gray-800/50"
+              >
+                <LinkIcon size={18} />
+                Create Image URL
               </button>
             </form>
 

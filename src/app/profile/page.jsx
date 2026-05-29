@@ -4,56 +4,59 @@ import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import Image from "next/image";
-import { Camera, User, Mail, Link as LinkIcon, Save, X, LogOut } from "lucide-react";
+import { 
+  Camera, 
+  User, 
+  Mail, 
+  Save, 
+  X, 
+  LogOut, 
+  Edit3, 
+  Link2, 
+  Loader2,
+  Image as ImageIcon
+} from "lucide-react";
 import { useSession, saveAuthToken } from "@/lib/auth-client";
 
 export default function ProfilePage() {
   const router = useRouter();
   const fileInputRef = useRef(null);
+
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
   const { data: session } = useSession();
+
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [profile, setProfile] = useState({ name: "", email: "", image: "", });
-  const [form, setForm] = useState({ name: "", email: "", image: "", });
+
+  const [profile, setProfile] = useState({ name: "", email: "", image: "" });
+  const [form, setForm] = useState({ name: "", email: "", image: "" });
+
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [preview, setPreview] = useState("");
 
-  // =========================
-  // FETCH PROFILE
-  // =========================
   const fetchProfile = async () => {
     try {
       setLoading(true);
 
       const token = localStorage.getItem("token") || (await saveAuthToken());
-
-      if (!token) {
-        router.push("/login");
-        return;
-      }
+      if (!token) return router.push("/login");
 
       const res = await fetch(`${API_URL}/profile`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       const data = await res.json();
-
       if (!res.ok) throw new Error(data.message);
 
-      const user = data?.user || {};
-
-      const safeUser = {
-        name: user.name || "",
-        email: user.email || "",
-        image: user.image || "",
+      const user = {
+        name: data?.user?.name || "",
+        email: data?.user?.email || "",
+        image: data?.user?.image || "",
       };
 
-      setProfile(safeUser);
-      setForm(safeUser);
-      setPreview(safeUser.image);
+      setProfile(user);
+      setForm(user);
+      setPreview(user.image);
     } catch (err) {
       toast.error(err.message || "Failed to load profile");
     } finally {
@@ -65,25 +68,10 @@ export default function ProfilePage() {
     fetchProfile();
   }, []);
 
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    setForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    if (name === "image") {
-      setPreview(value);
-    }
-  };
-
-
-  const handleImageClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
+    setForm((p) => ({ ...p, [name]: value }));
+    if (name === "image") setPreview(value);
   };
 
   const handleFileChange = (e) => {
@@ -91,23 +79,17 @@ export default function ProfilePage() {
     if (!file) return;
 
     if (!file.type.startsWith("image/")) {
-      toast.error("Please choose a valid image file");
+      toast.error("Please select a valid image");
       return;
     }
 
     const reader = new FileReader();
     reader.onloadend = () => {
-      const base64String = reader.result;
-      setPreview(base64String);
-      setForm((prev) => ({
-        ...prev,
-        image: base64String,
-      }));
-      toast.success("Image selected from local storage");
+      setPreview(reader.result);
+      setForm((p) => ({ ...p, image: reader.result }));
     };
     reader.readAsDataURL(file);
   };
-
 
   const openEdit = () => {
     setForm(profile);
@@ -115,17 +97,12 @@ export default function ProfilePage() {
     setIsEditOpen(true);
   };
 
-
   const handleSave = async () => {
     try {
       setSaving(true);
 
       const token = localStorage.getItem("token") || (await saveAuthToken());
-
-      if (!token) {
-        router.push("/login");
-        return;
-      }
+      if (!token) return router.push("/login");
 
       const res = await fetch(`${API_URL}/profile`, {
         method: "PATCH",
@@ -137,23 +114,10 @@ export default function ProfilePage() {
       });
 
       const data = await res.json();
-
       if (!res.ok) throw new Error(data.message);
 
-      const updatedUser = data?.user || form;
-
-      const safeUpdated = {
-        name: updatedUser.name || "",
-        email: updatedUser.email || "",
-        image: updatedUser.image || "",
-      };
-
-      setProfile(safeUpdated);
-      setForm(safeUpdated);
-      setPreview(safeUpdated.image);
-
+      setProfile(form);
       setIsEditOpen(false);
-
       toast.success("Profile updated successfully");
     } catch (err) {
       toast.error(err.message || "Update failed");
@@ -164,193 +128,217 @@ export default function ProfilePage() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    toast.success("Logged out successfully");
     router.push("/login");
   };
 
+  const handleCreateImageURL = () => {
+    router.push("/image-urls");
+  };
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-black">
-        <div className="text-center">
-          <div className="w-12 h-12 border-2 border-blue-600 border-t-transparent dark:border-blue-500 dark:border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="font-bold text-gray-800 dark:text-gray-200 tracking-wide">
-            Loading profile...
-          </p>
-        </div>
+      <div className="min-h-screen w-full flex flex-col items-center justify-center bg-slate-50 dark:bg-[#030712] px-4">
+        <Loader2 className="w-8 h-8 sm:w-10 sm:h-10 text-blue-600 dark:text-blue-500 animate-spin mb-3" />
+        <p className="text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400 tracking-wide text-center">
+          Loading your secure dashboard...
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-white via-blue-50 to-purple-50 dark:from-black dark:via-[#050816] dark:to-[#020617] px-4 py-8 md:py-16 flex items-center justify-center">
-      
-      <input type="file" ref={fileInputRef} onChange={handleFileChange} accept="image/*"  className="hidden" />
+    <>
+      <title>Profile</title>
 
-      <div className="w-full max-w-xl md:max-w-2xl lg:max-w-3xl bg-white/90 dark:bg-black/80 backdrop-blur-2xl rounded-3xl p-6 sm:p-10 shadow-2xl border border-gray-200 dark:border-gray-800 transition-all duration-300">
+      <div className="min-h-screen w-full px-4 py-6 sm:py-12 md:py-16 flex items-center justify-center bg-gradient-to-br from-slate-50 via-slate-100 to-zinc-200 dark:from-[#030712] dark:via-[#090d16] dark:to-[#020617] text-slate-900 dark:text-slate-100 transition-colors duration-300">
+        
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          className="hidden"
+          accept="image/*"
+        />
 
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-center mb-8 bg-linear-to-r from-blue-600 via-indigo-600 to-blue-500 bg-clip-text text-transparent tracking-tight">
-          My Profile
-        </h1>
-
-        <div className="flex flex-col items-center justify-center mb-10 group">
-          <div 
-            onClick={handleImageClick}
-            className="w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 relative rounded-full overflow-hidden border border-gray-200 dark:border-gray-800 shadow-2xl cursor-pointer bg-gray-100 dark:bg-gray-900 transition-all duration-300 transform hover:scale-105 active:scale-95"
-          >
-            <Image
-              src={profile?.image || "/avatar.png"}
-              alt="profile" fill
-              className="object-cover transition-opacity duration-300 group-hover:opacity-80"
-              priority
-            />
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white transition-opacity duration-300">
-              <Camera className="w-6 h-6 md:w-8 md:h-8 mb-1 animate-bounce" />
-              <span className="text-[10px] md:text-xs font-bold uppercase tracking-wider">Change Photo</span>
-            </div>
-          </div>
-          <p className="text-xs text-gray-400 dark:text-gray-500 mt-3 font-semibold pointer-events-none italic">
-            Click image to upload file from device
-          </p>
-        </div>
-
-        <div className="space-y-4 sm:space-y-5">
+        <div className="w-full max-w-xs sm:max-w-xl md:max-w-2xl rounded-2xl sm:rounded-3xl border border-slate-200/60 dark:border-slate-800/50 bg-white/80 dark:bg-slate-900/70 backdrop-blur-xl shadow-xl p-5 sm:p-8 md:p-12 transition-all">
           
-          <div className="p-4 sm:p-5 rounded-2xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-gray-800 flex items-center gap-4 transition-all hover:bg-gray-100/50 dark:hover:bg-white/10">
-            <div className="p-3 bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400 rounded-xl">
-              <User className="w-5 h-5 sm:w-6 sm:h-6" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-xs font-black uppercase text-blue-600 dark:text-blue-400 tracking-wider">Full Name</p>
-              <p className="text-base sm:text-lg font-bold text-gray-900 dark:text-white truncate">
-                {profile?.name || "N/A"}
-              </p>
-            </div>
+          <div className="text-center mb-6 sm:mb-8">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 dark:from-blue-400 dark:via-indigo-400 dark:to-purple-400 text-transparent bg-clip-text">
+              Account Profile
+            </h1>
+            <p className="text-[11px] sm:text-xs md:text-sm text-slate-500 dark:text-slate-400 mt-1.5 sm:mt-2 px-2">
+              Manage your public personal display credentials across your interconnected accounts
+            </p>
           </div>
 
-          <div className="p-4 sm:p-5 rounded-2xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-gray-800 flex items-center gap-4 transition-all hover:bg-gray-100/50 dark:hover:bg-white/10">
-            <div className="p-3 bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400 rounded-xl">
-              <Mail className="w-5 h-5 sm:w-6 sm:h-6" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-xs font-black uppercase text-blue-600 dark:text-blue-400 tracking-wider">Email Address</p>
-              <p className="text-base sm:text-lg font-bold text-gray-900 dark:text-white truncate">
-                {profile?.email || "N/A"}
-              </p>
+          {/* Profile Avatar Frame */}
+          <div className="flex justify-center mb-6 sm:mb-8 md:mb-10">
+            <div
+              onClick={() => fileInputRef.current.click()}
+              className="relative w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full overflow-hidden ring-4 ring-white dark:ring-slate-800 shadow-xl cursor-pointer group transition-transform active:scale-95"
+            >
+              <Image
+                src={profile.image || "/avatar.png"}
+                alt="profile"
+                fill
+                priority
+                className="object-cover group-hover:scale-105 transition duration-300"
+              />
+              <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center text-white gap-1">
+                <Camera className="w-4 h-4 sm:w-5 sm:h-5 animate-pulse" />
+                <span className="text-[9px] sm:text-[10px] font-bold tracking-wider">CHANGE</span>
+              </div>
             </div>
           </div>
 
-        </div>
+          {/* Read-Only Informational Fields */}
+          <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8 md:mb-10">
+            <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl bg-slate-100/50 dark:bg-slate-800/30 border border-slate-200/50 dark:border-slate-700/30 transition-all">
+              <div className="p-2 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 shrink-0">
+                <User className="w-4 h-4 sm:w-5 sm:h-5" />
+              </div>
+              <div className="flex flex-col min-w-0 flex-1">
+                <span className="text-[9px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Full Name</span>
+                <span className="font-semibold text-sm sm:text-base text-slate-800 dark:text-slate-200 truncate">{profile.name || "Not provided"}</span>
+              </div>
+            </div>
 
-        <div className="flex flex-col sm:flex-row items-center justify-end gap-4 mt-8 sm:mt-10">
-          <button
-            onClick={handleLogout}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-red-600 dark:text-red-400 font-bold bg-red-50 hover:bg-red-100 dark:bg-red-950/30 dark:hover:bg-red-950/50 shadow-md transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
-          >
-            <LogOut className="w-5 h-5" />
-            Logout
-          </button>
-          
-          <button
-            onClick={openEdit}
-            className="w-full sm:w-auto px-8 py-4 rounded-xl text-white font-bold bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
-          >
-            Edit Profile
-          </button>
-        </div>
-      </div>
+            <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl bg-slate-100/50 dark:bg-slate-800/30 border border-slate-200/50 dark:border-slate-700/30 transition-all">
+              <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 shrink-0">
+                <Mail className="w-4 h-4 sm:w-5 sm:h-5" />
+              </div>
+              <div className="flex flex-col min-w-0 flex-1">
+                <span className="text-[9px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Email Address</span>
+                <span className="font-semibold text-sm sm:text-base text-slate-800 dark:text-slate-200 truncate">{profile.email || "Not provided"}</span>
+              </div>
+            </div>
+          </div>
 
-      {isEditOpen && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50">
-          
-          <div className="w-full max-w-md bg-white dark:bg-[#0b1121] rounded-3xl p-6 sm:p-8 shadow-2xl border border-gray-200 dark:border-gray-800 transform scale-100 transition-all duration-300 max-h-[90vh] overflow-y-auto">
+          {/* Action Stack (Ordered: Edit -> Create Image URL -> Logout) */}
+          <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3 items-stretch sm:items-center justify-end border-t border-slate-200/60 dark:border-slate-800/60 pt-5 sm:pt-6">
             
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white tracking-tight">
-                Edit Profile
-              </h2>
-              <button 
-                onClick={() => setIsEditOpen(false)}
-                className="p-1 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition"
-              >
-                <X className="w-6 h-6" />
-              </button>
-            </div>
+            <button
+              onClick={openEdit}
+              className="w-full sm:w-auto px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-600/10 hover:shadow-lg transition-all active:scale-[0.99] flex items-center justify-center gap-2"
+            >
+              <Edit3 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              Edit Profile
+            </button>
 
-            <div className="flex flex-col items-center justify-center mb-6">
-              <div 
-                onClick={handleImageClick}
-                className="w-24 h-24 sm:w-28 sm:h-28 relative rounded-full overflow-hidden border border-gray-200 dark:border-gray-800 cursor-pointer shadow-lg bg-gray-50 dark:bg-gray-900 group"
-              >
-                <Image
-                  src={preview || "/avatar.png"}
-                  alt="preview" fill
-                  className="object-cover group-hover:opacity-80 transition"
-                />
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white transition">
-                  <Camera className="w-5 h-5" />
-                </div>
-              </div>
-              <p className="text-[11px] text-blue-600 dark:text-blue-400 mt-2 font-bold uppercase tracking-wider cursor-pointer hover:underline" onClick={handleImageClick}>
-                Browse File Manager
-              </p>
-            </div>
+            <button
+              onClick={handleCreateImageURL}
+              className="w-full sm:w-auto px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition-all active:scale-[0.99] flex items-center justify-center gap-2"
+            >
+              <Link2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              Create Image URL
+            </button>
 
-            <div className="space-y-4">
-              
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-1 ml-1">Name</label>
-                <div className="relative">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <input type="text" name="name" value={form.name} onChange={handleChange} placeholder="Name"
-                    className="w-full h-12 bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-gray-800 rounded-xl pl-11 pr-4 text-sm font-semibold text-gray-900 dark:text-white outline-none focus:border-blue-600 dark:focus:border-blue-500 transition"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-1 ml-1">Email</label>
-                <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="Email"
-                    className="w-full h-12 bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-gray-800 rounded-xl pl-11 pr-4 text-sm font-semibold text-gray-900 dark:text-white outline-none focus:border-blue-600 dark:focus:border-blue-500 transition"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-1 ml-1">Image URL</label>
-                <div className="relative">
-                  <LinkIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <input type="text" name="image" value={form.image} onChange={handleChange} placeholder="Image URL (or upload above)"
-                    className="w-full h-12 bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-gray-800 rounded-xl pl-11 pr-4 text-sm font-semibold text-gray-900 dark:text-white outline-none focus:border-blue-600 dark:focus:border-blue-500 transition"
-                  />
-                </div>
-              </div>
-
-            </div>
-
-            <div className="flex items-center justify-end gap-3 mt-6 pt-4 border-t border-gray-100 dark:border-gray-900">
-              
-              <button type="button" onClick={() => setIsEditOpen(false)}
-                className="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 dark:bg-white/5 dark:hover:bg-white/10 text-gray-700 dark:text-gray-300 font-bold rounded-xl text-sm transition"
-              >
-                Cancel
-              </button>
-
-              <button type="button" onClick={handleSave} disabled={saving}
-                className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-bold rounded-xl text-sm transition disabled:opacity-50"
-              >
-                <Save className="w-4 h-4" />
-                {saving ? "Saving..." : "Save"}
-              </button>
-
-            </div>
+            <button
+              onClick={handleLogout}
+              className="w-full sm:w-auto px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-bold text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/20 hover:bg-red-100 dark:hover:bg-red-950/40 transition-all active:scale-[0.99] flex items-center justify-center gap-2"
+            >
+              <LogOut className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              Logout
+            </button>
 
           </div>
         </div>
-      )}
 
-    </div>
+        {/* EDIT MODAL LAYER */}
+        {isEditOpen && (
+          <div className="fixed inset-0 z-50 bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+            
+            <div className="w-full max-w-xs sm:max-w-md my-auto rounded-xl sm:rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 sm:p-6 shadow-2xl transition-all scale-100 animate-in fade-in zoom-in-95 duration-200">
+              
+              <div className="flex justify-between items-center mb-5 sm:mb-6">
+                <h2 className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white">Update Specifications</h2>
+                <button 
+                  onClick={() => setIsEditOpen(false)}
+                  className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+                >
+                  <X className="w-4 h-4 sm:w-5 sm:h-5" />
+                </button>
+              </div>
+
+              <div className="space-y-3.5 sm:space-y-4">
+                <div>
+                  <label className="block text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-1 sm:mb-1.5">Name</label>
+                  <div className="relative">
+                    <User className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <input
+                      name="name"
+                      type="text"
+                      value={form.name}
+                      onChange={handleChange}
+                      placeholder="Enter full name"
+                      className="w-full pl-9 pr-3.5 py-2 sm:py-2.5 text-xs sm:text-sm rounded-xl bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-800 focus:border-blue-500 dark:focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-1 sm:mb-1.5">Email Address</label>
+                  <div className="relative">
+                    <Mail className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <input
+                      name="email"
+                      type="email"
+                      value={form.email}
+                      onChange={handleChange}
+                      placeholder="Enter email address"
+                      className="w-full pl-9 pr-3.5 py-2 sm:py-2.5 text-xs sm:text-sm rounded-xl bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-800 focus:border-blue-500 dark:focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-1 sm:mb-1.5">Avatar Image Target Location</label>
+                  <div className="relative">
+                    <ImageIcon className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <input
+                      name="image"
+                      type="text"
+                      value={form.image}
+                      onChange={handleChange}
+                      placeholder="Paste standard source URI"
+                      className="w-full pl-9 pr-3.5 py-2 sm:py-2.5 text-xs sm:text-sm rounded-xl bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-800 focus:border-blue-500 dark:focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-end gap-2 sm:gap-3 mt-6 sm:mt-8 pt-3 sm:pt-4 border-t border-slate-100 dark:border-slate-800">
+                <button 
+                  onClick={() => setIsEditOpen(false)}
+                  className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  onClick={handleSave}
+                  disabled={saving}
+                  className="px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold transition disabled:opacity-50 flex items-center gap-1.5 shadow-md shadow-blue-600/10"
+                >
+                  {saving ? (
+                    <>
+                      <Loader2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <Save className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                      Save Changes
+                    </>
+                  )}
+                </button>
+              </div>
+
+            </div>
+          </div>
+        )}
+
+      </div>
+    </>
   );
 }
