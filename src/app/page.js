@@ -4,6 +4,10 @@ import Testimonials from '@/Components/Testimonials';
 import Top_Tutors from '@/Components/Top_Tutors';
 import React from 'react';
 
+export const metadata = {
+  title: 'Home',
+};
+
 const page = () => {
   return (
     <div>

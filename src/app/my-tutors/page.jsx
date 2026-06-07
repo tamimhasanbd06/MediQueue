@@ -7,6 +7,10 @@ import { FaSearch, FaEdit, FaTrash, FaGraduationCap, FaMapMarkerAlt, FaUsers, Fa
 import { saveAuthToken } from "@/lib/auth-client";
 
 export default function MyTutorsPage() {
+  useEffect(() => {
+    document.title = "MediQueue | My Tutors";
+  }, []);
+
   const router = useRouter();
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
@@ -219,7 +223,7 @@ export default function MyTutorsPage() {
                     </td>
                     <td className="p-5 text-center font-semibold text-gray-700 dark:text-blue-200">{tutor.subject}</td>
                     <td className="p-5 text-center font-bold text-emerald-600 dark:text-emerald-400 text-lg">৳{tutor.hourlyFee || tutor.fee}</td>
-                    <td className="p-5 text-center font-medium text-gray-600 dark:text-gray-300">{tutor.totalSeats || "0"} available</td>
+                    <td className="p-5 text-center font-medium text-gray-600 dark:text-gray-300">{tutor.totalSeats ?? "0"} available</td>
                     <td className="p-5 text-center text-sm font-medium text-gray-500 dark:text-blue-300/80">{tutor.location}</td>
                     <td className="p-5 text-center">
                       <div className="flex justify-center items-center gap-2">
@@ -278,7 +282,7 @@ export default function MyTutorsPage() {
                   <div className="space-y-2.5 my-4 text-xs md:text-sm text-gray-600 dark:text-gray-300 font-medium">
                     <div className="flex items-center gap-2">
                       <FaUsers className="text-blue-400 w-4 shrink-0" />
-                      <span>{tutor.totalSeats || "0"} Active Seats</span>
+                      <span>{tutor.totalSeats ?? "0"} Active Seats</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <FaMapMarkerAlt className="text-blue-400 w-4 shrink-0" />
@@ -345,14 +349,14 @@ export default function MyTutorsPage() {
                 {[
                   "name", "subject", "photoURL", "hourlyFee",
                   "availableDays", "availableTime", "location", "institution",
-                  "experience", "teachingMode", "courseStartMonth", "courseEndMonth",
+                  "experience", "teachingMode", "sessionStartDate", "courseStartMonth", "courseEndMonth",
                   "totalSeats", "maxStudents", "courseDuration", "fee"
                 ].map((key) => (
                   <div key={key} className="flex flex-col gap-1.5">
                     <label className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400/80">
                       {key.replace(/([A-Z])/g, ' $1').trim()}
                     </label>
-                    <input name={key} value={form[key] || ""} onChange={handleChange}
+                    <input name={key} type={key === "sessionStartDate" ? "date" : "text"} value={form[key] || ""} onChange={handleChange}
                       className="w-full p-3.5 rounded-xl text-gray-900 dark:text-blue-200 font-medium text-sm outline-none transition-all duration-200 border-2 border-blue-500/80 dark:border-blue-500/60 bg-white dark:bg-[#060b13] focus:ring-4 focus:ring-blue-500/20 placeholder:text-gray-300 dark:placeholder:text-blue-900/40" />
                   </div>
                 ))}

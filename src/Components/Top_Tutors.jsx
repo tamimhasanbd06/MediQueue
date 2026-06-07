@@ -15,13 +15,13 @@ export default function FeaturedTutors() {
       try {
         setLoading(true);
 
-        const res = await fetch(`${API_URL}/tutors`, {
+        const res = await fetch(`${API_URL}/tutors?limit=6`, {
           cache: "no-store",
         });
 
         const data = await res.json();
 
-        setTutors(Array.isArray(data) ? data.slice(0, 6) : []);
+        setTutors(Array.isArray(data) ? data : []);
       } catch (err) {
         setTutors([]);
       } finally {
@@ -122,9 +122,9 @@ export default function FeaturedTutors() {
                     <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
                     <p>
                       <span className="font-bold text-blue-600 dark:text-blue-400">
-                        Start Month:
+                        Session Date:
                       </span>{" "}
-                      <span className="font-medium text-slate-800 dark:text-slate-200">{tutor?.courseStartMonth}</span>
+                      <span className="font-medium text-slate-800 dark:text-slate-200">{tutor?.sessionStartDate || tutor?.courseStartMonth || "N/A"}</span>
                     </p>
                   </div>
 
@@ -132,9 +132,9 @@ export default function FeaturedTutors() {
                     <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
                     <p>
                       <span className="font-bold text-blue-600 dark:text-blue-400">
-                        End Month:
+                        Available Slots:
                       </span>{" "}
-                      <span className="font-medium text-slate-800 dark:text-slate-200">{tutor?.courseEndMonth}</span>
+                      <span className="font-medium text-slate-800 dark:text-slate-200">{Number(tutor?.totalSeats ?? tutor?.totalSlot ?? 0)} slots</span>
                     </p>
                   </div>
 

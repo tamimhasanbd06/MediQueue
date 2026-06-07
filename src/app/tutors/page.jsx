@@ -4,15 +4,17 @@ import Link from "next/link";
 import Image from "next/image";
 import { toast } from "react-hot-toast";
 
-const months = [ "January", "February", "March", "April", "May", "June","July","August", "September","October", "November", "December",];
-
 export default function TutorsPage() {
+  useEffect(() => {
+    document.title = "MediQueue | Tutors";
+  }, []);
+
   const [tutors, setTutors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchText, setSearchText] = useState("");
   const [subjectText, setSubjectText] = useState("");
-  const [startMonth, setStartMonth] = useState("");
-  const [endMonth, setEndMonth] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
   const [viewLimit, setViewLimit] = useState(18);
   const [mounted, setMounted] = useState(false);
@@ -40,7 +42,13 @@ export default function TutorsPage() {
   const fetchTutors = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`${API_URL}/tutors`);
+      const params = new URLSearchParams();
+      if (searchText.trim()) params.set("search", searchText.trim());
+      if (subjectText.trim()) params.set("subject", subjectText.trim());
+      if (startDate) params.set("startDate", startDate);
+      if (endDate) params.set("endDate", endDate);
+      const queryString = params.toString();
+      const res = await fetch(`${API_URL}/tutors${queryString ? `?${queryString}` : ""}`);
       const data = await res.json();
       setTutors(Array.isArray(data) ? data : []);
     } catch (err) {
@@ -53,19 +61,22 @@ export default function TutorsPage() {
   };
 
   useEffect(() => {
-    fetchTutors();
-  }, []);
+    const timeout = setTimeout(() => {
+      fetchTutors();
+    }, 350);
+    return () => clearTimeout(timeout);
+  }, [searchText, subjectText, startDate, endDate]);
 
   const filtered = useMemo(() => {
     return tutors.filter((t) => {
       return (
         t?.name?.toLowerCase().includes(searchText.toLowerCase()) &&
         t?.subject?.toLowerCase().includes(subjectText.toLowerCase()) &&
-        (startMonth ? t?.courseStartMonth === startMonth : true) &&
-        (endMonth ? t?.courseEndMonth === endMonth : true)
+        (startDate ? String(t?.sessionStartDate || "") >= startDate : true) &&
+        (endDate ? String(t?.sessionStartDate || "") <= endDate : true)
       );
     });
-  }, [tutors, searchText, subjectText, startMonth, endMonth]);
+  }, [tutors, searchText, subjectText, startDate, endDate]);
 
   const visibleTutors = useMemo(() => {
     if (isExpanded) return filtered;
@@ -75,8 +86,8 @@ export default function TutorsPage() {
   const resetAll = () => {
     setSearchText("");
     setSubjectText("");
-    setStartMonth("");
-    setEndMonth("");
+    setStartDate("");
+    setEndDate("");
     setIsExpanded(false);
   };
 
@@ -116,27 +127,19 @@ export default function TutorsPage() {
               className="p-4 rounded-2xl border outline-none transition-all duration-300 focus:ring-4 focus:ring-blue-500/5 w-full bg-white border-blue-500/15 text-gray-900 placeholder:text-gray-400 focus:border-blue-600 shadow-2xs dark:bg-zinc-900 dark:border-blue-400/15 dark:text-blue-400 dark:placeholder:text-zinc-500 dark:focus:border-blue-500" 
             />
 
-            <select
-              value={startMonth} 
-              onChange={(e) => setStartMonth(e.target.value)}
-              className="p-4 rounded-2xl border outline-none transition-all duration-300 focus:ring-4 focus:ring-blue-500/5 w-full cursor-pointer bg-white border-blue-500/15 text-gray-900 focus:border-blue-600 shadow-2xs dark:bg-zinc-900 dark:border-blue-400/15 dark:text-blue-400 dark:focus:border-blue-500"
-            >
-              <option value="" className="dark:bg-zinc-950 text-gray-400">Start Month</option>
-              {months.map((m) => (
-                <option key={m} value={m} className="dark:bg-zinc-950 text-gray-900 dark:text-white">{m}</option>
-              ))}
-            </select>
+            <input
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="p-4 rounded-2xl border outline-none transition-all duration-300 focus:ring-4 focus:ring-blue-500/5 w-full bg-white border-blue-500/15 text-gray-900 focus:border-blue-600 shadow-2xs dark:bg-zinc-900 dark:border-blue-400/15 dark:text-blue-400 dark:focus:border-blue-500"
+            />
 
-            <select
-              value={endMonth}
-              onChange={(e) => setEndMonth(e.target.value)}
-              className="p-4 rounded-2xl border outline-none transition-all duration-300 focus:ring-4 focus:ring-blue-500/5 w-full cursor-pointer bg-white border-blue-500/15 text-gray-900 focus:border-blue-600 shadow-2xs dark:bg-zinc-900 dark:border-blue-400/15 dark:text-blue-400 dark:placeholder:text-zinc-500 dark:focus:border-blue-500"
-            >
-              <option value="" className="dark:bg-zinc-950 text-gray-400">End Month</option>
-              {months.map((m) => (
-                <option key={m} value={m} className="dark:bg-zinc-950 text-gray-900 dark:text-white">{m}</option>
-              ))}
-            </select>
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              className="p-4 rounded-2xl border outline-none transition-all duration-300 focus:ring-4 focus:ring-blue-500/5 w-full bg-white border-blue-500/15 text-gray-900 focus:border-blue-600 shadow-2xs dark:bg-zinc-900 dark:border-blue-400/15 dark:text-blue-400 dark:placeholder:text-zinc-500 dark:focus:border-blue-500"
+            />
 
             <button
               onClick={resetAll}
@@ -164,7 +167,8 @@ export default function TutorsPage() {
           <div className="max-w-7xl mx-auto space-y-12 relative z-10">
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
               {visibleTutors.map((tutor) => {
-                const isSoldOut = tutor?.maxStudents <= 0;
+                const availableSlots = Number(tutor?.totalSeats ?? tutor?.totalSlot ?? 0);
+                const isSoldOut = availableSlots <= 0;
 
                 return (
                   <Link 
@@ -190,7 +194,7 @@ export default function TutorsPage() {
 
                       <div className="absolute top-4 right-4">
                         <span className={`px-3.5 py-1.5 rounded-xl text-[11px] font-bold tracking-wider uppercase shadow-sm backdrop-blur-xs ${isSoldOut ? "bg-red-500/90 text-white" : "bg-emerald-500/90 text-white"}`}>
-                          {isSoldOut ? "No Seats Left" : `${tutor?.maxStudents} Seats Open`}
+                          {isSoldOut ? "No Seats Left" : `${availableSlots} Seats Open`}
                         </span>
                       </div>
                     </div>
@@ -228,10 +232,10 @@ export default function TutorsPage() {
                       <div className="flex items-center justify-between px-4 py-3 rounded-xl bg-blue-50/40 border border-blue-500/5 dark:bg-blue-950/10 dark:border-blue-400/5">
                         <div>
                           <p className="text-[10px] font-bold uppercase tracking-wider text-blue-600/80 dark:text-blue-400/80">
-                            Start Month
+                            Session Date
                           </p>
                           <h4 className="font-bold text-xs text-gray-800 dark:text-zinc-200 mt-0.5">
-                            {tutor?.courseStartMonth}
+                            {tutor?.sessionStartDate || tutor?.courseStartMonth || "N/A"}
                           </h4>
                         </div>
 
@@ -239,10 +243,10 @@ export default function TutorsPage() {
 
                         <div className="text-right">
                           <p className="text-[10px] font-bold uppercase tracking-wider text-blue-600/80 dark:text-blue-400/80">
-                            End Month
+                            Available Slots
                           </p>
                           <h4 className="font-bold text-xs text-gray-800 dark:text-zinc-200 mt-0.5">
-                            {tutor?.courseEndMonth}
+                            {availableSlots} slots
                           </h4>
                         </div>
                       </div>

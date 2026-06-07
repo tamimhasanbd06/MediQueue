@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Head from "next/head";
 import Image from "next/image";
@@ -15,6 +15,10 @@ import {
 } from "lucide-react";
 
 export default function ImageUrlsPage() {
+  useEffect(() => {
+    document.title = "MediQueue | Image URL Helper";
+  }, []);
+
   const router = useRouter();
   const fileInputRef = useRef(null);
 

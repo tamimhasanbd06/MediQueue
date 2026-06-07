@@ -19,6 +19,10 @@ import {
 import { useSession, saveAuthToken } from "@/lib/auth-client";
 
 export default function ProfilePage() {
+  useEffect(() => {
+    document.title = "MediQueue | Profile";
+  }, []);
+
   const router = useRouter();
   const fileInputRef = useRef(null);
 

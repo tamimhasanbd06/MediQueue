@@ -9,8 +9,13 @@ if (!mongoURI) {
 }
 
 const client = new MongoClient(mongoURI);
-await client.connect();
 const db = client.db("mediqueue");
+
+const trustedOrigins = [
+  "http://localhost:3000",
+  process.env.BETTER_AUTH_URL,
+  process.env.NEXT_PUBLIC_BETTER_AUTH_URL,
+].filter(Boolean);
 
 export const auth = betterAuth({
   database: mongodbAdapter(db, {
@@ -21,7 +26,6 @@ export const auth = betterAuth({
     enabled: true,
   },
 
-  // ভুলটি এখানে ঠিক করা হয়েছে: সরাসরি socialProviders অবজেক্ট দিন
   socialProviders: {
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID || "",
@@ -29,9 +33,7 @@ export const auth = betterAuth({
     },
   },
 
-  trustedOrigins: [
-    "http://localhost:3000",
-  ],
+  trustedOrigins,
 
   secret: process.env.BETTER_AUTH_SECRET,
 
@@ -43,7 +45,5 @@ export const auth = betterAuth({
     },
   },
 
-  plugins: [
-    jwt(),
-  ],
+  plugins: [jwt()],
 });

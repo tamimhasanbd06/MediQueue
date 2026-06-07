@@ -12,6 +12,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { useSession, saveAuthToken } from "@/lib/auth-client";
 
 export default function AddTutorPage() {
+  useEffect(() => {
+    document.title = "MediQueue | Add Tutor";
+  }, []);
+
   const router = useRouter();
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const { data: session } = useSession();
@@ -32,6 +36,7 @@ export default function AddTutorPage() {
     availableTime: "",
     hourlyFee: "",
     totalSeats: "",
+    sessionStartDate: "",
     courseStartMonth: "",
     courseEndMonth: "",
     institution: "",
@@ -81,6 +86,7 @@ export default function AddTutorPage() {
     if (!form.availableTime.trim()) return "Available time required";
     if (!form.hourlyFee.trim()) return "Hourly fee required";
     if (!form.totalSeats.trim()) return "Total seats required";
+    if (!form.sessionStartDate.trim()) return "Session start date required";
     if (!form.institution.trim()) return "Institution required";
     if (!form.location.trim()) return "Location required";
     if (!form.teachingMode.trim()) return "Teaching mode required";
@@ -96,7 +102,9 @@ export default function AddTutorPage() {
     try {
       setLoading(true);
 
-      const courseDuration = `${form.courseStartMonth.slice(0, 3)} - ${form.courseEndMonth.slice(0, 3)}`;
+      const courseDuration = form.courseStartMonth && form.courseEndMonth
+        ? `${form.courseStartMonth.slice(0, 3)} - ${form.courseEndMonth.slice(0, 3)}`
+        : "Flexible";
 
       const creatorData = session?.user 
         ? { id: session.user.id, name: session.user.name, email: session.user.email, image: session.user.image || "", key: "user" }
@@ -108,6 +116,9 @@ export default function AddTutorPage() {
         hourlyFee: Number(form.hourlyFee),
         totalSeats: Number(form.totalSeats),
         maxStudents: Number(form.maxStudents || form.totalSeats),
+        totalSlot: Number(form.totalSeats),
+        availableSlots: Number(form.totalSeats),
+        totalSlotLimit: Number(form.maxStudents || form.totalSeats),
         fee: Number(form.fee || 0),
         courseDuration,
         creator: creatorData,
@@ -148,6 +159,7 @@ export default function AddTutorPage() {
         availableTime: "",
         hourlyFee: "",
         totalSeats: "",
+        sessionStartDate: "",
         courseStartMonth: "",
         courseEndMonth: "",
         institution: "",
@@ -204,6 +216,7 @@ export default function AddTutorPage() {
             <Input icon={<FaClock />} name="availableTime" label="Available Time" placeholder="Available Time" value={form.availableTime} onChange={handleChange} darkMode={darkMode} />
             <Input icon={<FaMoneyBill />} name="hourlyFee" type="number" label="Hourly Fee" placeholder="Hourly Fee" value={form.hourlyFee} onChange={handleChange} darkMode={darkMode} />
             <Input icon={<FaLayerGroup />} name="totalSeats" type="number" label="Total Seats" placeholder="Total Seats" value={form.totalSeats} onChange={handleChange} darkMode={darkMode} />
+            <Input icon={<FaCalendar />} name="sessionStartDate" type="date" label="Session Start Date" placeholder="Session Start Date" value={form.sessionStartDate} onChange={handleChange} darkMode={darkMode} />
             <Input icon={<FaLayerGroup />} name="maxStudents" type="number" label="Max Students" placeholder="Max Students" value={form.maxStudents} onChange={handleChange} darkMode={darkMode} />
             <Input icon={<FaCalendar />} name="courseStartMonth" label="Course Start Month" placeholder="Course Start Month" value={form.courseStartMonth} onChange={handleChange} darkMode={darkMode} />
             <Input icon={<FaCalendar />} name="courseEndMonth" label="Course End Month" placeholder="Course End Month" value={form.courseEndMonth} onChange={handleChange} darkMode={darkMode} />

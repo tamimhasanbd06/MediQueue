@@ -114,10 +114,10 @@ npm install next react react-dom mongodb better-auth @better-auth/mongo-adapter 
 | --------------------- | --------------- |
 | `/`                   | Home Page       |
 | `/tutors`             | All Tutors      |
-| `/tutor-details/[id]` | Tutor Details   |
+| `/tutors/[id]`          | Tutor Details   |
 | `/add-tutor`          | Add Tutor       |
 | `/my-tutors`          | My Tutors       |
-| `/my-booked-sessions` | Booked Sessions |
+| `/booked-sessions`     | Booked Sessions |
 | `/login`              | Login Page      |
 | `/register`           | Register Page   |
 
@@ -160,7 +160,14 @@ The website is optimized for:
 ## Client Side
 
 ```env id="jlwmwd"
-NEXT_PUBLIC_BASE_URL=YOUR_CLIENT_URL
+NEXT_PUBLIC_API_URL=http://localhost:8000
+BETTER_AUTH_URL=http://localhost:3000
+NEXT_PUBLIC_BETTER_AUTH_URL=http://localhost:3000
+BETTER_AUTH_SECRET=YOUR_AUTH_SECRET
+MONGODB_URL=YOUR_DATABASE_URI
+JWT_SECRET=YOUR_SECRET_KEY
+GOOGLE_CLIENT_ID=YOUR_GOOGLE_CLIENT_ID
+GOOGLE_CLIENT_SECRET=YOUR_GOOGLE_CLIENT_SECRET
 ```
 
 ## Server Side
