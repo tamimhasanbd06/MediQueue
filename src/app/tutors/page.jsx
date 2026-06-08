@@ -95,7 +95,7 @@ export default function TutorsPage() {
     <>
       <title> MediQueue | Tutor </title>
 
-      <section className="min-h-screen px-4 md:px-10 py-16 transition-colors duration-500 bg-[#FFF8F2] dark:bg-black">
+<section className="min-h-screen px-4 md:px-10 py-16 transition-colors duration-500 bg-linear-to-br from-slate-50 via-slate-100 to-zinc-200 dark:from-[#030712] dark:via-[#090d16] dark:to-[#020617]">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/5 dark:bg-blue-500/5 rounded-full blur-3xl pointer-events-none"></div>
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-600/5 dark:bg-blue-600/5 rounded-full blur-3xl pointer-events-none"></div>
 

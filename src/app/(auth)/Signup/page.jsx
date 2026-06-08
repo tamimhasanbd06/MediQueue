@@ -176,12 +176,10 @@ export default function SignupPage() {
               </p>
             </div>
 
-            {/* GOOGLE BUTTON */}
+       
             <button
-              onClick={handleGoogleLogin}
-              disabled={googleLoading}
-              className="w-full h-14 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300 flex items-center justify-center gap-3 font-semibold text-gray-700 dark:text-gray-200 hover:scale-[1.01]"
-            >
+              onClick={handleGoogleLogin} disabled={googleLoading}
+              className="w-full h-14 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300 flex items-center justify-center gap-3 font-semibold text-gray-700 dark:text-gray-200 hover:scale-[1.01]">
 
               <FcGoogle className="text-2xl" />
 
@@ -202,61 +200,40 @@ export default function SignupPage() {
 
             </div>
 
-            {/* FORM */}
-            <form
-              onSubmit={handleSubmit}
-              className="space-y-5"
-            >
+          
+            <form onSubmit={handleSubmit} className="space-y-5">
 
-              {/* NAME */}
+           
               <div className="relative">
 
                 <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
 
                 <input
-                  type="text"
-                  name="name"
-                  placeholder="Full Name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="w-full h-14 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 pl-12 pr-4 text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500 transition"
-                />
+                  type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange}
+                  className="w-full h-14 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 pl-12 pr-4 text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500 transition"/>
 
               </div>
 
-              {/* EMAIL */}
+         
               <div className="relative">
 
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
 
                 <input
-                  type="email"
-                  name="email"
-                  placeholder="Email Address"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full h-14 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 pl-12 pr-4 text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500 transition"
-                />
+                  type="email" name="email" placeholder="Email Address" value={formData.email} onChange={handleChange}
+                  className="w-full h-14 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 pl-12 pr-4 text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500 transition"/>
 
               </div>
 
-              {/* IMAGE */}
               <div className="relative">
 
                 <ImageIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
 
-                <input
-                  type="text"
-                  name="image"
-                  placeholder="Photo URL"
-                  value={formData.image}
-                  onChange={handleChange}
-                  className="w-full h-14 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 pl-12 pr-4 text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500 transition"
-                />
+                <input type="text" name="image" placeholder="Photo URL" value={formData.image} onChange={handleChange}
+                  className="w-full h-14 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 pl-12 pr-4 text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500 transition" />
 
               </div>
 
-              {/* PASSWORD */}
               <div className="relative">
 
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -267,12 +244,8 @@ export default function SignupPage() {
                       ? "text"
                       : "password"
                   }
-                  name="password"
-                  placeholder="Password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className="w-full h-14 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 pl-12 pr-14 text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500 transition"
-                />
+                  name="password" placeholder="Password" value={formData.password} onChange={handleChange}
+                  className="w-full h-14 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 pl-12 pr-14 text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500 transition" />
 
                 <button
                   type="button"
@@ -281,8 +254,7 @@ export default function SignupPage() {
                       !showPassword
                     )
                   }
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
-                >
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500" >
 
                   {showPassword
                     ? <EyeOff size={20} />
@@ -291,7 +263,7 @@ export default function SignupPage() {
                 </button>
               </div>
 
-              {/* CONFIRM PASSWORD */}
+           
               <div className="relative">
 
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -308,8 +280,7 @@ export default function SignupPage() {
                     formData.confirmPassword
                   }
                   onChange={handleChange}
-                  className="w-full h-14 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 pl-12 pr-14 text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500 transition"
-                />
+                  className="w-full h-14 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 pl-12 pr-14 text-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500 transition" />
 
                 <button
                   type="button"
@@ -318,8 +289,7 @@ export default function SignupPage() {
                       !showConfirmPassword
                     )
                   }
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
-                >
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">
 
                   {showConfirmPassword
                     ? <EyeOff size={20} />
@@ -333,12 +303,10 @@ export default function SignupPage() {
                 one lowercase letter and minimum 6 characters.
               </p>
 
-              {/* SUBMIT BUTTON */}
+          
               <button
-                type="submit"
-                disabled={loading}
-                className="w-full h-14 rounded-2xl bg-linear-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold text-base shadow-lg shadow-blue-500/30 transition-all duration-300 hover:scale-[1.01]"
-              >
+                type="submit" disabled={loading}
+                className="w-full h-14 rounded-2xl bg-linear-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold text-base shadow-lg shadow-blue-500/30 transition-all duration-300 hover:scale-[1.01]" >
 
                 {loading
                   ? "Creating Account..."
@@ -346,26 +314,23 @@ export default function SignupPage() {
 
               </button>
 
-              {/* CREATE IMAGE URL LINK BUTTON */}
+             
               <button
-                type="button"
-                onClick={() => router.push("/image-urls")}
-                className="w-full h-14 flex items-center justify-center gap-2 border-2 rounded-2xl font-semibold text-base transition-all duration-300 hover:scale-[1.01] bg-gray-50/50 dark:bg-gray-950/50 border-blue-500/30 text-blue-600 dark:text-blue-400 dark:border-blue-500/20 hover:bg-blue-50/50 dark:hover:bg-gray-800/50"
-              >
+                type="button" onClick={() => router.push("/image-urls")}
+                className="w-full h-14 flex items-center justify-center gap-2 border-2 rounded-2xl font-semibold text-base transition-all duration-300 hover:scale-[1.01] bg-gray-50/50 dark:bg-gray-950/50 border-blue-500/30 text-blue-600 dark:text-blue-400 dark:border-blue-500/20 hover:bg-blue-50/50 dark:hover:bg-gray-800/50">
                 <LinkIcon size={18} />
                 Create Image URL
               </button>
             </form>
 
-            {/* LOGIN LINK */}
+      
             <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-8">
 
               Already have an account?
 
               <Link
                 href="/login"
-                className="ml-1 font-semibold text-blue-600 hover:text-blue-700 hover:underline"
-              >
+                className="ml-1 font-semibold text-blue-600 hover:text-blue-700 hover:underline">
                 Login
               </Link>
 

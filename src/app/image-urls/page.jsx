@@ -5,14 +5,7 @@ import { useRouter } from "next/navigation";
 import Head from "next/head";
 import Image from "next/image";
 import toast from "react-hot-toast";
-import {
-  ArrowLeft,
-  UploadCloud,
-  ExternalLink,
-  CheckCircle2,
-  X,
-  Copy
-} from "lucide-react";
+import { ArrowLeft, UploadCloud, ExternalLink, CheckCircle2, X, Copy } from "lucide-react";
 
 export default function ImageUrlsPage() {
   useEffect(() => {
@@ -26,7 +19,7 @@ export default function ImageUrlsPage() {
   const [localPreview, setLocalPreview] = useState("");
   const [imageUrl, setImageUrl] = useState("");
 
-  // Dynamic back button that returns to the previous browser history page
+
   const handleBackToProfile = () => {
     if (typeof window !== "undefined" && window.history.length > 1) {
       router.back();
@@ -121,19 +114,13 @@ export default function ImageUrlsPage() {
         <title>MediQueue | Image URL Generator</title>
       </Head>
 
-      <div className="min-h-screen w-full flex items-center justify-center px-4 py-10 bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200 dark:from-[#020617] dark:via-[#050816] dark:to-[#020617] text-slate-900 dark:text-slate-100 transition-colors duration-300">
+      <div className="min-h-screen w-full flex items-center justify-center px-4 py-10 bg-linear-to-br from-slate-50 via-slate-100 to-slate-200 dark:from-[#020617] dark:via-[#050816] dark:to-[#020617] text-slate-900 dark:text-slate-100 transition-colors duration-300">
 
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={handleFileSelect}
-          accept="image/*"
-          className="hidden"
-        />
+        <input type="file" ref={fileInputRef} onChange={handleFileSelect} accept="image/*" className="hidden"/>
 
         <div className="w-full max-w-2xl rounded-3xl border border-slate-200/60 dark:border-slate-800/50 bg-white/80 dark:bg-slate-900/70 backdrop-blur-xl shadow-2xl p-6 sm:p-10 transition-all">
 
-          {/* Top Header Row */}
+
           <div className="flex justify-between items-center border-b pb-4 mb-6 border-slate-200/60 dark:border-slate-800/50">
             <button
               onClick={handleBackToProfile}
@@ -148,9 +135,9 @@ export default function ImageUrlsPage() {
             </span>
           </div>
 
-          {/* Display Title Block */}
+     
           <div className="text-center mb-8">
-            <h1 className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 dark:from-blue-400 dark:via-indigo-400 dark:to-purple-400 text-transparent bg-clip-text">
+            <h1 className="text-2xl sm:text-3xl font-extrabold bg-linear-to-r from-blue-600 via-indigo-500 to-purple-600 dark:from-blue-400 dark:via-indigo-400 dark:to-purple-400 text-transparent bg-clip-text">
               Image URL Generator
             </h1>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
@@ -158,33 +145,25 @@ export default function ImageUrlsPage() {
             </p>
           </div>
 
-          {/* Public Web URL Target Field */}
+
           <div className="flex gap-2 mb-6">
             <input
-              type="text"
-              value={imageUrl}
-              onChange={(e) => setImageUrl(e.target.value)}
-              placeholder="Paste direct URL (e.g., https://i.ibb.co/image.png)"
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-950/40 text-sm outline-none focus:border-blue-500 dark:focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
-            />
+              type="text" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} placeholder="Paste direct URL (e.g., https://i.ibb.co/image.png)"
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-950/40 text-sm outline-none focus:border-blue-500 dark:focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"/>
 
             <button
               onClick={handleUrlSubmit}
-              className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold shadow-md shadow-blue-600/10 transition-all active:scale-[0.98]"
-            >
+              className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold shadow-md shadow-blue-600/10 transition-all active:scale-[0.98]" >
               Load
             </button>
           </div>
 
-          {/* Drag & Drop Space / Dynamic Preview Canvas Component */}
+
+
           <div className="mb-6">
             {!localPreview ? (
               <div
-                onDragEnter={handleDrag}
-                onDragOver={handleDrag}
-                onDragLeave={handleDrag}
-                onDrop={handleDrop}
-                onClick={() => fileInputRef.current?.click()}
+                onDragEnter={handleDrag} onDragOver={handleDrag} onDragLeave={handleDrag} onDrop={handleDrop} onClick={() => fileInputRef.current?.click()}
                 className={`p-10 border-2 border-dashed rounded-2xl text-center cursor-pointer transition-all duration-200 group ${
                   dragActive
                     ? "border-blue-500 bg-blue-500/5 scale-[0.99]"
@@ -223,7 +202,7 @@ export default function ImageUrlsPage() {
                   </button>
                 </div>
 
-                {/* Content Render Grid */}
+
                 <div className="flex flex-col sm:flex-row gap-5 items-center">
                   <div className="relative w-28 h-28 rounded-xl overflow-hidden ring-4 ring-white dark:ring-slate-900 bg-slate-200 dark:bg-slate-800 shadow-md shrink-0">
                     <Image
@@ -251,7 +230,7 @@ export default function ImageUrlsPage() {
             )}
           </div>
 
-          {/* Third Party Actions */}
+   
           <div className="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4 p-5 rounded-2xl bg-blue-50/40 dark:bg-blue-950/10 border border-blue-100 dark:border-blue-950/40">
             <div className="text-center sm:text-left">
               <p className="text-sm font-bold text-slate-800 dark:text-slate-200">Need a permanent link?</p>

@@ -1,23 +1,41 @@
-import Banner from '@/Components/Banner';
-import WhyChooseMediQueue from '@/Components/Why_Choose_MediQueue';
-import Testimonials from '@/Components/Testimonials';
-import Top_Tutors from '@/Components/Top_Tutors';
 import React from 'react';
+
+import Banner from '@/Components/Banner';
+import Top_Tutors from '@/Components/Top_Tutors';
+import WhyChooseMediQueue from '@/Components/Why_Choose_MediQueue';
+import HowItWorks from '@/Components/HowItWorks';
+import LearningSupport from '@/Components/LearningSupport';
+import SubjectHighlights from '@/Components/SubjectHighlights';
+import Testimonials from '@/Components/Testimonials';
+import HomeCallToAction from '@/Components/HomeCallToAction';
+import ThemeToast from '@/Components/ThemeToast';
 
 export const metadata = {
   title: 'Home',
 };
 
-const page = () => {
+const Page = () => {
   return (
     <div>
-      <Banner/>
-      <Top_Tutors/>
-<WhyChooseMediQueue/>
-<Testimonials/>
+      <Banner />
 
+      <Top_Tutors />
+
+      <WhyChooseMediQueue />
+
+      <HowItWorks />
+
+      <LearningSupport />
+
+      <SubjectHighlights />
+
+      <Testimonials />
+
+      <HomeCallToAction />
+
+      <ThemeToast />
     </div>
   );
 };
 
-export default page;
+export default Page;

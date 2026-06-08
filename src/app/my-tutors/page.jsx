@@ -135,7 +135,7 @@ export default function MyTutorsPage() {
     }
   };
 
-  // DELETE
+  
   const handleDelete = async () => {
     try {
       const token = localStorage.getItem("token") || (await saveAuthToken());
@@ -246,7 +246,7 @@ export default function MyTutorsPage() {
             </table>
           </div>
 
-          {/* TABLET & MOBILE VIEW: RESPONSIVE CARDS */}
+
           <div className="block xl:hidden grid grid-cols-1 md:grid-cols-2 gap-6">
             {visibleTutors.map((tutor) => (
               <div key={tutor._id}

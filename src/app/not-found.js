@@ -1,13 +1,12 @@
-// src/app/not-found.jsx
 
 import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <section className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-blue-950 flex items-center justify-center px-6 py-10">
+    <section className="min-h-screen bg-linear-to-br from-slate-900 via-slate-800 to-blue-950 flex items-center justify-center px-6 py-10">
       <div className="w-full max-w-5xl grid lg:grid-cols-2 gap-12 items-center">
         
-        {/* LEFT CONTENT */}
+  
         <div className="text-center lg:text-left">
           <h1 className="text-[110px] sm:text-[140px] md:text-[170px] font-black text-blue-400 leading-none drop-shadow-lg">
             404
@@ -38,19 +37,19 @@ export default function NotFound() {
           </div>
         </div>
 
-        {/* RIGHT CONTENT */}
+        
         <div className="flex justify-center">
           <div className="relative">
-            {/* GLOW EFFECT */}
+
             <div className="absolute inset-0 bg-blue-500/20 blur-3xl rounded-full"></div>
 
-            {/* CARD */}
-            <div className="relative w-[280px] sm:w-[350px] md:w-[420px] h-[280px] sm:h-[350px] md:h-[420px] rounded-[40px] border border-slate-700 bg-slate-900/70 backdrop-blur-xl flex items-center justify-center shadow-2xl overflow-hidden">
+           
+            <div className="relative w-70 sm:w-87.5 md:w-105 h-70 sm:h-87.5 md:h-[105 rounded-[40px] border border-slate-700 bg-slate-900/70 backdrop-blur-xl flex items-center justify-center shadow-2xl overflow-hidden">
               
-              {/* CIRCLE */}
+        
               <div className="absolute w-60 h-60 rounded-full bg-blue-500/10 border border-blue-400/20 animate-pulse"></div>
 
-              {/* INNER CONTENT */}
+          
               <div className="text-center z-10">
                 <h1 className="text-7xl sm:text-8xl font-black text-blue-400">
                   !
@@ -61,7 +60,7 @@ export default function NotFound() {
                 </p>
               </div>
 
-              {/* DECORATIVE BLUR */}
+          
               <div className="absolute -top-10 -right-10 w-32 h-32 bg-blue-500/20 rounded-full blur-2xl"></div>
 
               <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-slate-500/20 rounded-full blur-2xl"></div>
