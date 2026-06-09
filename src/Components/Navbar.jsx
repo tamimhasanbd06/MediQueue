@@ -385,6 +385,8 @@ export default function Navbar() {
                       Login
                     </Link>
                     <Link
+
+                    
                       href="/signup"
                       onClick={() => setMobileMenuOpen(false)}
                       className="flex h-12 items-center justify-center rounded-2xl bg-linear-to-r from-blue-600 to-indigo-600 text-sm font-bold tracking-wide text-white shadow-md shadow-blue-500/10 active:scale-98"
