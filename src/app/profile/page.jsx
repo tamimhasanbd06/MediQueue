@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import Image from "next/image";
 import {  Camera, User, Mail, Save, X, LogOut, Edit3, Link2, Loader2,Image as ImageIcon } from "lucide-react";
-import { useSession, saveAuthToken } from "@/lib/auth-client";
+import {
+  useSession, saveAuthToken, clearAuthToken, signOut,} from "@/lib/auth-client";
 
 export default function ProfilePage() {
   useEffect(() => {
@@ -114,11 +115,22 @@ export default function ProfilePage() {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    router.push("/login");
-  };
-
+const handleLogout = async () => {
+  try {
+    await signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          clearAuthToken();
+          toast.success("Logged out successfully");
+          router.replace("/login");
+          router.refresh();
+        },
+      },
+    });
+  } catch (error) {
+    toast.error("Logout failed");
+  }
+};
   const handleCreateImageURL = () => {
     router.push("/image-urls");
   };

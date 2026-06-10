@@ -31,7 +31,6 @@ export default function MyTutorsPage() {
 
   const [form, setForm] = useState({});
 
-  // Dynamic Responsive Visibility State management 
   const [isExpanded, setIsExpanded] = useState(false);
   const [viewLimit, setViewLimit] = useState(6);
 
@@ -39,11 +38,11 @@ export default function MyTutorsPage() {
     const handleResize = () => {
       const width = window.innerWidth;
       if (width < 768) {
-        setViewLimit(6);   // Mobile base visibility limit
+        setViewLimit(6);
       } else if (width >= 768 && width < 1280) {
-        setViewLimit(12);  // Tablet base visibility limit
+        setViewLimit(12);
       } else {
-        setViewLimit(6);   // Desktop baseline visibility row limit
+        setViewLimit(6);
       }
     };
 
@@ -52,7 +51,6 @@ export default function MyTutorsPage() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // FETCH
   const fetchTutors = async () => {
     try {
       setLoading(true);
@@ -81,7 +79,6 @@ export default function MyTutorsPage() {
     fetchTutors();
   }, []);
 
-  // OPEN UPDATE
   const openUpdate = (tutor) => {
     setSelectedTutor(tutor);
     setForm({ ...tutor });
@@ -135,7 +132,6 @@ export default function MyTutorsPage() {
     }
   };
 
-  
   const handleDelete = async () => {
     try {
       const token = localStorage.getItem("token") || (await saveAuthToken());
@@ -167,11 +163,8 @@ export default function MyTutorsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950 text-white font-semibold text-lg tracking-wider">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-          <span>Loading Dashboard Data...</span>
-        </div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -187,7 +180,7 @@ export default function MyTutorsPage() {
 
         <div className="max-w-xl mx-auto mb-10 flex items-center gap-3 p-4 rounded-2xl bg-white dark:bg-[#0B1120] border-2 border-blue-500/80 dark:border-blue-500/60 shadow-xl focus-within:ring-4 focus-within:ring-blue-500/10 transition-all duration-300">
           <FaSearch className="text-blue-500 text-lg shrink-0" />
-          <input 
+          <input
             value={search}
             onChange={(e) => { setSearch(e.target.value); setIsExpanded(false); }}
             placeholder="Search tutors by name or subject..."
@@ -196,7 +189,6 @@ export default function MyTutorsPage() {
         </div>
 
         <div className="max-w-7xl mx-auto space-y-8">
-          {/* DESKTOP TABLE VIEW */}
           <div className="hidden xl:block overflow-hidden rounded-3xl border-2 border-blue-500/80 dark:border-blue-500/60 shadow-2xl bg-white dark:bg-[#0B1120]">
             <table className="w-full border-collapse">
               <thead>
@@ -245,7 +237,6 @@ export default function MyTutorsPage() {
               </tbody>
             </table>
           </div>
-
 
           <div className="block xl:hidden grid grid-cols-1 md:grid-cols-2 gap-6">
             {visibleTutors.map((tutor) => (
@@ -325,14 +316,14 @@ export default function MyTutorsPage() {
             <div className="flex justify-center pt-6">
               <button
                 onClick={() => setIsExpanded(!isExpanded)}
-                className=" px-10 py-4 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-black text-sm uppercase tracking-wider transition-all duration-300 hover:scale-[1.03] active:scale-[0.97] shadow-xl shadow-blue-500/20 " >
+                className="px-10 py-4 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-black text-sm uppercase tracking-wider transition-all duration-300 hover:scale-[1.03] active:scale-[0.97] shadow-xl shadow-blue-500/20">
                 {isExpanded ? "Show Less" : "Show More"}
               </button>
             </div>
           )}
         </div>
 
-        {/* UPDATE MODAL */}
+  
         {modal.update && (
           <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4">
             <div className="w-full max-w-4xl max-h-[85vh] overflow-y-auto bg-white dark:bg-[#0B1120] border-4 border-blue-500/90 dark:border-blue-500/70 rounded-3xl p-5 md:p-8 shadow-2xl transition-all overscroll-contain">
@@ -363,7 +354,6 @@ export default function MyTutorsPage() {
               </div>
 
               <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mt-8 pt-5 border-t-2 border-blue-500/20">
-                {/* CREATE IMAGE URL LINK BUTTON */}
                 <button
                   type="button"
                   onClick={() => router.push("/image-urls")}
@@ -376,12 +366,12 @@ export default function MyTutorsPage() {
                 <div className="flex items-center gap-3 justify-end">
                   <button
                     onClick={() => setModal((m) => ({ ...m, update: false }))}
-                    className="px-6 py-3.5 bg-gray-100 dark:bg-blue-950/40 text-gray-600 dark:text-blue-400 font-black rounded-xl hover:bg-gray-200 dark:hover:bg-blue-900/40 text-xs uppercase tracking-wide transition-all duration-200" >
+                    className="px-6 py-3.5 bg-gray-100 dark:bg-blue-950/40 text-gray-600 dark:text-blue-400 font-black rounded-xl hover:bg-gray-200 dark:hover:bg-blue-900/40 text-xs uppercase tracking-wide transition-all duration-200">
                     Cancel Action
                   </button>
                   <button
                     onClick={handleUpdate}
-                    className="px-8 py-3.5 bg-blue-600 text-white font-black rounded-xl hover:bg-blue-700 text-xs uppercase tracking-wide transition-all duration-200 shadow-md" >
+                    className="px-8 py-3.5 bg-blue-600 text-white font-black rounded-xl hover:bg-blue-700 text-xs uppercase tracking-wide transition-all duration-200 shadow-md">
                     {saving ? "Saving Changes..." : "Save Configuration"}
                   </button>
                 </div>
@@ -390,7 +380,7 @@ export default function MyTutorsPage() {
           </div>
         )}
 
-        {/* DELETE MODAL */}
+
         {modal.delete && (
           <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
             <div className="bg-white dark:bg-[#0B1120] border-4 border-blue-500/90 dark:border-blue-500/70 p-6 md:p-8 rounded-3xl max-w-sm w-full text-center shadow-2xl">
@@ -415,7 +405,7 @@ export default function MyTutorsPage() {
           </div>
         )}
 
-        {/* SUCCESS MODAL */}
+  
         {modal.success && (
           <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
             <div className="bg-white dark:bg-[#0B1120] border-4 border-blue-500/90 dark:border-blue-500/70 p-8 rounded-3xl max-w-sm w-full text-center shadow-2xl">

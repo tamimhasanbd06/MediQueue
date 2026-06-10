@@ -98,15 +98,15 @@ export default function BookedSessionsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#FFF8F2] dark:bg-black transition-all duration-500">
-        <div className="w-14 h-14 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
 
   return (
     <>
-      <section className="min-h-screen px-4 md:px-10 py-12 bg-[#FFF8F2] dark:bg-black transition-colors duration-500">
+      <section className="min-h-screen px-4 md:px-10 py-12 bg-linear-to-br from-white via-blue-50 to-slate-100 dark:from-black dark:via-[#020817] dark:to-blue-950 transition-colors duration-300">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <span className="text-xs font-bold tracking-widest uppercase text-blue-600 dark:text-blue-400 px-4 py-1.5 bg-blue-50 dark:bg-zinc-900 border border-blue-500/10 rounded-xl">

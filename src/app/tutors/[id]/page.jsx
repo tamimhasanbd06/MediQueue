@@ -1,3 +1,4 @@
+
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
@@ -17,7 +18,22 @@ export default function TutorDetailsPage() {
   const [alreadyBooked, setAlreadyBooked] = useState(false);
   const [bookingModal, setBookingModal] = useState(false);
   const [bookingForm, setBookingForm] = useState({ studentName: "", phone: "" });
+  const [countryCode, setCountryCode] = useState("+880");
+  const [errorModal, setErrorModal] = useState(false);
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+  const countries = [
+    { code: "+880", name: "Bangladesh", length: 10 },
+    { code: "+1", name: "United States", length: 10 },
+    { code: "+44", name: "United Kingdom", length: 10 },
+    { code: "+91", name: "India", length: 10 },
+    { code: "+92", name: "Pakistan", length: 10 },
+    { code: "+966", name: "Saudi Arabia", length: 9 },
+    { code: "+971", name: "UAE", length: 9 },
+    { code: "+60", name: "Malaysia", length: 9 },
+    { code: "+65", name: "Singapore", length: 8 },
+    { code: "+61", name: "Australia", length: 9 }
+  ];
 
   useEffect(() => {
     document.title = tutor?.name ? `MediQueue | ${tutor.name}` : "MediQueue | Tutor Details";
@@ -83,6 +99,8 @@ export default function TutorDetailsPage() {
     if (bookingNotStarted) return toast.error("Booking is not available yet for this tutor");
     if (noSeats) return toast.error("This session is fully booked. You can’t join at the moment.");
     if (alreadyBooked) return toast.error("You already booked this session");
+    setCountryCode("+880");
+    setBookingForm((prev) => ({ ...prev, phone: "" }));
     setBookingModal(true);
   };
 
@@ -91,6 +109,12 @@ export default function TutorDetailsPage() {
 
     if (!bookingForm.studentName.trim()) return toast.error("Student name required");
     if (!bookingForm.phone.trim()) return toast.error("Phone number required");
+
+    const currentCountry = countries.find((c) => c.code === countryCode);
+    if (currentCountry && bookingForm.phone.length < currentCountry.length) {
+      setErrorModal(true);
+      return;
+    }
 
     try {
       setBookingLoading(true);
@@ -108,7 +132,7 @@ export default function TutorDetailsPage() {
           tutorId: tutor._id,
           tutorName: tutor.name,
           studentName: bookingForm.studentName,
-          phone: bookingForm.phone,
+          phone: `${countryCode}${bookingForm.phone}`,
           studentEmail: session?.user?.email || "",
         }),
       });
@@ -223,7 +247,33 @@ export default function TutorDetailsPage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <ModalInput icon={<FaUserGraduate />} label="Student Name" value={bookingForm.studentName} onChange={(value) => setBookingForm((prev) => ({ ...prev, studentName: value }))} />
-              <ModalInput icon={<FaPhoneAlt />} label="Phone" value={bookingForm.phone} onChange={(value) => setBookingForm((prev) => ({ ...prev, phone: value }))} />
+              
+              <label className="flex flex-col gap-2">
+                <span className="text-sm font-bold text-blue-600 dark:text-blue-400">Phone</span>
+                <div className="flex items-center rounded-2xl border bg-gray-50 border-gray-200 dark:bg-zinc-900 dark:border-zinc-800 overflow-hidden focus-within:border-blue-500 transition-colors">
+                  <div className="flex items-center gap-1.5 px-3 py-3 border-r border-gray-200 dark:border-zinc-800 bg-gray-100 dark:bg-zinc-800 shrink-0">
+                    <span className="text-blue-600 dark:text-blue-400"><FaPhoneAlt /></span>
+                    <select
+                      value={countryCode}
+                      onChange={(e) => setCountryCode(e.target.value)}
+                      className="bg-transparent text-sm font-bold text-gray-900 dark:text-white outline-none cursor-pointer"
+                    >
+                      {countries.map((c) => (
+                        <option key={c.code} value={c.code}>
+                          {c.code}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <input
+                    value={bookingForm.phone}
+                    onChange={(e) => setBookingForm((prev) => ({ ...prev, phone: e.target.value.replace(/\D/g, "") }))}
+                    placeholder="Enter phone number"
+                    className="w-full bg-transparent px-4 py-3 outline-none text-gray-900 dark:text-white"
+                  />
+                </div>
+              </label>
+
               <ModalInput label="Tutor ID" value={tutor._id} readOnly />
               <ModalInput label="Tutor Name" value={tutor.name} readOnly />
               <ModalInput label="Student Email" value={session?.user?.email || ""} readOnly className="md:col-span-2" />
@@ -232,6 +282,23 @@ export default function TutorDetailsPage() {
               {bookingLoading ? "Booking..." : "Confirm Booking"}
             </button>
           </form>
+        </div>
+      )}
+
+      {errorModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="w-full max-w-md rounded-3xl bg-white dark:bg-zinc-950 border border-red-500/20 p-6 shadow-2xl text-center">
+            <h2 className="text-xl font-black text-red-500 mb-3">Invalid Number</h2>
+            <p className="text-gray-600 dark:text-zinc-400 mb-6 font-medium">
+              Please submit correct a number and number will be correct length
+            </p>
+            <button
+              onClick={() => setErrorModal(false)}
+              className="w-full py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold transition-all duration-300 shadow-md"
+            >
+              Submit
+            </button>
+          </div>
         </div>
       )}
     </>
@@ -267,3 +334,4 @@ function ModalInput({ icon, label, value, onChange, readOnly, className = "" }) 
     </label>
   );
 }
+
